@@ -1,0 +1,212 @@
+.
+├── KeyboardCore
+│   ├── Extensions
+│   ├── KeyboardCore.docc
+│   │   ├── KeyboardCore.md
+│   │   └── Resources
+│   │       └── Layouts
+│   │           ├── mn_assamese_symbols.json
+│   │           ├── mn_assamese_symbols_shift.json
+│   │           ├── mn_bangla.json
+│   │           ├── mn_bangla_shift.json
+│   │           ├── mn_bangla_symbols.json
+│   │           ├── mn_bangla_symbols_shift.json
+│   │           ├── mn_blank.json
+│   │           ├── mn_blank_shift.json
+│   │           ├── mn_common_symbols.json
+│   │           ├── mn_common_symbols_shift.json
+│   │           ├── mn_grantha.json
+│   │           ├── mn_grantha_shift.json
+│   │           ├── mn_grantha_symbols.json
+│   │           ├── mn_grantha_symbols_shift.json
+│   │           ├── mn_gujarati.json
+│   │           ├── mn_gujarati_shift.json
+│   │           ├── mn_gujarati_symbols.json
+│   │           ├── mn_gujarati_symbols_shift.json
+│   │           ├── mn_hindi.json
+│   │           ├── mn_hindi_shift.json
+│   │           ├── mn_hindi_symbols.json
+│   │           ├── mn_hindi_symbols_shift.json
+│   │           ├── mn_jawi18.json
+│   │           ├── mn_kannada.json
+│   │           ├── mn_kannada_shift.json
+│   │           ├── mn_kannada_symbols.json
+│   │           ├── mn_malayalam.json
+│   │           ├── mn_malayalam_shift.json
+│   │           ├── mn_marathi.json
+│   │           ├── mn_marathi_shift.json
+│   │           ├── mn_oriya.json
+│   │           ├── mn_oriya_shift.json
+│   │           ├── mn_oriya_symbols.json
+│   │           ├── mn_punjabi.json
+│   │           ├── mn_punjabi_shift.json
+│   │           ├── mn_punjabi_symbols.json
+│   │           ├── mn_punjabi_symbols_shift.json
+│   │           ├── mn_qwerty.json
+│   │           ├── mn_qwerty_shift.json
+│   │           ├── mn_sinhala.json
+│   │           ├── mn_sinhala_shift.json
+│   │           ├── mn_sinhala_symbols.json
+│   │           ├── mn_tamil99.json
+│   │           ├── mn_tamil99_shift.json
+│   │           ├── mn_tamil_symbols.json
+│   │           ├── mn_telugu.json
+│   │           ├── mn_telugu_shift.json
+│   │           └── tamil.json
+│   ├── KeyboardCore.swift
+│   ├── Models
+│   │   ├── InputState.swift
+│   │   ├── KeyboardLayout.swift
+│   │   ├── KeyboardState.swift
+│   │   ├── KeyboardTheme.swift
+│   │   ├── LanguageId.swift
+│   │   ├── PredictionCandidate.swift
+│   │   └── ThemeConfiguration.swift
+│   ├── Resourcces
+│   │   ├── Layouts
+│   │   │   ├── mn_assamese_symbols.json
+│   │   │   ├── mn_assamese_symbols_shift.json
+│   │   │   ├── mn_bangla.json
+│   │   │   ├── mn_bangla_shift.json
+│   │   │   ├── mn_bangla_symbols.json
+│   │   │   ├── mn_bangla_symbols_shift.json
+│   │   │   ├── mn_blank.json
+│   │   │   ├── mn_blank_shift.json
+│   │   │   ├── mn_common_symbols.json
+│   │   │   ├── mn_common_symbols_shift.json
+│   │   │   ├── mn_grantha.json
+│   │   │   ├── mn_grantha_shift.json
+│   │   │   ├── mn_grantha_symbols.json
+│   │   │   ├── mn_grantha_symbols_shift.json
+│   │   │   ├── mn_gujarati.json
+│   │   │   ├── mn_gujarati_shift.json
+│   │   │   ├── mn_gujarati_symbols.json
+│   │   │   ├── mn_gujarati_symbols_shift.json
+│   │   │   ├── mn_hindi.json
+│   │   │   ├── mn_hindi_shift.json
+│   │   │   ├── mn_hindi_symbols.json
+│   │   │   ├── mn_hindi_symbols_shift.json
+│   │   │   ├── mn_jawi18.json
+│   │   │   ├── mn_kannada.json
+│   │   │   ├── mn_kannada_shift.json
+│   │   │   ├── mn_kannada_symbols.json
+│   │   │   ├── mn_malayalam.json
+│   │   │   ├── mn_malayalam_shift.json
+│   │   │   ├── mn_malayalam_symbols.json
+│   │   │   ├── mn_marathi.json
+│   │   │   ├── mn_marathi_shift.json
+│   │   │   ├── mn_oriya.json
+│   │   │   ├── mn_oriya_shift.json
+│   │   │   ├── mn_oriya_symbols.json
+│   │   │   ├── mn_punjabi.json
+│   │   │   ├── mn_punjabi_shift.json
+│   │   │   ├── mn_punjabi_symbols.json
+│   │   │   ├── mn_punjabi_symbols_shift.json
+│   │   │   ├── mn_qwerty.json
+│   │   │   ├── mn_qwerty_shift.json
+│   │   │   ├── mn_sinhala.json
+│   │   │   ├── mn_sinhala_shift.json
+│   │   │   ├── mn_sinhala_symbols.json
+│   │   │   ├── mn_tamil99.json
+│   │   │   ├── mn_tamil99_shift.json
+│   │   │   ├── mn_tamil_symbols.json
+│   │   │   ├── mn_telugu.json
+│   │   │   ├── mn_telugu_shift.json
+│   │   │   ├── mn_telugu_symbols.json
+│   │   │   └── tamil.json
+│   │   └── Themes
+│   │       ├── th_cyber_purple.json
+│   │       ├── th_ios_default.json
+│   │       ├── th_neon_dreams.json
+│   │       └── th_ocean_sunset.json
+│   ├── Services
+│   │   ├── KeyTranslator.swift
+│   │   ├── KeyTranslatorFactory.swift
+│   │   ├── KeyboardBuilder.swift
+│   │   ├── KeyboardLogicController.swift
+│   │   ├── LayoutParser.swift
+│   │   └── ThemeManager.swift
+│   ├── UI
+│   │   └── KeyPopupView.swift
+│   └── Utils
+│       ├── AppConfiguration.swift
+│       └── InputSettings.swift
+├── README.md
+├── SangamKeyboards
+│   ├── App
+│   │   ├── SangamKeyboardsApp.swift
+│   │   ├── ViewModels
+│   │   └── Views
+│   │       ├── ContentView.swift
+│   │       ├── KeyboardPreviewView.swift
+│   │       ├── LanguageSelectionView.swift
+│   │       ├── SettingsView.swift
+│   │       └── SetupGuideView.swift
+│   ├── Resources
+│   │   ├── Assets.xcassets
+│   │   │   ├── AppIcon.appiconset
+│   │   │   │   ├── Contents.json
+│   │   │   │   └── SangamKeyboards.png
+│   │   │   └── Contents.json
+│   │   └── Localizations
+│   └── SangamKeyboards.entitlements
+├── SangamKeyboards.xcodeproj
+│   ├── project.pbxproj
+│   ├── project.xcworkspace
+│   │   ├── contents.xcworkspacedata
+│   │   ├── xcshareddata
+│   │   │   └── swiftpm
+│   │   │       └── configuration
+│   │   └── xcuserdata
+│   │       └── muthu.xcuserdatad
+│   │           └── UserInterfaceState.xcuserstate
+│   ├── xcshareddata
+│   │   └── xcschemes
+│   │       ├── SangamKeyboards.xcscheme
+│   │       └── Tamil99.xcscheme
+│   └── xcuserdata
+│       └── muthu.xcuserdatad
+│           ├── xcdebugger
+│           │   └── Breakpoints_v2.xcbkptlist
+│           └── xcschemes
+│               └── xcschememanagement.plist
+├── SangamKeyboardsExtension
+│   ├── Core
+│   │   ├── CompositionEngine.swift
+│   │   ├── InputCoordinator.swift
+│   │   ├── InputStateManager.swift
+│   │   ├── MockPredictionService.swift
+│   │   ├── PredictionService.swift
+│   │   ├── SimpleInputManager.swift
+│   │   └── UIUpdateService.swift
+│   ├── Engine
+│   │   ├── CPlusPlusEngineBridge.swift
+│   │   └── PredictionEngine.h
+│   ├── KeyTranslators
+│   │   ├── MalayKeyTranslator.swift
+│   │   ├── MalayalamKeyTranslator.swift
+│   │   ├── Tamil99KeyTranslator.swift
+│   │   └── TamilAnjalKeyTranslator.swift
+│   ├── KeyboardMetrics.swift
+│   ├── KeyboardViewController.swift
+│   ├── Resources
+│   │   └── Assets.xcassets
+│   └── UI
+│       ├── CandidatesView.swift
+│       ├── Components
+│       │   └── KeyView.swift
+│       └── KeyboardView.swift
+├── SangamTamil99
+│   ├── Info.plist
+│   └── TamilKeyboardViewController.swift
+├── Tamil99
+│   ├── Info.plist
+│   ├── Tamil99.entitlements
+│   └── TamilKeyboardViewController.swift
+├── TamilAnjal
+│   ├── Info.plist
+│   ├── TamilAnjal.entitlements
+│   └── TamilAnjalKeyboardViewController.swift
+└── tree.txt
+
+45 directories, 165 files

@@ -1,0 +1,33 @@
+{
+  "key_pack_file_dir" : "\/Users\/muthu\/Projects\/SangamKeyboards-2026\/FontPacks",
+  "key_pack_name" : "SellinamFontPack",
+  "key_font_count" : 4,
+  "key_font_info_array" : [
+    {
+      "key_font_source" : "\/Users\/muthu\/Projects\/SangamKeyboards-2026\/FontPacks\/AnjalAnnaiMN-Regular.otf",
+      "key_font_license" : "R",
+      "key_font_name" : "AnjalAnnaiMN-Regular.otf",
+      "key_font_size" : 320372
+    },
+    {
+      "key_font_source" : "\/Users\/muthu\/Projects\/SangamKeyboards-2026\/FontPacks\/AnjalKuyil-Regular.otf",
+      "key_font_size" : 44764,
+      "key_font_name" : "AnjalKuyil-Regular.otf",
+      "key_font_license" : "R"
+    },
+    {
+      "key_font_license" : "R",
+      "key_font_size" : 43192,
+      "key_font_name" : "AnjalMalarNew-Regular.otf",
+      "key_font_source" : "\/Users\/muthu\/Projects\/SangamKeyboards-2026\/FontPacks\/AnjalMalarNew-Regular.otf"
+    },
+    {
+      "key_font_license" : "R",
+      "key_font_source" : "\/Users\/muthu\/Projects\/SangamKeyboards-2026\/FontPacks\/AnjalSudarNew-Medium.otf",
+      "key_font_name" : "AnjalSudarNew-Medium.otf",
+      "key_font_size" : 52552
+    }
+  ],
+  "key_pack_file_name" : "SellinamAssets",
+  "key_pack_key" : "Sellinam"
+}

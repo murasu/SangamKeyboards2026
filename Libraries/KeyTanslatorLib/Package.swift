@@ -1,0 +1,50 @@
+// swift-tools-version: 5.9
+import PackageDescription
+
+let package = Package(
+    name: "AnjalKeyTranslator",
+    platforms: [
+        .macOS(.v12),
+        .iOS(.v15),
+        .watchOS(.v8),
+        .tvOS(.v15)
+    ],
+    products: [
+        .library(
+            name: "AnjalKeyTranslator",
+            targets: ["AnjalKeyTranslator"]
+        ),
+    ],
+    targets: [
+        .target(
+            name: "CAnjalKeyTranslator",
+            path: ".",
+            sources: [
+                "src/KeyTranslatorMultilingual.c",
+                "src/tamil/AnjalKeyMap.c",
+                "src/indic/IndicNotesIMEngine.c",
+                "src/indic/IndicDevanagariKeymap.c",
+                "src/indic/IndicMalayalamKeymap.c",
+                "src/indic/IndicKannadaKeymap.c",
+                "src/indic/IndicTeluguKeymap.c",
+                "src/indic/IndicGurmukhiKeymap.c"
+            ],
+            publicHeadersPath: "include",
+            cSettings: [
+                .headerSearchPath("include"),
+                .define("TARGET_OS_MAC", .when(platforms: [.macOS])),
+                .define("TARGET_OS_IOS", .when(platforms: [.iOS])),
+            ]
+        ),
+        .target(
+            name: "AnjalKeyTranslator",
+            dependencies: ["CAnjalKeyTranslator"],
+            path: "swift/Sources/AnjalKeyTranslator"
+        ),
+        .testTarget(
+            name: "AnjalKeyTranslatorTests",
+            dependencies: ["AnjalKeyTranslator"],
+            path: "swift/Tests/AnjalKeyTranslatorTests"
+        ),
+    ]
+)

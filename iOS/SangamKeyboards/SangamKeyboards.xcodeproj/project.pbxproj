@@ -1,0 +1,1002 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		004EC0002E8C2A500076D45E /* TamilAnjal.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 004EBFF92E8C2A500076D45E /* TamilAnjal.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		004EC03B2E8EC7640076D45E /* KeyboardCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006AAF852E83EF8600BAAAA8 /* KeyboardCore.framework */; };
+		004EC03C2E8EC76B0076D45E /* KeyboardCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006AAF852E83EF8600BAAAA8 /* KeyboardCore.framework */; };
+		006AAF8D2E83EF8600BAAAA8 /* KeyboardCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 006AAF852E83EF8600BAAAA8 /* KeyboardCore.framework */; };
+		006AAF8E2E83EF8600BAAAA8 /* KeyboardCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 006AAF852E83EF8600BAAAA8 /* KeyboardCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		00C1E1BF2E8C1E94001A493D /* Tamil99.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 00C1E1B82E8C1E94001A493D /* Tamil99.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		004EBFFE2E8C2A500076D45E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 006AAF222E83EDD400BAAAA8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 004EBFF82E8C2A500076D45E;
+			remoteInfo = TamilAnjal;
+		};
+		006AAF8B2E83EF8600BAAAA8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 006AAF222E83EDD400BAAAA8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 006AAF842E83EF8600BAAAA8;
+			remoteInfo = KeyboardCore;
+		};
+		00C1E1BD2E8C1E94001A493D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 006AAF222E83EDD400BAAAA8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00C1E1B72E8C1E94001A493D;
+			remoteInfo = Tamil99;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		006AAF5B2E83EF0900BAAAA8 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				00C1E1BF2E8C1E94001A493D /* Tamil99.appex in Embed Foundation Extensions */,
+				004EC0002E8C2A500076D45E /* TamilAnjal.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		006AAF922E83EF8600BAAAA8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				006AAF8E2E83EF8600BAAAA8 /* KeyboardCore.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00C320F52EA3E8A500AEDD92 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		004EBFF92E8C2A500076D45E /* TamilAnjal.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TamilAnjal.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		006AAF2A2E83EDD400BAAAA8 /* SangamKeyboards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SangamKeyboards.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		006AAF852E83EF8600BAAAA8 /* KeyboardCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KeyboardCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		00C1E1B82E8C1E94001A493D /* Tamil99.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Tamil99.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		00C320F72EA3E8A500AEDD92 /* FontExtractor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FontExtractor; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		004EC0062E8C2A8B0076D45E /* Exceptions for "SangamKeyboardsExtension" folder in "TamilAnjal" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				KeyboardMetrics.swift,
+				KeyboardViewController.swift,
+				Resources/SellinamAssets.fpk2,
+				sample_theme_with_tamil_font.json,
+			);
+			target = 004EBFF82E8C2A500076D45E /* TamilAnjal */;
+		};
+		004EC0352E8D79580076D45E /* Exceptions for "Tamil99" folder in "Tamil99" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 00C1E1B72E8C1E94001A493D /* Tamil99 */;
+		};
+		004EC0362E8D795C0076D45E /* Exceptions for "TamilAnjal" folder in "TamilAnjal" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 004EBFF82E8C2A500076D45E /* TamilAnjal */;
+		};
+		006AB05E2E86835900BAAAA8 /* Exceptions for "SangamKeyboardsExtension" folder in "KeyboardCore" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				KeyTranslators/MalayalamKeyTranslator.swift,
+				KeyTranslators/MalayKeyTranslator.swift,
+				KeyTranslators/Tamil99KeyTranslator.swift,
+				KeyTranslators/TamilAnjalKeyTranslator.swift,
+			);
+			target = 006AAF842E83EF8600BAAAA8 /* KeyboardCore */;
+		};
+		00C1E1CA2E8C1EDD001A493D /* Exceptions for "SangamKeyboardsExtension" folder in "SangamKeyboards" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				KeyboardMetrics.swift,
+				KeyboardViewController.swift,
+				Resources/SellinamAssets.fpk2,
+				sample_theme_with_tamil_font.json,
+			);
+			target = 006AAF292E83EDD400BAAAA8 /* SangamKeyboards */;
+		};
+		00C1E1CB2E8C1EDD001A493D /* Exceptions for "SangamKeyboardsExtension" folder in "Tamil99" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				KeyboardMetrics.swift,
+				KeyboardViewController.swift,
+				Resources/SellinamAssets.fpk2,
+				sample_theme_with_tamil_font.json,
+			);
+			target = 00C1E1B72E8C1E94001A493D /* Tamil99 */;
+		};
+		00C321042EA3EC5400AEDD92 /* Exceptions for "FontExtractor" folder in "SangamKeyboards" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FontExracter.swift,
+			);
+			target = 006AAF292E83EDD400BAAAA8 /* SangamKeyboards */;
+		};
+		00C3210B2EA3F22400AEDD92 /* Exceptions for "FontExtractor" folder in "KeyboardCore" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				FontExracter.swift,
+			);
+			target = 006AAF842E83EF8600BAAAA8 /* KeyboardCore */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		004EBFFA2E8C2A500076D45E /* TamilAnjal */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				004EC0362E8D795C0076D45E /* Exceptions for "TamilAnjal" folder in "TamilAnjal" target */,
+			);
+			path = TamilAnjal;
+			sourceTree = "<group>";
+		};
+		006AAF2C2E83EDD400BAAAA8 /* SangamKeyboards */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SangamKeyboards;
+			sourceTree = "<group>";
+		};
+		006AAF502E83EF0900BAAAA8 /* SangamKeyboardsExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				00C1E1CA2E8C1EDD001A493D /* Exceptions for "SangamKeyboardsExtension" folder in "SangamKeyboards" target */,
+				006AB05E2E86835900BAAAA8 /* Exceptions for "SangamKeyboardsExtension" folder in "KeyboardCore" target */,
+				00C1E1CB2E8C1EDD001A493D /* Exceptions for "SangamKeyboardsExtension" folder in "Tamil99" target */,
+				004EC0062E8C2A8B0076D45E /* Exceptions for "SangamKeyboardsExtension" folder in "TamilAnjal" target */,
+			);
+			path = SangamKeyboardsExtension;
+			sourceTree = "<group>";
+		};
+		006AAF862E83EF8600BAAAA8 /* KeyboardCore */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = KeyboardCore;
+			sourceTree = "<group>";
+		};
+		00C1E1B92E8C1E94001A493D /* Tamil99 */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				004EC0352E8D79580076D45E /* Exceptions for "Tamil99" folder in "Tamil99" target */,
+			);
+			path = Tamil99;
+			sourceTree = "<group>";
+		};
+		00C320F82EA3E8A500AEDD92 /* FontExtractor */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				00C321042EA3EC5400AEDD92 /* Exceptions for "FontExtractor" folder in "SangamKeyboards" target */,
+				00C3210B2EA3F22400AEDD92 /* Exceptions for "FontExtractor" folder in "KeyboardCore" target */,
+			);
+			path = FontExtractor;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		004EBFF62E8C2A500076D45E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				004EC03C2E8EC76B0076D45E /* KeyboardCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		006AAF272E83EDD400BAAAA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				006AAF8D2E83EF8600BAAAA8 /* KeyboardCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		006AAF822E83EF8600BAAAA8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00C1E1B52E8C1E94001A493D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				004EC03B2E8EC7640076D45E /* KeyboardCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00C320F42EA3E8A500AEDD92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		004EC03A2E8EC7640076D45E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		006AAF212E83EDD400BAAAA8 = {
+			isa = PBXGroup;
+			children = (
+				006AAF2C2E83EDD400BAAAA8 /* SangamKeyboards */,
+				006AAF502E83EF0900BAAAA8 /* SangamKeyboardsExtension */,
+				006AAF862E83EF8600BAAAA8 /* KeyboardCore */,
+				00C1E1B92E8C1E94001A493D /* Tamil99 */,
+				004EBFFA2E8C2A500076D45E /* TamilAnjal */,
+				00C320F82EA3E8A500AEDD92 /* FontExtractor */,
+				004EC03A2E8EC7640076D45E /* Frameworks */,
+				006AAF2B2E83EDD400BAAAA8 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		006AAF2B2E83EDD400BAAAA8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				006AAF2A2E83EDD400BAAAA8 /* SangamKeyboards.app */,
+				006AAF852E83EF8600BAAAA8 /* KeyboardCore.framework */,
+				00C1E1B82E8C1E94001A493D /* Tamil99.appex */,
+				004EBFF92E8C2A500076D45E /* TamilAnjal.appex */,
+				00C320F72EA3E8A500AEDD92 /* FontExtractor */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		006AAF802E83EF8600BAAAA8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		004EBFF82E8C2A500076D45E /* TamilAnjal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 004EC0012E8C2A500076D45E /* Build configuration list for PBXNativeTarget "TamilAnjal" */;
+			buildPhases = (
+				004EBFF52E8C2A500076D45E /* Sources */,
+				004EBFF62E8C2A500076D45E /* Frameworks */,
+				004EBFF72E8C2A500076D45E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				004EBFFA2E8C2A500076D45E /* TamilAnjal */,
+			);
+			name = TamilAnjal;
+			packageProductDependencies = (
+			);
+			productName = TamilAnjal;
+			productReference = 004EBFF92E8C2A500076D45E /* TamilAnjal.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		006AAF292E83EDD400BAAAA8 /* SangamKeyboards */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 006AAF352E83EDD500BAAAA8 /* Build configuration list for PBXNativeTarget "SangamKeyboards" */;
+			buildPhases = (
+				006AAF262E83EDD400BAAAA8 /* Sources */,
+				006AAF272E83EDD400BAAAA8 /* Frameworks */,
+				006AAF282E83EDD400BAAAA8 /* Resources */,
+				006AAF5B2E83EF0900BAAAA8 /* Embed Foundation Extensions */,
+				006AAF922E83EF8600BAAAA8 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				006AAF8C2E83EF8600BAAAA8 /* PBXTargetDependency */,
+				00C1E1BE2E8C1E94001A493D /* PBXTargetDependency */,
+				004EBFFF2E8C2A500076D45E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				006AAF2C2E83EDD400BAAAA8 /* SangamKeyboards */,
+			);
+			name = SangamKeyboards;
+			packageProductDependencies = (
+			);
+			productName = SangamKeyboards;
+			productReference = 006AAF2A2E83EDD400BAAAA8 /* SangamKeyboards.app */;
+			productType = "com.apple.product-type.application";
+		};
+		006AAF842E83EF8600BAAAA8 /* KeyboardCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 006AAF8F2E83EF8600BAAAA8 /* Build configuration list for PBXNativeTarget "KeyboardCore" */;
+			buildPhases = (
+				006AAF802E83EF8600BAAAA8 /* Headers */,
+				006AAF812E83EF8600BAAAA8 /* Sources */,
+				006AAF822E83EF8600BAAAA8 /* Frameworks */,
+				006AAF832E83EF8600BAAAA8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				006AAF862E83EF8600BAAAA8 /* KeyboardCore */,
+			);
+			name = KeyboardCore;
+			packageProductDependencies = (
+			);
+			productName = KeyboardCore;
+			productReference = 006AAF852E83EF8600BAAAA8 /* KeyboardCore.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		00C1E1B72E8C1E94001A493D /* Tamil99 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00C1E1C12E8C1E94001A493D /* Build configuration list for PBXNativeTarget "Tamil99" */;
+			buildPhases = (
+				00C1E1B42E8C1E94001A493D /* Sources */,
+				00C1E1B52E8C1E94001A493D /* Frameworks */,
+				00C1E1B62E8C1E94001A493D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				00C1E1B92E8C1E94001A493D /* Tamil99 */,
+			);
+			name = Tamil99;
+			packageProductDependencies = (
+			);
+			productName = Tamil99;
+			productReference = 00C1E1B82E8C1E94001A493D /* Tamil99.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		00C320F62EA3E8A500AEDD92 /* FontExtractor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00C320FB2EA3E8A500AEDD92 /* Build configuration list for PBXNativeTarget "FontExtractor" */;
+			buildPhases = (
+				00C320F32EA3E8A500AEDD92 /* Sources */,
+				00C320F42EA3E8A500AEDD92 /* Frameworks */,
+				00C320F52EA3E8A500AEDD92 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				00C320F82EA3E8A500AEDD92 /* FontExtractor */,
+			);
+			name = FontExtractor;
+			packageProductDependencies = (
+			);
+			productName = FontExtractor;
+			productReference = 00C320F72EA3E8A500AEDD92 /* FontExtractor */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		006AAF222E83EDD400BAAAA8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2600;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					004EBFF82E8C2A500076D45E = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					006AAF292E83EDD400BAAAA8 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					006AAF842E83EF8600BAAAA8 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					00C1E1B72E8C1E94001A493D = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					00C320F62EA3E8A500AEDD92 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+				};
+			};
+			buildConfigurationList = 006AAF252E83EDD400BAAAA8 /* Build configuration list for PBXProject "SangamKeyboards" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 006AAF212E83EDD400BAAAA8;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 006AAF2B2E83EDD400BAAAA8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				006AAF292E83EDD400BAAAA8 /* SangamKeyboards */,
+				006AAF842E83EF8600BAAAA8 /* KeyboardCore */,
+				00C1E1B72E8C1E94001A493D /* Tamil99 */,
+				004EBFF82E8C2A500076D45E /* TamilAnjal */,
+				00C320F62EA3E8A500AEDD92 /* FontExtractor */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		004EBFF72E8C2A500076D45E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		006AAF282E83EDD400BAAAA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		006AAF832E83EF8600BAAAA8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00C1E1B62E8C1E94001A493D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		004EBFF52E8C2A500076D45E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		006AAF262E83EDD400BAAAA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		006AAF812E83EF8600BAAAA8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00C1E1B42E8C1E94001A493D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		00C320F32EA3E8A500AEDD92 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		004EBFFF2E8C2A500076D45E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 004EBFF82E8C2A500076D45E /* TamilAnjal */;
+			targetProxy = 004EBFFE2E8C2A500076D45E /* PBXContainerItemProxy */;
+		};
+		006AAF8C2E83EF8600BAAAA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 006AAF842E83EF8600BAAAA8 /* KeyboardCore */;
+			targetProxy = 006AAF8B2E83EF8600BAAAA8 /* PBXContainerItemProxy */;
+		};
+		00C1E1BE2E8C1E94001A493D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00C1E1B72E8C1E94001A493D /* Tamil99 */;
+			targetProxy = 00C1E1BD2E8C1E94001A493D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		004EC0022E8C2A500076D45E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TamilAnjal/TamilAnjal.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 300;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TamilAnjal/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TamilAnjal;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.murasu.Sangam.TamilAnjal;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		004EC0032E8C2A500076D45E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = TamilAnjal/TamilAnjal.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 300;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TamilAnjal/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TamilAnjal;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.murasu.Sangam.TamilAnjal;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		006AAF332E83EDD500BAAAA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		006AAF342E83EDD500BAAAA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		006AAF362E83EDD500BAAAA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SangamKeyboards/SangamKeyboards.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 300;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.murasu.Sangam;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		006AAF372E83EDD500BAAAA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SangamKeyboards/SangamKeyboards.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 300;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.murasu.Sangam;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		006AAF902E83EF8600BAAAA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.murasu.Sangam.KeyboardCore;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		006AAF912E83EF8600BAAAA8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.murasu.Sangam.KeyboardCore;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_MODULE = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		00C1E1C22E8C1E94001A493D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Tamil99/Tamil99.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 300;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tamil99/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tamil99;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.murasu.Sangam.Tamil99;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		00C1E1C32E8C1E94001A493D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Tamil99/Tamil99.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 300;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tamil99/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Tamil99;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.murasu.Sangam.Tamil99;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		00C320FC2EA3E8A500AEDD92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		00C320FD2EA3E8A500AEDD92 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = F7UG2X3VU8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		004EC0012E8C2A500076D45E /* Build configuration list for PBXNativeTarget "TamilAnjal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				004EC0022E8C2A500076D45E /* Debug */,
+				004EC0032E8C2A500076D45E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		006AAF252E83EDD400BAAAA8 /* Build configuration list for PBXProject "SangamKeyboards" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				006AAF332E83EDD500BAAAA8 /* Debug */,
+				006AAF342E83EDD500BAAAA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		006AAF352E83EDD500BAAAA8 /* Build configuration list for PBXNativeTarget "SangamKeyboards" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				006AAF362E83EDD500BAAAA8 /* Debug */,
+				006AAF372E83EDD500BAAAA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		006AAF8F2E83EF8600BAAAA8 /* Build configuration list for PBXNativeTarget "KeyboardCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				006AAF902E83EF8600BAAAA8 /* Debug */,
+				006AAF912E83EF8600BAAAA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00C1E1C12E8C1E94001A493D /* Build configuration list for PBXNativeTarget "Tamil99" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00C1E1C22E8C1E94001A493D /* Debug */,
+				00C1E1C32E8C1E94001A493D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00C320FB2EA3E8A500AEDD92 /* Build configuration list for PBXNativeTarget "FontExtractor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00C320FC2EA3E8A500AEDD92 /* Debug */,
+				00C320FD2EA3E8A500AEDD92 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 006AAF222E83EDD400BAAAA8 /* Project object */;
+}

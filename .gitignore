@@ -1,0 +1,312 @@
+# Xcode
+.DS_Store
+build/
+DerivedData/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+
+# SwiftPM
+.swiftpm/
+.build/
+Package.resolved
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Accio dependency manager
+Dependencies/
+.accio/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output/
+
+# Code coverage
+*.gcno
+*.gcda
+*.profraw
+*.profdata
+
+# Archives
+*.xcarchive
+
+# Swift playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# User-specific files
+*.swp
+*.swo
+
+# SPM Xcode integration cache
+.xcpackage/
+
+# Other
+*.moved-aside
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Keyboards/extensions
+*.appex
+
+# Android Studio / IntelliJ IDEA
+*.iml
+.idea/
+.gradle/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+.navigation/
+lint/
+
+# Android build outputs
+app/build/
+*/build/
+
+# NDK
+obj/
+.ndk/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+.history/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.opendb
+*.VC.VC.opendb
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+*.pidb
+*.svclog
+*.scc
+*.psess
+*.vsp
+*.vspx
+*.sap
+*.cachefile
+*.Cache
+*.ilk
+*.log
+*.tlog
+*.lastbuildstate
+*.idb
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp_proj
+*.vspscc
+*.vssscc
+*.sln.docstates.suo
+*.sln.ide
+*.dotSettings
+*.DotSettings.user
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# C/C++
+*.o
+*.obj
+*.out
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.ko
+*.elf
+*.gch
+*.pch
+*.d
+*.su
+*.i*86
+*.x86_64
+*.hex
+core
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+
+# Kotlin
+*.kt.swp
+.kotlin/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.cover
+*.egg
+*.egg-info/
+dist/
+wheels/
+*.manifest
+*.spec
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+celerybeat-schedule
+*.sage.py
+.ipynb_checkpoints
+.spyderproject
+.spyproject
+.ropeproject
+
+# PHP
+vendor/
+composer.phar
+composer.lock
+.phpunit.result.cache
+.env.local
+.env.*.local
+npm-debug.log
+yarn-error.log
+
+# Objective-C
+*.hmap
+*.ipa
+*.xcuserstate
+xcshareddata/
+
+# Temp and build directories
+temp/
+tmp/
+build/
+xcode-build/
+win-build/
+android-build/
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# Logs
+*.log
+logs/
+log/
+
+# Package managers
+node_modules/
+bower_components/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS generated
+.directory
