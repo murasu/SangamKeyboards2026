@@ -20,12 +20,13 @@ let package = Package(
             name: "CAnjalKeyTranslator",
             path: ".",
             sources: [
-                "src/KeyTranslatorMultilingual.c",
                 "src/tamil/AnjalKeyMap.c",
+                "src/tamil/KeyTranslatorTamil.c",
                 "src/indic/IndicNotesIMEngine.c",
                 "src/indic/IndicDevanagariKeymap.c",
                 "src/indic/IndicMalayalamKeymap.c",
                 "src/indic/IndicKannadaKeymap.c",
+                "src/indic/IndicTamilAnjalKeymap.c",
                 "src/indic/IndicTeluguKeymap.c",
                 "src/indic/IndicGurmukhiKeymap.c"
             ],

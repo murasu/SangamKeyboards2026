@@ -18,6 +18,7 @@ void  getKeyStringUnicode(UniChar currKey, UniChar *s,  getKeyStringResults *res
 	if ( results->imeType == kImeTypeDevanagari )
 		getKeyStringUnicodeDevanagariAnjal(currKey, s, results);
 	else if ( results->imeType == kImeTypeTamil )
+        // TODO: This was used in the IndicNotes key translator. Check if it can be removed.
 		getKeyStringUnicodeTamilAnjal(currKey, s, results);
 	//else if ( results->imeType == kImeTypeDiacritic )
 	//	getKeyStringUnicodeDiacritic(currKey, s, results);

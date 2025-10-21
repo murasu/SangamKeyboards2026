@@ -4,26 +4,6 @@ import CAnjalKeyTranslator
 @available(macOS 12.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 public class SwiftKeyTranslator {
     
-    public enum SupportedLanguage: Int32, CaseIterable {
-        case tamil = 101
-        case devanagari = 100    
-        case malayalam = 102
-        case kannada = 105
-        case telugu = 104
-        case gurmukhi = 103
-        
-        public var displayName: String {
-            switch self {
-            case .tamil: return "Tamil"
-            case .devanagari: return "Devanagari (Hindi/Sanskrit)"
-            case .malayalam: return "Malayalam"
-            case .kannada: return "Kannada"
-            case .telugu: return "Telugu"
-            case .gurmukhi: return "Gurmukhi (Punjabi)"
-            }
-        }
-    }
-    
     public enum KeyboardLayout: Int32, CaseIterable {
         case anjal = 0
         case tamil99 = 1
@@ -35,7 +15,12 @@ public class SwiftKeyTranslator {
         case murasu6 = 7
         case bamini = 8
         case tnTypewriter = 9
-    }
+        
+        // Convert to C enum
+        var cValue: CAnjalKeyTranslator.KeyboardLayout {
+            return CAnjalKeyTranslator.KeyboardLayout(rawValue: UInt32(self.rawValue))
+        }
+    } 
     
     private let translatorRef: MultilingualTranslatorRef
     private var currentLanguage: SupportedLanguage
@@ -45,8 +30,8 @@ public class SwiftKeyTranslator {
         self.currentLanguage = language
         self.currentLayout = layout
         
-        // Create the C translator instance
-        self.translatorRef = multilingual_translator_create(language.rawValue, layout.rawValue)
+        // Create the C translator instance - pass enums directly
+        self.translatorRef = multilingual_translator_create(language, layout.cValue)
     }
     
     deinit {
@@ -71,7 +56,7 @@ public class SwiftKeyTranslator {
     }
     
     public func switchLanguage(to language: SupportedLanguage) -> Bool {
-        let success = multilingual_translator_set_language(translatorRef, language.rawValue)
+        let success = multilingual_translator_set_language(translatorRef, language)
         if success {
             currentLanguage = language
         }
@@ -79,7 +64,7 @@ public class SwiftKeyTranslator {
     }
     
     public func setLayout(_ layout: KeyboardLayout) -> Bool {
-        let success = multilingual_translator_set_layout(translatorRef, layout.rawValue)
+        let success = multilingual_translator_set_layout(translatorRef, layout.cValue)
         if success {
             currentLayout = layout
         }
@@ -120,27 +105,27 @@ public class SwiftKeyTranslator {
             
             // Tamil: 0x0B80-0x0BFF
             if value >= 0x0B80 && value <= 0x0BFF {
-                return .tamil
+                return LANG_TAMIL
             }
             // Devanagari: 0x0900-0x097F  
             else if value >= 0x0900 && value <= 0x097F {
-                return .devanagari
+                return LANG_DEVANAGARI
             }
             // Malayalam: 0x0D00-0x0D7F
             else if value >= 0x0D00 && value <= 0x0D7F {
-                return .malayalam
+                return LANG_MALAYALAM
             }
             // Kannada: 0x0C80-0x0CFF
             else if value >= 0x0C80 && value <= 0x0CFF {
-                return .kannada
+                return LANG_KANNADA
             }
             // Telugu: 0x0C00-0x0C7F
             else if value >= 0x0C00 && value <= 0x0C7F {
-                return .telugu
+                return LANG_TELUGU
             }
             // Gurmukhi: 0x0A00-0x0A7F
             else if value >= 0x0A00 && value <= 0x0A7F {
-                return .gurmukhi
+                return LANG_GURMUKHI
             }
         }
         return nil

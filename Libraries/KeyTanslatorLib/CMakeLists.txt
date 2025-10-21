@@ -34,7 +34,7 @@ set(INDIC_SOURCES
 )
 
 set(MAIN_SOURCES
-    src/KeyTranslatorMultilingual.c
+    #src/KeyTranslatorMultilingual.c
     ${TAMIL_SOURCES}
     ${INDIC_SOURCES}
 )
@@ -56,7 +56,7 @@ add_library(AnjalKeyTranslatorShared SHARED ${MAIN_SOURCES} ${HEADERS})
 
 # Set library properties
 set_target_properties(AnjalKeyTranslator PROPERTIES
-    OUTPUT_NAME "anjalkeyboard"
+    OUTPUT_NAME "anjalkeyboard-static"
     VERSION ${PROJECT_VERSION}
     SOVERSION 1
 )
