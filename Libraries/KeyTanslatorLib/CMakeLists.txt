@@ -30,6 +30,7 @@ set(INDIC_SOURCES
     src/indic/IndicKannadaKeymap.c
     src/indic/IndicTeluguKeymap.c
     src/indic/IndicGurmukhiKeymap.c
+    src/indic/IndicTamilAnjalKeymap.c
 )
 
 set(MAIN_SOURCES

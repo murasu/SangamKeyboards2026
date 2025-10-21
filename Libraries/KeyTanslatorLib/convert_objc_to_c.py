@@ -65,12 +65,13 @@ def main():
     
     # List of files to convert
     files_to_convert = [
-        'IndicDevanagariAnjalIMKeymap.m',
-        'IndicMalayalamAnjalIMKeymap.m', 
-        'IndicKannadaAnjalIMKeymap.m',
-        'IndicTeluguAnjalIMKeymap.m',
-        'IndicGurmukhiAnjalIMKeymap.m',
-        'IndicNotesIMEngine.m'
+#        'IndicDevanagariAnjalIMKeymap.m',
+#        'IndicMalayalamAnjalIMKeymap.m', 
+#        'IndicKannadaAnjalIMKeymap.m',
+#        'IndicTeluguAnjalIMKeymap.m',
+#        'IndicGurmukhiAnjalIMKeymap.m',
+#        'IndicNotesIMEngine.m'
+        'IndicTamilAnjalIMKeymap.m'
     ]
     
     for filename in files_to_convert:

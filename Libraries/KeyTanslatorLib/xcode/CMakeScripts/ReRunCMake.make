@@ -5,10 +5,10 @@ empty:=
 space:= $(empty) $(empty)
 spaceplus:= $(empty)\ $(empty)
 
-TARGETS += $(subst $(space),$(spaceplus),$(wildcard /Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/CMakeLists.txt))
-TARGETS += $(subst $(space),$(spaceplus),$(wildcard /Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/3.30.5/CMakeCCompiler.cmake))
-TARGETS += $(subst $(space),$(spaceplus),$(wildcard /Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake))
-TARGETS += $(subst $(space),$(spaceplus),$(wildcard /Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/3.30.5/CMakeSystem.cmake))
+TARGETS += $(subst $(space),$(spaceplus),$(wildcard /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt))
+TARGETS += $(subst $(space),$(spaceplus),$(wildcard /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/3.30.5/CMakeCCompiler.cmake))
+TARGETS += $(subst $(space),$(spaceplus),$(wildcard /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake))
+TARGETS += $(subst $(space),$(spaceplus),$(wildcard /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/3.30.5/CMakeSystem.cmake))
 TARGETS += $(subst $(space),$(spaceplus),$(wildcard /opt/homebrew/Cellar/cmake/3.30.5/share/cmake/Modules/CMakeCInformation.cmake))
 TARGETS += $(subst $(space),$(spaceplus),$(wildcard /opt/homebrew/Cellar/cmake/3.30.5/share/cmake/Modules/CMakeCXXInformation.cmake))
 TARGETS += $(subst $(space),$(spaceplus),$(wildcard /opt/homebrew/Cellar/cmake/3.30.5/share/cmake/Modules/CMakeCommonLanguageInclude.cmake))
@@ -31,5 +31,5 @@ TARGETS += $(subst $(space),$(spaceplus),$(wildcard /opt/homebrew/Cellar/cmake/3
 TARGETS += $(subst $(space),$(spaceplus),$(wildcard /opt/homebrew/Cellar/cmake/3.30.5/share/cmake/Modules/Platform/Darwin.cmake))
 TARGETS += $(subst $(space),$(spaceplus),$(wildcard /opt/homebrew/Cellar/cmake/3.30.5/share/cmake/Modules/Platform/UnixPaths.cmake))
 
-/Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/cmake.check_cache: $(TARGETS)
-	/opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -S/Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib -B/Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode
+/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/cmake.check_cache: $(TARGETS)
+	/opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -S/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib -B/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode

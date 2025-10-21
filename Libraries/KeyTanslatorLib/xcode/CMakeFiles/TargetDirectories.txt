@@ -1,5 +1,0 @@
-/Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslator.dir
-/Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslatorShared.dir
-/Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/install.dir
-/Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/ALL_BUILD.dir
-/Users/muthu/Projects/SangamKeyboards-2026/LibrariesAndComponents/KeyTanslatorLib/xcode/CMakeFiles/ZERO_CHECK.dir

@@ -65,6 +65,22 @@ playground.xcworkspace
 # Keyboards/extensions
 *.appex
 
+# CMake
+CMakeFiles/
+CMakeCache.txt
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+*.cmake
+!CMakeLists.txt
+*.bin
+*.cbp
+cmake-build-*/
+CMakeUserPresets.json
+
 # Android Studio / IntelliJ IDEA
 *.iml
 .idea/
