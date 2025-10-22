@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		008BF1B42EA8E06B004F6F89 /* AnjalKeyTranslator in Frameworks */ = {isa = PBXBuildFile; productRef = 008BF1B32EA8E06B004F6F89 /* AnjalKeyTranslator */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		008BF18D2EA89C06004F6F89 /* ContextAwareEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContextAwareEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				008BF1B42EA8E06B004F6F89 /* AnjalKeyTranslator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = ContextAwareEditor;
 			packageProductDependencies = (
+				008BF1B32EA8E06B004F6F89 /* AnjalKeyTranslator */,
 			);
 			productName = ContextAwareEditor;
 			productReference = 008BF18D2EA89C06004F6F89 /* ContextAwareEditor.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 008BF1842EA89C06004F6F89;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				008BF1B22EA8E06B004F6F89 /* XCLocalSwiftPackageReference "../../Libraries/KeyTanslatorLib" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 008BF18E2EA89C06004F6F89 /* Products */;
 			projectDirPath = "";
@@ -351,6 +360,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		008BF1B22EA8E06B004F6F89 /* XCLocalSwiftPackageReference "../../Libraries/KeyTanslatorLib" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Libraries/KeyTanslatorLib;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		008BF1B32EA8E06B004F6F89 /* AnjalKeyTranslator */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AnjalKeyTranslator;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 008BF1852EA89C06004F6F89 /* Project object */;
 }

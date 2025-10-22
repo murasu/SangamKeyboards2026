@@ -47,10 +47,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		008BF1AA2EA8DEE4004F6F89 /* Package 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BF1A92EA8DEE4004F6F89 /* Package 2.swift */; };
-		008BF1AC2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BF1AB2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift */; };
-		008BF1AF2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BF1AE2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift */; };
-		008BF1B12EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BF1B02EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift */; };
 		0A9F0828E85D4FB6B02B435E /* AnjalKeyMapLookup.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D42BC271E6A43B99D60E3C2 /* AnjalKeyMapLookup.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0CC5BF7A073B48328D9296B2 /* EncodingTamil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FADFD739A144A579050BCDC /* EncodingTamil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1DAB609CA88D42D89566E2E6 /* IndicIMEConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0BC4416F7D4777BD774824 /* IndicIMEConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -130,11 +126,6 @@
 
 /* Begin PBXFileReference section */
 		0071AC104CF748738ECE402F /* IndicKannadaKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicKannadaKeymap.c; path = src/indic/IndicKannadaKeymap.c; sourceTree = SOURCE_ROOT; };
-		008BF1A92EA8DEE4004F6F89 /* Package 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package 2.swift"; sourceTree = "<group>"; };
-		008BF1AB2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift; sourceTree = "<group>"; };
-		008BF1AD2EA8DF00004F6F89 /* SourcesCAnjalKeyTranslatorincludemodule.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = SourcesCAnjalKeyTranslatorincludemodule.modulemap; sourceTree = "<group>"; };
-		008BF1AE2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplesSwiftUIExampleContentView.swift; sourceTree = "<group>"; };
-		008BF1B02EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift; sourceTree = "<group>"; };
 		01E4433FF06F43679D0E2CEE /* KeyTranslatorTamil.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = KeyTranslatorTamil.c; path = src/tamil/KeyTranslatorTamil.c; sourceTree = SOURCE_ROOT; };
 		02E1FE4CE7F54520B3D6FAE8 /* IndicTamilAnjalKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTamilAnjalKeymap.c; path = src/indic/IndicTamilAnjalKeymap.c; sourceTree = SOURCE_ROOT; };
 		1B4EE5522BEB4970995B43EA /* IndicDevanagariKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicDevanagariKeymap.c; path = src/indic/IndicDevanagariKeymap.c; sourceTree = SOURCE_ROOT; };
@@ -272,11 +263,6 @@
 				4B0BC4416F7D4777BD774824 /* IndicIMEConstants.h */,
 				4F3C826C427D4A28BDF4368D /* IndicNotesIMEngine.h */,
 				BA5BC1294DAA4036A054FDDD /* KeyTranslatorMultilingual.h */,
-				008BF1A92EA8DEE4004F6F89 /* Package 2.swift */,
-				008BF1AB2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift */,
-				008BF1AD2EA8DF00004F6F89 /* SourcesCAnjalKeyTranslatorincludemodule.modulemap */,
-				008BF1AE2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift */,
-				008BF1B02EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift */,
 			);
 			name = "Header Files";
 			sourceTree = "<group>";
@@ -482,14 +468,10 @@
 				85099E35EE594387A651EBB0 /* IndicGurmukhiKeymap.c in Sources */,
 				3AE24A472AFF4710A7E1D3B0 /* IndicKannadaKeymap.c in Sources */,
 				504647D443A84001BA6CC8C4 /* IndicMalayalamKeymap.c in Sources */,
-				008BF1AC2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift in Sources */,
 				210D8D073E0F4AE985395301 /* IndicNotesIMEngine.c in Sources */,
-				008BF1AF2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift in Sources */,
 				85502093AC19490FB72E3261 /* IndicTamilAnjalKeymap.c in Sources */,
-				008BF1AA2EA8DEE4004F6F89 /* Package 2.swift in Sources */,
 				ABB0071EB8AE4C1590465D37 /* IndicTeluguKeymap.c in Sources */,
 				ADEECAD5098049E08953AA91 /* AnjalKeyMap.c in Sources */,
-				008BF1B12EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift in Sources */,
 				3FB6081D81B74526A560B0AC /* KeyTranslatorTamil.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
