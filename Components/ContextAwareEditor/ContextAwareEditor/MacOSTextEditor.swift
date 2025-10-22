@@ -47,10 +47,16 @@ class CustomNSTextView: NSTextView {
     func configure(with core: TextEditorCore) {
         self.editorCore = core
         
-        // Set the text storage
-        textStorage?.setAttributedString(core.textStorage)
+        // Set initial text from core
+        if !core.textStorage.string.isEmpty {
+            string = core.textStorage.string
+        }
         
-        // Observe core changes
+        // Make sure the text view is editable and selectable
+        isEditable = true
+        isSelectable = true
+        
+        // Setup observers
         setupObservers()
     }
     
@@ -89,20 +95,36 @@ class CustomNSTextView: NSTextView {
         let character = characters
         let currentRange = selectedRange()
         
-        // Process the character through our core
-        editorCore.processTypedCharacter(character, at: currentRange)
+        // Let the system handle the text insertion first
+        super.keyDown(with: event)
+        
+        // Then process through our core for predictions
+        editorCore.updatePredictions(at: selectedRange().location)
         
         // Update the display
         updatePredictionDisplay()
     }
     
     override func insertText(_ string: Any) {
-        // Override to prevent double insertion since we handle it in processTypedCharacter
-        if let editorCore = editorCore, editorCore.showingPrediction {
-            // If we're showing predictions, let our system handle it
-            return
-        }
         super.insertText(string)
+        
+        // After text is inserted, sync with our core and update predictions
+        if let editorCore = editorCore {
+            // Update the core's text storage to match what's actually in the text view
+            if textStorage?.string != editorCore.textStorage.string {
+                editorCore.textStorage.replaceCharacters(
+                    in: NSRange(location: 0, length: editorCore.textStorage.length),
+                    with: textStorage?.string ?? ""
+                )
+            }
+            
+            // Update predictions based on current cursor position
+            editorCore.updatePredictions(at: selectedRange().location)
+            updatePredictionDisplay()
+            
+            // Notify of text change
+            editorCore.onTextChange?(editorCore.textStorage.string)
+        }
     }
     
     // MARK: - Prediction Display
@@ -190,6 +212,19 @@ class PredictionOverlayView: NSView {
     }
 }
 
+/// SwiftUI wrapper for the macOS text editor that properly manages state
+struct MacOSTextEditorView: View {
+    @StateObject private var observedCore: TextEditorCore
+    
+    init(core: TextEditorCore) {
+        self._observedCore = StateObject(wrappedValue: core)
+    }
+    
+    var body: some View {
+        MacOSTextEditor(core: observedCore)
+    }
+}
+
 /// SwiftUI wrapper for the macOS text editor
 struct MacOSTextEditor: NSViewRepresentable {
     @ObservedObject var core: TextEditorCore
@@ -216,9 +251,12 @@ struct MacOSTextEditor: NSViewRepresentable {
     func updateNSView(_ nsView: NSScrollView, context: Context) {
         guard let textView = nsView.documentView as? CustomNSTextView else { return }
         
-        // Update text if needed
+        // Update text if the core has been modified externally
         if textView.string != core.textStorage.string {
             textView.string = core.textStorage.string
+            // Move cursor to end after setting text
+            let length = textView.string.count
+            textView.setSelectedRange(NSRange(location: length, length: 0))
         }
     }
 }

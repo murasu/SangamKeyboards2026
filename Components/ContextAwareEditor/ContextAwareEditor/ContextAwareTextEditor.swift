@@ -16,11 +16,9 @@ import UIKit
 
 /// Cross-platform SwiftUI text editor with context-aware features
 public struct ContextAwareTextEditor: View {
-    @StateObject private var core = TextEditorCore()
+    let core: TextEditorCore
     
     // Configuration options
-    private var onTextChange: ((String) -> Void)?
-    private var onKeyTranslation: ((String, NSRange?) -> Void)?
     private var fontSize: CGFloat
     private var textColor: Color
     private var backgroundColor: Color
@@ -36,6 +34,7 @@ public struct ContextAwareTextEditor: View {
             #endif
         }()
     ) {
+        self.core = TextEditorCore()
         self.fontSize = fontSize
         self.textColor = textColor
         self.backgroundColor = backgroundColor
@@ -44,7 +43,7 @@ public struct ContextAwareTextEditor: View {
     public var body: some View {
         Group {
             #if canImport(AppKit)
-            MacOSTextEditor(core: core)
+            MacOSTextEditorView(core: core)
             #elseif canImport(UIKit)
             IOSTextEditor(core: core)
             #else
@@ -53,32 +52,20 @@ public struct ContextAwareTextEditor: View {
             #endif
         }
         .background(backgroundColor)
-        .onAppear {
-            setupCore()
-        }
-    }
-    
-    private func setupCore() {
-        core.onTextChange = onTextChange
-        core.onKeyTranslation = onKeyTranslation
     }
     
     // MARK: - Configuration Methods
     
     /// Set a callback for text changes
     public func onTextChange(_ callback: @escaping (String) -> Void) -> ContextAwareTextEditor {
-        var editor = self
-        editor.onTextChange = callback
-        editor.core.onTextChange = callback
-        return editor
+        core.onTextChange = callback
+        return self
     }
     
     /// Set a callback for key translation events
     public func onKeyTranslation(_ callback: @escaping (String, NSRange?) -> Void) -> ContextAwareTextEditor {
-        var editor = self
-        editor.onKeyTranslation = callback
-        editor.core.onKeyTranslation = callback
-        return editor
+        core.onKeyTranslation = callback
+        return self
     }
     
     /// Configure the text processor for character translation
