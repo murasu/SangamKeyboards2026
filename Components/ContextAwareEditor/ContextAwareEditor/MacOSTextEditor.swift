@@ -180,11 +180,13 @@ struct MacOSTextEditor: NSViewRepresentable {
         
         // Manual color selection since NSColor.labelColor doesn't work in SwiftUI context
         let textColor: NSColor
+        textColor = .labelColor
+        /*
         if NSApp.effectiveAppearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua {
             textColor = NSColor.white  // Dark mode - white text
         } else {
             textColor = NSColor.black  // Light mode - black text
-        }
+        } */
         
         textView.textStorage?.addAttribute(.foregroundColor, value: textColor, range: fullRange)
         
