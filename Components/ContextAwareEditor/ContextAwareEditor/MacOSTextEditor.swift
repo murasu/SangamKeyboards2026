@@ -196,7 +196,7 @@ struct MacOSTextEditor: NSViewRepresentable {
     
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
-        let textView = CustomNSTextView()
+        let textView = CustomNSTextView(frame: .zero, textContainer: nil)
         
         // Configure scroll view
         scrollView.hasVerticalScroller = true

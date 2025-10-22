@@ -39,9 +39,15 @@ public class TextEditorCore: ObservableObject {
     
     private func setupTextStorage() {
         // Set up default attributes for the text
+        #if canImport(AppKit)
+        let textColor = NSColor.labelColor
+        #elseif canImport(UIKit)
+        let textColor = UIColor.label
+        #endif
+        
         let defaultAttributes: [NSAttributedString.Key: Any] = [
             .font: PlatformFont.monospacedSystemFont(ofSize: 14, weight: .regular),
-            .foregroundColor: PlatformColor.label
+            .foregroundColor: textColor
         ]
         
         let attributedString = NSAttributedString(string: "", attributes: defaultAttributes)
