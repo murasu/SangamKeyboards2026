@@ -1,3 +1,4 @@
+/*
 import Foundation
 import CAnjalKeyTranslator
 
@@ -37,6 +38,7 @@ public class SwiftKeyTranslator {
     deinit {
         multilingual_translator_destroy(translatorRef)
     }
+
     
     public func translateKey(keyCode: Int32, shifted: Bool = false) -> String {
         let buffer = UnsafeMutablePointer<wchar_t>.allocate(capacity: 20)
@@ -131,3 +133,4 @@ public class SwiftKeyTranslator {
         return nil
     }
 }
+*/

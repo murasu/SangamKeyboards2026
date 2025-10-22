@@ -1,4 +1,9 @@
 module CAnjalKeyTranslator {
     header "KeyTranslatorMultilingual.h"
+    header "AnjalKeyMap.h"
+    header "AnjalKeyMapLookup.h"
+    header "EncodingTamil.h"
+    header "IndicIMEConstants.h"
+    header "IndicNotesIMEngine.h"
     export *
 }
