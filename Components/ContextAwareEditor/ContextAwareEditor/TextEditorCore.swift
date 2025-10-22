@@ -169,6 +169,35 @@ public class TextEditorCore: ObservableObject {
         generateCandidates(for: parsedResult.translatedText)
     }
     
+    func appendComposition(translated: String) {
+        var deleteNext = false
+        // We use a temporary variable so typedString is updated in one go
+        // This will prevent candidates from loadig for every char appended
+        var typedStringTemp = compositionBuffer
+        
+        for c in translated.unicodeScalars {
+//            Log("Append String: checking \(c)")
+            if c.value == DELCODE { //} Character(UnicodeScalar(127) ?? UnicodeScalar(0)) {
+//                Log("Append String: character is DEL")
+                deleteNext = true
+            }
+            else if Character(c).isNumber && deleteNext {
+//                Log("Append String: character is number and deleteNext is TRUE")
+                let deleteCount = Character(c).wholeNumberValue
+                //Log("TYPED STRING set at appendComposition 1")
+                typedStringTemp = String(typedStringTemp.unicodeScalars.dropLast(deleteCount!))
+            }
+            else {
+//                Log("Append String: appending c to string")
+                //Log("TYPED STRING appended at appendComposition 2")
+                typedStringTemp.append(Character(c))
+            }
+            //Log("Append String: typedString is now \(typedString)")
+        }
+        
+        compositionBuffer = typedStringTemp
+    }
+    
     private func handleBackspaceInComposition() {
         guard let translator = sangamTranslator else {
             // Simple backspace
