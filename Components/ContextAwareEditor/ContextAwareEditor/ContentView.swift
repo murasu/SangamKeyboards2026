@@ -20,7 +20,8 @@ struct ContentView: View {
                 .font(.caption)
                 .foregroundColor(.secondary)
             
-            SimpleContextAwareEditor(initialText: "// Start typing here...\n// Try typing: func, var, class, etc.\n")
+            ContextAwareTextEditor()
+                .text("// Start typing here...\n// Try typing: func, var, class, etc.\n")
                 .onTextChange { text in
                     currentText = text
                 }
