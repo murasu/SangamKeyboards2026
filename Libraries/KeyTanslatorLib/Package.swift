@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "AnjalKeyTranslator",
+    name: "SangamKeyTranslator",
     platforms: [
         .macOS(.v12),
         .iOS(.v15),
@@ -11,8 +11,8 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "AnjalKeyTranslator",
-            targets: ["AnjalKeyTranslator"]
+            name: "SangamKeyTranslator",
+            targets: ["SangamKeyTranslator"]
         ),
     ],
     targets: [
@@ -38,14 +38,9 @@ let package = Package(
             ]
         ),
         .target(
-            name: "AnjalKeyTranslator",
+            name: "SangamKeyTranslator",
             dependencies: ["CAnjalKeyTranslator"],
-            path: "swift/Sources/AnjalKeyTranslator"
-        ),
-        .testTarget(
-            name: "AnjalKeyTranslatorTests",
-            dependencies: ["AnjalKeyTranslator"],
-            path: "swift/Tests/AnjalKeyTranslatorTests"
+            path: "swift/Sources/SangamKeyTranslator"
         ),
     ]
 )

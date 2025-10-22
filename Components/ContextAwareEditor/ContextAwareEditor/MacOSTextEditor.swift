@@ -234,22 +234,31 @@ struct MacOSTextEditor: NSViewRepresentable {
         func textDidChange(_ notification: Notification) {
             guard let textView = notification.object as? NSTextView else { return }
             
-            // Sync the current text back to core
+            // Check if this is an external change (paste, programmatic change, etc.)
             let currentText = textView.string
             if currentText != parent.core.textStorage.string {
+                // External change detected - commit any active composition
+                if parent.core.isCurrentlyComposing {
+                    parent.core.forceCommitComposition()
+                }
+                
+                // Sync the external change to core
                 parent.core.textStorage.replaceCharacters(
                     in: NSRange(location: 0, length: parent.core.textStorage.length),
                     with: currentText
                 )
+                
+                // Notify text change
+                parent.core.onTextChange?(currentText)
             }
             
-            // Notify text change
-            parent.core.onTextChange?(currentText)
-            
-            // Update predictions based on current cursor position
-            parent.core.updatePredictions(at: textView.selectedRange().location)
+            // Update predictions for non-composition changes
+            if !parent.core.isCurrentlyComposing {
+                parent.core.updatePredictions(at: textView.selectedRange().location)
+            }
             updatePredictionDisplay(for: textView)
         }
+
         
         // MARK: - Prediction Display
         
@@ -300,23 +309,68 @@ struct MacOSTextEditor: NSViewRepresentable {
         func handleKeyDown(with event: NSEvent) -> Bool {
             guard let textView = self.textView else { return false }
             
+            let currentRange = textView.selectedRange()
+            
+            // Handle special keys first
             switch event.keyCode {
             case 48: // Tab key - accept prediction
                 if parent.core.showingPrediction && !parent.core.currentPredictions.isEmpty {
-                    acceptPrediction(parent.core.currentPredictions[0], for: textView)
+                    parent.core.acceptPrediction(parent.core.currentPredictions[0])
+                    updateTextViewFromCore(textView)
                     return true // Consume the event
                 }
-            case 53: // Escape key - hide predictions
-                if parent.core.showingPrediction {
-                    parent.core.hidePredictions()
-                    updatePredictionDisplay(for: textView)
-                    return true // Consume the event
+            case 53: // Escape key - handle escape
+                parent.core.handleEscapeKey()
+                updatePredictionDisplay(for: textView)
+                return true // Consume the event
+            case 36: // Return key - commit composition and insert newline
+                if parent.core.isCurrentlyComposing {
+                    parent.core.forceCommitComposition()
+                    updateTextViewFromCore(textView)
                 }
+                // Let the return key be processed normally
+                return false
+            case 49: // Space key - commit composition and insert space
+                if parent.core.isCurrentlyComposing {
+                    parent.core.forceCommitComposition()
+                    updateTextViewFromCore(textView)
+                }
+                // Let the space key be processed normally
+                return false
             default:
                 break
             }
             
+            // Handle character input for composition/translation
+            if let characters = event.characters, !characters.isEmpty {
+                for character in characters {
+                    let charString = String(character)
+                    let keyCode = Int32(event.keyCode)
+                    let isShifted = event.modifierFlags.contains(.shift)
+                    
+                    // Use the new composition-aware processing
+                    parent.core.processKeyInput(charString, keyCode: keyCode, isShifted: isShifted, at: currentRange)
+                    
+                    // Update the text view
+                    updateTextViewFromCore(textView)
+                    updatePredictionDisplay(for: textView)
+                    
+                    return true // Consume the event to prevent default handling
+                }
+            }
+            
             return false // Don't consume the event
+        }
+        
+        private func updateTextViewFromCore(_ textView: NSTextView) {
+            // Update text view content from core
+            let coreText = parent.core.textStorage.string
+            if textView.string != coreText {
+                textView.string = coreText
+                
+                // Apply the attributed string to maintain formatting
+                textView.textStorage?.setAttributedString(parent.core.textStorage)
+            }
         }
         
         private func acceptPrediction(_ prediction: String, for textView: NSTextView) {

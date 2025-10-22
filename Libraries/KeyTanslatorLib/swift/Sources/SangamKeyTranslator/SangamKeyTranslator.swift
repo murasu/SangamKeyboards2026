@@ -14,13 +14,13 @@ private let ZWNJ: UInt16 = 0x200C
 private let ZWSPACE: UInt16 = 0x200B
 
 // Error types for Swift
-enum SangamTranslatorError: Error {
+public enum SangamTranslatorError: Error {
     case initializationFailed
     case invalidKeyCode
     case bufferTooSmall
 }
 
-class SangamKeyTranslator {
+public class SangamKeyTranslator {
     
     // MARK: - Private Properties
     private var prevKeyCode: Int32 = 0
@@ -32,7 +32,7 @@ class SangamKeyTranslator {
     
     // MARK: - Initialization
     
-    init(imeType: Int32) throws {
+    public init(imeType: Int32) throws {
         // Call the C function to set keyboard layout
         SetKeyboardLayout(imeType)
         prevKeyWasBackspace = false
@@ -45,29 +45,29 @@ class SangamKeyTranslator {
     
     // MARK: - Public Methods
     
-    func setWytiwygDeleteInReverseTypingOrder(_ isSet: Bool) {
+    public func setWytiwygDeleteInReverseTypingOrder(_ isSet: Bool) {
         delInRevTypingOrder = isSet
         SetWytiwygDeleteInReverseTypingOrder(isSet)
     }
     
-    func updateKeyStatesAfterDelete(forLastChar lastChar: wchar_t) {
+    public func updateKeyStatesAfterDelete(forLastChar lastChar: wchar_t) {
         clearResults()
         UpdatePrevKeyTypesForLastChar(lastChar)
     }
     
-    func terminateComposition() {
+    public func terminateComposition() {
         clearResults()
     }
     
-    func setLayout(_ kbdLayout: Int32) {
+    public func setLayout(_ kbdLayout: Int32) {
         SetKeyboardLayout(kbdLayout)
     }
     
-    func getLayout() -> Int32 {
+    public func getLayout() -> Int32 {
         return GetKeyboardLayout()
     }
     
-    func translateComposition(in composing: String?, newKeyCode keyCode: Int32, shifted: Bool) -> String {
+    public func translateComposition(in composing: String?, newKeyCode keyCode: Int32, shifted: Bool) -> String {
         var result = ""
         let postfix: String
         
@@ -124,7 +124,7 @@ class SangamKeyTranslator {
         return result
     }
     
-    func deleteLastChar(in composition: String) -> String {
+    public func deleteLastChar(in composition: String) -> String {
         var mutableComposition = composition
         let len = mutableComposition.count
         var shouldResetPrevKeyType = false
@@ -198,7 +198,7 @@ class SangamKeyTranslator {
         return mutableComposition
     }
     
-    func cleanupStrayVowelSign(_ composition: String) -> String {
+    public func cleanupStrayVowelSign(_ composition: String) -> String {
         var mutableComposition = composition
         let len = mutableComposition.count
         
@@ -216,7 +216,7 @@ class SangamKeyTranslator {
         return mutableComposition
     }
     
-    func getUnmappedChar(for keyCode: Int32, composing: String, shifted: Bool) -> String {
+    public func getUnmappedChar(for keyCode: Int32, composing: String, shifted: Bool) -> String {
         print("Getting unmapped char for \(keyCode)")
         
         var result = ""

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		008BF1B42EA8E06B004F6F89 /* AnjalKeyTranslator in Frameworks */ = {isa = PBXBuildFile; productRef = 008BF1B32EA8E06B004F6F89 /* AnjalKeyTranslator */; };
+		0086D5BE2EA9001F0021AC7C /* SangamKeyTranslator in Frameworks */ = {isa = PBXBuildFile; productRef = 0086D5BD2EA9001F0021AC7C /* SangamKeyTranslator */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				008BF1B42EA8E06B004F6F89 /* AnjalKeyTranslator in Frameworks */,
+				0086D5BE2EA9001F0021AC7C /* SangamKeyTranslator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,7 +70,7 @@
 			);
 			name = ContextAwareEditor;
 			packageProductDependencies = (
-				008BF1B32EA8E06B004F6F89 /* AnjalKeyTranslator */,
+				0086D5BD2EA9001F0021AC7C /* SangamKeyTranslator */,
 			);
 			productName = ContextAwareEditor;
 			productReference = 008BF18D2EA89C06004F6F89 /* ContextAwareEditor.app */;
@@ -101,7 +101,7 @@
 			mainGroup = 008BF1842EA89C06004F6F89;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				008BF1B22EA8E06B004F6F89 /* XCLocalSwiftPackageReference "../../Libraries/KeyTanslatorLib" */,
+				0086D5BC2EA9001F0021AC7C /* XCLocalSwiftPackageReference "../../Libraries/KeyTanslatorLib" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 008BF18E2EA89C06004F6F89 /* Products */;
@@ -362,16 +362,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		008BF1B22EA8E06B004F6F89 /* XCLocalSwiftPackageReference "../../Libraries/KeyTanslatorLib" */ = {
+		0086D5BC2EA9001F0021AC7C /* XCLocalSwiftPackageReference "../../Libraries/KeyTanslatorLib" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../Libraries/KeyTanslatorLib;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		008BF1B32EA8E06B004F6F89 /* AnjalKeyTranslator */ = {
+		0086D5BD2EA9001F0021AC7C /* SangamKeyTranslator */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = AnjalKeyTranslator;
+			productName = SangamKeyTranslator;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
