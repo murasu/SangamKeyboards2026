@@ -1,0 +1,4 @@
+module CAnjalKeyTranslator {
+    header "KeyTranslatorMultilingual.h"
+    export *
+}

@@ -47,8 +47,6 @@ class CustomNSTextView: NSTextView {
 }
 */
 
-
-
 /// Simple prediction overlay view for macOS
 class PredictionOverlayView: NSView {
     private let textField = NSTextField()

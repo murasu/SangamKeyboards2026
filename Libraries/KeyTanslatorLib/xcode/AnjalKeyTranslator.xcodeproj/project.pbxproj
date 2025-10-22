@@ -3,13 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
 		34D16C826DA5179104BCE887 /* ZERO_CHECK */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 954A2774A8854B44B83871E4 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildConfigurationList = C108BC49A5414E39B42C71F8 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
 			buildPhases = (
 				91CF91F5364B2AA90B427C16 /* Generate CMakeFiles/ZERO_CHECK */,
 			);
@@ -20,26 +20,26 @@
 		};
 		A1D147911640D430DAB1BC7A /* ALL_BUILD */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 664B948F4C9E49489E5CF096 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildConfigurationList = 32EDB4FD740F44A3B00BA7A9 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
 			buildPhases = (
 				F3E33788AE88F455A3F3B8EF /* Generate CMakeFiles/ALL_BUILD */,
 			);
 			dependencies = (
-				4CB2767C0DFD42AFA15F7142 /* PBXTargetDependency */,
-				948755FD62FC43AC931BC46D /* PBXTargetDependency */,
-				EA246A9AE1E044EAA4DB2D59 /* PBXTargetDependency */,
+				E7C35A9B692A42C18D11EAE3 /* PBXTargetDependency */,
+				7A357DA9A83A4BD1BDB2D33B /* PBXTargetDependency */,
+				6C7E06F272D74F47BF0459A7 /* PBXTargetDependency */,
 			);
 			name = ALL_BUILD;
 			productName = ALL_BUILD;
 		};
 		B78BBEE50A52A3BC3F04A90F /* install */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 1285A89F6D044A6E898F2B08 /* Build configuration list for PBXAggregateTarget "install" */;
+			buildConfigurationList = 369D72DAF1DC40FDBE8F11E1 /* Build configuration list for PBXAggregateTarget "install" */;
 			buildPhases = (
 				93426DA6A4AC2C2AC9CE883C /* CMake PostBuild Rules */,
 			);
 			dependencies = (
-				0D9DC4A222454097932A9E01 /* PBXTargetDependency */,
+				15879A5349784CD5AFA6D470 /* PBXTargetDependency */,
 			);
 			name = install;
 			productName = install;
@@ -47,167 +47,139 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		03504223759741529E8BBDE1 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */ = {isa = PBXBuildFile; fileRef = 7B314DA173454C94B107ED69 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */; };
-		080F2924E26C459F8CCDA8A8 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */ = {isa = PBXBuildFile; fileRef = 2F073575E2C2440AAAE625A3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */; settings = {ATTRIBUTES = (Public); }; };
-		082218E7703B43B381B48479 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */ = {isa = PBXBuildFile; fileRef = F823239D2DAB4B7A87FDAA2D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */; settings = {ATTRIBUTES = (Public); }; };
-		0A47ABD5E0344280AE56256B /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */ = {isa = PBXBuildFile; fileRef = 0C339B504826480E81F74966 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */; };
-		0B033CB004B8480FB5312F2D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */ = {isa = PBXBuildFile; fileRef = 8F5C014B9DC1435192ADC64D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */; };
-		1356AD6B729B4E238EB0EF3F /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */ = {isa = PBXBuildFile; fileRef = 56BD1263D20E46F59BBC48A5 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */; };
-		299A7349D7A0426992D16425 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */ = {isa = PBXBuildFile; fileRef = 04962E994A29498784758F2F /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */; settings = {ATTRIBUTES = (Public); }; };
-		2C8F4342871B4148B265A508 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */ = {isa = PBXBuildFile; fileRef = D8D1B72CD4B0447F847F71E8 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */; };
-		3F26ADD39B0E42A58E14F648 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */ = {isa = PBXBuildFile; fileRef = 0426C02694654B3F8409B721 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */; };
-		48412F2F43144E7B9BE8CA5C /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */ = {isa = PBXBuildFile; fileRef = CEE7F276DB3D40EBBCC09F7E /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */; };
-		4D50F3361AA742EE8A012A36 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */ = {isa = PBXBuildFile; fileRef = 735C3D1000CC4AE88483EBF4 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */; settings = {ATTRIBUTES = (Public); }; };
-		5FA522C3D58F41148D6C52F6 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */ = {isa = PBXBuildFile; fileRef = BE736C38EF824E6CACB122B2 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */; };
-		60CBAE1DC33D4686BB801C2A /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */ = {isa = PBXBuildFile; fileRef = 6FFB45040959451F9A4BDE2E /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */; };
-		6671A10AFC1C45B29EF008AE /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */ = {isa = PBXBuildFile; fileRef = 16DB7CC8F22A467985D8047C /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */; };
-		733A6346BB814255A45BD7A2 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */ = {isa = PBXBuildFile; fileRef = 12999B9CC1E04FD29FABBB95 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */; };
-		808AA459FC9E4963B463FDD9 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 02C67898A2D841AF8EFD6156 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */; };
-		824596FCCBCB453ABA9FD7FF /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */ = {isa = PBXBuildFile; fileRef = 69D6066DAB244618AE4F7077 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */; settings = {ATTRIBUTES = (Public); }; };
-		9B6E2AC04CCD4529986B5C3F /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */ = {isa = PBXBuildFile; fileRef = 5D130DC6529D4809920FE122 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */; settings = {ATTRIBUTES = (Public); }; };
-		9FBEDE1624B74C3BA188DB43 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */ = {isa = PBXBuildFile; fileRef = CAF61F1A29664BC3A21D9904 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */; settings = {ATTRIBUTES = (Public); }; };
-		B1557E84F0B94A76BAED7931 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */ = {isa = PBXBuildFile; fileRef = 7CB8BEFB1D9C4B74A78347DA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */; };
-		B8E29F61552D40D3951369EA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */ = {isa = PBXBuildFile; fileRef = 2813F86A1C0A464481CC10FA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */; settings = {ATTRIBUTES = (Public); }; };
-		BB3FE895BD18411ABEEED558 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */ = {isa = PBXBuildFile; fileRef = 6805EB6CF45840A598B19B7D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */; };
-		BDD598FB014D4179940EE826 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */ = {isa = PBXBuildFile; fileRef = 0271766149C04E56BD82CAE1 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */; };
-		C5F4DCB774D64A90A2EFA4B4 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */ = {isa = PBXBuildFile; fileRef = 628947822DCC4E45940E6FAD /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */; settings = {ATTRIBUTES = (Public); }; };
-		C70CBFE1880A423F8D500F3A /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 5FDE6BA921944204813FA2D3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */; };
-		CA0F68C5C6BD4D49B325C7ED /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */ = {isa = PBXBuildFile; fileRef = BF9929FFF59A468D97E6DDF3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */; };
-		CA12BCF19E3E4E7D863F3551 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */ = {isa = PBXBuildFile; fileRef = F9F384A9A51242CF8562BD8D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */; };
-		CDE21E398F3342F499C1E242 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */ = {isa = PBXBuildFile; fileRef = 0BE837B6F7454C9283D151B3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */; settings = {ATTRIBUTES = (Public); }; };
-		D2A7DFEF3B094B5690E7EF0E /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */ = {isa = PBXBuildFile; fileRef = BD0069A11CC1464FB7125E72 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */; };
-		DE116663A48F43C982F3DDFA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */ = {isa = PBXBuildFile; fileRef = 1C008F3EAB0445EBA0EAAA76 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */; settings = {ATTRIBUTES = (Public); }; };
-		E0C39C4111A64E339AF20419 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */ = {isa = PBXBuildFile; fileRef = E62211043D774E66B9900023 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */; };
-		E75AF074D19F468E8C978107 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */ = {isa = PBXBuildFile; fileRef = B0A526F5A0E64A9F8B1F4B33 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */; };
-		ED58E6C5EAFD4A3D847D2752 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */ = {isa = PBXBuildFile; fileRef = 6EAEA0804275457D9AC9E312 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */; settings = {ATTRIBUTES = (Public); }; };
-		EE225857F7DF44A286915C47 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */ = {isa = PBXBuildFile; fileRef = 41FB201F3A814F1CA3E66F2D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */; };
+		008BF1AA2EA8DEE4004F6F89 /* Package 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BF1A92EA8DEE4004F6F89 /* Package 2.swift */; };
+		008BF1AC2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BF1AB2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift */; };
+		008BF1AF2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BF1AE2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift */; };
+		008BF1B12EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008BF1B02EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift */; };
+		0A9F0828E85D4FB6B02B435E /* AnjalKeyMapLookup.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D42BC271E6A43B99D60E3C2 /* AnjalKeyMapLookup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0CC5BF7A073B48328D9296B2 /* EncodingTamil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FADFD739A144A579050BCDC /* EncodingTamil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1DAB609CA88D42D89566E2E6 /* IndicIMEConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0BC4416F7D4777BD774824 /* IndicIMEConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		210D8D073E0F4AE985395301 /* IndicNotesIMEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = E5496EFC0A86456780F692B6 /* IndicNotesIMEngine.c */; };
+		2C3102BE09354E8DA3A16243 /* AnjalKeyMapLookup.h in Headers */ = {isa = PBXBuildFile; fileRef = 97F07770A93E4EB6AAAEC90F /* AnjalKeyMapLookup.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		398FB57C6D95421F8AA1E18F /* IndicNotesIMEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = A6788853AAE1445D898E5624 /* IndicNotesIMEngine.c */; };
+		3AE24A472AFF4710A7E1D3B0 /* IndicKannadaKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 0071AC104CF748738ECE402F /* IndicKannadaKeymap.c */; };
+		3DBCD4045A0B4C58B4CA3E13 /* IndicDevanagariKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B4EE5522BEB4970995B43EA /* IndicDevanagariKeymap.c */; };
+		3FB6081D81B74526A560B0AC /* KeyTranslatorTamil.c in Sources */ = {isa = PBXBuildFile; fileRef = 309F8724742640B5A1153EB0 /* KeyTranslatorTamil.c */; };
+		504647D443A84001BA6CC8C4 /* IndicMalayalamKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 68A7F57C1D4F4FF7838E3988 /* IndicMalayalamKeymap.c */; };
+		67C8350E3B7C424B944CD6BF /* IndicGurmukhiKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 991979B287764E5DAFC4E87B /* IndicGurmukhiKeymap.c */; };
+		6F41A074B2034207A5BC1023 /* IndicDevanagariKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 65A8E6FB015F495AB01E364B /* IndicDevanagariKeymap.c */; };
+		85099E35EE594387A651EBB0 /* IndicGurmukhiKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = BD59C942E261484ABFAD19FF /* IndicGurmukhiKeymap.c */; };
+		85502093AC19490FB72E3261 /* IndicTamilAnjalKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 02E1FE4CE7F54520B3D6FAE8 /* IndicTamilAnjalKeymap.c */; };
+		857C21A65AD44A17AAE58183 /* KeyTranslatorTamil.c in Sources */ = {isa = PBXBuildFile; fileRef = 01E4433FF06F43679D0E2CEE /* KeyTranslatorTamil.c */; };
+		86E436C91DE24FF48E0CB63D /* IndicKannadaKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 41ED9B0522AD4B0BB9035C84 /* IndicKannadaKeymap.c */; };
+		8D830D9B00DE49CC8D48F280 /* IndicIMEConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 4365E42A068F4B219A7E6A90 /* IndicIMEConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8E21CC562EB243A99D63752F /* AnjalKeyMap.c in Sources */ = {isa = PBXBuildFile; fileRef = C5DD7342BBC44BD9836216E4 /* AnjalKeyMap.c */; };
+		940A241661024FC781EDCD7A /* KeyTranslatorMultilingual.h in Headers */ = {isa = PBXBuildFile; fileRef = 5683A96D89B6454983CFBABE /* KeyTranslatorMultilingual.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96B30F6551884C8D8D53087C /* IndicNotesIMEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F3C826C427D4A28BDF4368D /* IndicNotesIMEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A5C82316B88945E6ACBDB6A6 /* EncodingTamil.h in Headers */ = {isa = PBXBuildFile; fileRef = 8345BA3A309344A2B50CCFD5 /* EncodingTamil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ABB0071EB8AE4C1590465D37 /* IndicTeluguKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = E5D24E6253A2490E95D31066 /* IndicTeluguKeymap.c */; };
+		ABE5033882D1473CB687CB6F /* IndicTeluguKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = 85CFEC70AF85487A9AAB687C /* IndicTeluguKeymap.c */; };
+		ADEECAD5098049E08953AA91 /* AnjalKeyMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 3218EBF19B3443A2A8B8A680 /* AnjalKeyMap.c */; };
+		C7B074D4BEC4460F9A95AA6A /* IndicTamilAnjalKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = F098BA827CB149E8903B91CC /* IndicTamilAnjalKeymap.c */; };
+		CBA1C46FA02F40828B9C3B3C /* KeyTranslatorMultilingual.h in Headers */ = {isa = PBXBuildFile; fileRef = BA5BC1294DAA4036A054FDDD /* KeyTranslatorMultilingual.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CE05051138464732AB8F04E4 /* AnjalKeyMap.h in Headers */ = {isa = PBXBuildFile; fileRef = BC99E563B26043EB89716642 /* AnjalKeyMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D390B3C03D684D37BFC223E2 /* AnjalKeyMap.h in Headers */ = {isa = PBXBuildFile; fileRef = 39DFF7BB156145EF8742DCF2 /* AnjalKeyMap.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DF3D6ABC28484FF09F4212B5 /* IndicMalayalamKeymap.c in Sources */ = {isa = PBXBuildFile; fileRef = B6DE12FA5DA840BC99EBB1C7 /* IndicMalayalamKeymap.c */; };
+		EBC342AA215B4A78946789C9 /* IndicNotesIMEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 94E7BF18DFBC4BE4A357F833 /* IndicNotesIMEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXBuildStyle section */
-		2FB15A34EC994E599DBB4731 /* Release */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = Release;
-		};
-		518A2824D04B4D988EA00EF2 /* Debug */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = Debug;
-		};
-		550687A384994E4DA2448B24 /* MinSizeRel */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = MinSizeRel;
-		};
-		EB110C6F9A794AA7AA5A9C02 /* RelWithDebInfo */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = RelWithDebInfo;
-		};
-/* End PBXBuildStyle section */
-
 /* Begin PBXContainerItemProxy section */
-		02FFD928914F4CD5A38BF6EE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A1D147911640D430DAB1BC7A;
-			remoteInfo = ALL_BUILD;
-		};
-		1948921D6179410DA2E9D028 /* PBXContainerItemProxy */ = {
+		51595017615148F4BFFB96DE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 34D16C826DA5179104BCE887;
 			remoteInfo = ZERO_CHECK;
 		};
-		4BD54D539E544773A6EB9F4D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 34D16C826DA5179104BCE887;
-			remoteInfo = ZERO_CHECK;
-		};
-		666B51186A4D4EEE8F373646 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = FD7C231E3FD6C2EA5146280F;
-			remoteInfo = AnjalKeyTranslatorShared;
-		};
-		99F6F6902BAF4204B39E8457 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 34D16C826DA5179104BCE887;
-			remoteInfo = ZERO_CHECK;
-		};
-		C13624068F174A84993ED02B /* PBXContainerItemProxy */ = {
+		9DFD9B4C035D4893987A732B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 651E194E34CC97A45136F207;
 			remoteInfo = AnjalKeyTranslator;
 		};
+		AF48FB1639EC425CB7E76E2B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 34D16C826DA5179104BCE887;
+			remoteInfo = ZERO_CHECK;
+		};
+		C044781EDE2D4CA596C995A3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FD7C231E3FD6C2EA5146280F;
+			remoteInfo = AnjalKeyTranslatorShared;
+		};
+		D2D72EEE9CA84258BE0A794F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A1D147911640D430DAB1BC7A;
+			remoteInfo = ALL_BUILD;
+		};
+		F148D6130C954AFEBE001D8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 38E84880D9B24118A0CD21E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 34D16C826DA5179104BCE887;
+			remoteInfo = ZERO_CHECK;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0271766149C04E56BD82CAE1 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = KeyTranslatorMultilingual.c; path = src/KeyTranslatorMultilingual.c; sourceTree = SOURCE_ROOT; };
-		02C67898A2D841AF8EFD6156 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		0426C02694654B3F8409B721 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTamilAnjalKeymap.c; path = src/indic/IndicTamilAnjalKeymap.c; sourceTree = SOURCE_ROOT; };
-		04962E994A29498784758F2F /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IndicIMEConstants.h; path = include/IndicIMEConstants.h; sourceTree = SOURCE_ROOT; };
-		056F535B57244189AEC839AC /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		0BE837B6F7454C9283D151B3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IndicNotesIMEngine.h; path = include/IndicNotesIMEngine.h; sourceTree = SOURCE_ROOT; };
-		0C339B504826480E81F74966 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicMalayalamKeymap.c; path = src/indic/IndicMalayalamKeymap.c; sourceTree = SOURCE_ROOT; };
-		12999B9CC1E04FD29FABBB95 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicGurmukhiKeymap.c; path = src/indic/IndicGurmukhiKeymap.c; sourceTree = SOURCE_ROOT; };
-		16DB7CC8F22A467985D8047C /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTeluguKeymap.c; path = src/indic/IndicTeluguKeymap.c; sourceTree = SOURCE_ROOT; };
-		1C008F3EAB0445EBA0EAAA76 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AnjalKeyMap.h; path = include/AnjalKeyMap.h; sourceTree = SOURCE_ROOT; };
-		2813F86A1C0A464481CC10FA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EncodingTamil.h; path = include/EncodingTamil.h; sourceTree = SOURCE_ROOT; };
-		2F073575E2C2440AAAE625A3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyTranslatorMultilingual.h; path = include/KeyTranslatorMultilingual.h; sourceTree = SOURCE_ROOT; };
-		41FB201F3A814F1CA3E66F2D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicMalayalamKeymap.c; path = src/indic/IndicMalayalamKeymap.c; sourceTree = SOURCE_ROOT; };
-		56BD1263D20E46F59BBC48A5 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = AnjalKeyMap.c; path = src/tamil/AnjalKeyMap.c; sourceTree = SOURCE_ROOT; };
-		5D130DC6529D4809920FE122 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AnjalKeyMapLookup.h; path = include/AnjalKeyMapLookup.h; sourceTree = SOURCE_ROOT; };
-		5FDE6BA921944204813FA2D3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		628947822DCC4E45940E6FAD /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyTranslatorMultilingual.h; path = include/KeyTranslatorMultilingual.h; sourceTree = SOURCE_ROOT; };
-		6805EB6CF45840A598B19B7D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicNotesIMEngine.c; path = src/indic/IndicNotesIMEngine.c; sourceTree = SOURCE_ROOT; };
-		69D6066DAB244618AE4F7077 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AnjalKeyMapLookup.h; path = include/AnjalKeyMapLookup.h; sourceTree = SOURCE_ROOT; };
-		6EAEA0804275457D9AC9E312 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IndicNotesIMEngine.h; path = include/IndicNotesIMEngine.h; sourceTree = SOURCE_ROOT; };
-		6FFB45040959451F9A4BDE2E /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicKannadaKeymap.c; path = src/indic/IndicKannadaKeymap.c; sourceTree = SOURCE_ROOT; };
-		735C3D1000CC4AE88483EBF4 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IndicIMEConstants.h; path = include/IndicIMEConstants.h; sourceTree = SOURCE_ROOT; };
-		7B314DA173454C94B107ED69 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicDevanagariKeymap.c; path = src/indic/IndicDevanagariKeymap.c; sourceTree = SOURCE_ROOT; };
-		7CB8BEFB1D9C4B74A78347DA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = AnjalKeyMap.c; path = src/tamil/AnjalKeyMap.c; sourceTree = SOURCE_ROOT; };
-		8535270FD831491F9E427A18 /* AnjalKeyTranslatorShared */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = anjalkeyboard.framework/anjalkeyboard; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F5C014B9DC1435192ADC64D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicNotesIMEngine.c; path = src/indic/IndicNotesIMEngine.c; sourceTree = SOURCE_ROOT; };
-		B0A526F5A0E64A9F8B1F4B33 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicKannadaKeymap.c; path = src/indic/IndicKannadaKeymap.c; sourceTree = SOURCE_ROOT; };
-		B5069120DE354F12A416EBD2 /* AnjalKeyTranslator */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = anjalkeyboard.framework/anjalkeyboard; sourceTree = BUILT_PRODUCTS_DIR; };
-		BD0069A11CC1464FB7125E72 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicDevanagariKeymap.c; path = src/indic/IndicDevanagariKeymap.c; sourceTree = SOURCE_ROOT; };
-		BE736C38EF824E6CACB122B2 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = KeyTranslatorMultilingual.c; path = src/KeyTranslatorMultilingual.c; sourceTree = SOURCE_ROOT; };
-		BF9929FFF59A468D97E6DDF3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = KeyTranslatorTamil.c; path = src/tamil/KeyTranslatorTamil.c; sourceTree = SOURCE_ROOT; };
-		CAF61F1A29664BC3A21D9904 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AnjalKeyMap.h; path = include/AnjalKeyMap.h; sourceTree = SOURCE_ROOT; };
-		CEE7F276DB3D40EBBCC09F7E /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicGurmukhiKeymap.c; path = src/indic/IndicGurmukhiKeymap.c; sourceTree = SOURCE_ROOT; };
-		D8D1B72CD4B0447F847F71E8 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = KeyTranslatorTamil.c; path = src/tamil/KeyTranslatorTamil.c; sourceTree = SOURCE_ROOT; };
-		E62211043D774E66B9900023 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTamilAnjalKeymap.c; path = src/indic/IndicTamilAnjalKeymap.c; sourceTree = SOURCE_ROOT; };
-		F823239D2DAB4B7A87FDAA2D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EncodingTamil.h; path = include/EncodingTamil.h; sourceTree = SOURCE_ROOT; };
-		F9F384A9A51242CF8562BD8D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTeluguKeymap.c; path = src/indic/IndicTeluguKeymap.c; sourceTree = SOURCE_ROOT; };
+		0071AC104CF748738ECE402F /* IndicKannadaKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicKannadaKeymap.c; path = src/indic/IndicKannadaKeymap.c; sourceTree = SOURCE_ROOT; };
+		008BF1A92EA8DEE4004F6F89 /* Package 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Package 2.swift"; sourceTree = "<group>"; };
+		008BF1AB2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift; sourceTree = "<group>"; };
+		008BF1AD2EA8DF00004F6F89 /* SourcesCAnjalKeyTranslatorincludemodule.modulemap */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = SourcesCAnjalKeyTranslatorincludemodule.modulemap; sourceTree = "<group>"; };
+		008BF1AE2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplesSwiftUIExampleContentView.swift; sourceTree = "<group>"; };
+		008BF1B02EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift; sourceTree = "<group>"; };
+		01E4433FF06F43679D0E2CEE /* KeyTranslatorTamil.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = KeyTranslatorTamil.c; path = src/tamil/KeyTranslatorTamil.c; sourceTree = SOURCE_ROOT; };
+		02E1FE4CE7F54520B3D6FAE8 /* IndicTamilAnjalKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTamilAnjalKeymap.c; path = src/indic/IndicTamilAnjalKeymap.c; sourceTree = SOURCE_ROOT; };
+		1B4EE5522BEB4970995B43EA /* IndicDevanagariKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicDevanagariKeymap.c; path = src/indic/IndicDevanagariKeymap.c; sourceTree = SOURCE_ROOT; };
+		309F8724742640B5A1153EB0 /* KeyTranslatorTamil.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = KeyTranslatorTamil.c; path = src/tamil/KeyTranslatorTamil.c; sourceTree = SOURCE_ROOT; };
+		3218EBF19B3443A2A8B8A680 /* AnjalKeyMap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = AnjalKeyMap.c; path = src/tamil/AnjalKeyMap.c; sourceTree = SOURCE_ROOT; };
+		39DFF7BB156145EF8742DCF2 /* AnjalKeyMap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AnjalKeyMap.h; path = include/AnjalKeyMap.h; sourceTree = SOURCE_ROOT; };
+		3FADFD739A144A579050BCDC /* EncodingTamil.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EncodingTamil.h; path = include/EncodingTamil.h; sourceTree = SOURCE_ROOT; };
+		41ED9B0522AD4B0BB9035C84 /* IndicKannadaKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicKannadaKeymap.c; path = src/indic/IndicKannadaKeymap.c; sourceTree = SOURCE_ROOT; };
+		4365E42A068F4B219A7E6A90 /* IndicIMEConstants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IndicIMEConstants.h; path = include/IndicIMEConstants.h; sourceTree = SOURCE_ROOT; };
+		4677CCF99FFE49C0BE580B8C /* anjalkeyboard.framework/anjalkeyboard */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = anjalkeyboard.framework/anjalkeyboard; path = anjalkeyboard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B0BC4416F7D4777BD774824 /* IndicIMEConstants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IndicIMEConstants.h; path = include/IndicIMEConstants.h; sourceTree = SOURCE_ROOT; };
+		4F3C826C427D4A28BDF4368D /* IndicNotesIMEngine.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IndicNotesIMEngine.h; path = include/IndicNotesIMEngine.h; sourceTree = SOURCE_ROOT; };
+		5683A96D89B6454983CFBABE /* KeyTranslatorMultilingual.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyTranslatorMultilingual.h; path = include/KeyTranslatorMultilingual.h; sourceTree = SOURCE_ROOT; };
+		5D42BC271E6A43B99D60E3C2 /* AnjalKeyMapLookup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AnjalKeyMapLookup.h; path = include/AnjalKeyMapLookup.h; sourceTree = SOURCE_ROOT; };
+		65A8E6FB015F495AB01E364B /* IndicDevanagariKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicDevanagariKeymap.c; path = src/indic/IndicDevanagariKeymap.c; sourceTree = SOURCE_ROOT; };
+		68A7F57C1D4F4FF7838E3988 /* IndicMalayalamKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicMalayalamKeymap.c; path = src/indic/IndicMalayalamKeymap.c; sourceTree = SOURCE_ROOT; };
+		8345BA3A309344A2B50CCFD5 /* EncodingTamil.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = EncodingTamil.h; path = include/EncodingTamil.h; sourceTree = SOURCE_ROOT; };
+		85CFEC70AF85487A9AAB687C /* IndicTeluguKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTeluguKeymap.c; path = src/indic/IndicTeluguKeymap.c; sourceTree = SOURCE_ROOT; };
+		94E7BF18DFBC4BE4A357F833 /* IndicNotesIMEngine.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = IndicNotesIMEngine.h; path = include/IndicNotesIMEngine.h; sourceTree = SOURCE_ROOT; };
+		97F07770A93E4EB6AAAEC90F /* AnjalKeyMapLookup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AnjalKeyMapLookup.h; path = include/AnjalKeyMapLookup.h; sourceTree = SOURCE_ROOT; };
+		991979B287764E5DAFC4E87B /* IndicGurmukhiKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicGurmukhiKeymap.c; path = src/indic/IndicGurmukhiKeymap.c; sourceTree = SOURCE_ROOT; };
+		A6788853AAE1445D898E5624 /* IndicNotesIMEngine.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicNotesIMEngine.c; path = src/indic/IndicNotesIMEngine.c; sourceTree = SOURCE_ROOT; };
+		B6DE12FA5DA840BC99EBB1C7 /* IndicMalayalamKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicMalayalamKeymap.c; path = src/indic/IndicMalayalamKeymap.c; sourceTree = SOURCE_ROOT; };
+		B92D6E1CE45D472F84DC159F /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		BA5BC1294DAA4036A054FDDD /* KeyTranslatorMultilingual.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyTranslatorMultilingual.h; path = include/KeyTranslatorMultilingual.h; sourceTree = SOURCE_ROOT; };
+		BC99E563B26043EB89716642 /* AnjalKeyMap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = AnjalKeyMap.h; path = include/AnjalKeyMap.h; sourceTree = SOURCE_ROOT; };
+		BD59C942E261484ABFAD19FF /* IndicGurmukhiKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicGurmukhiKeymap.c; path = src/indic/IndicGurmukhiKeymap.c; sourceTree = SOURCE_ROOT; };
+		C597BE86C92E4EDAA4A35000 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		C5DD7342BBC44BD9836216E4 /* AnjalKeyMap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = AnjalKeyMap.c; path = src/tamil/AnjalKeyMap.c; sourceTree = SOURCE_ROOT; };
+		D5CB3B055CEB4415864F0EB5 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		E5496EFC0A86456780F692B6 /* IndicNotesIMEngine.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicNotesIMEngine.c; path = src/indic/IndicNotesIMEngine.c; sourceTree = SOURCE_ROOT; };
+		E5D24E6253A2490E95D31066 /* IndicTeluguKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTeluguKeymap.c; path = src/indic/IndicTeluguKeymap.c; sourceTree = SOURCE_ROOT; };
+		F098BA827CB149E8903B91CC /* IndicTamilAnjalKeymap.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = IndicTamilAnjalKeymap.c; path = src/indic/IndicTamilAnjalKeymap.c; sourceTree = SOURCE_ROOT; };
+		FD22C9367A8D494B99C8E8A0 /* anjalkeyboard-static.framework/anjalkeyboard-static */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = "anjalkeyboard-static.framework/anjalkeyboard-static"; path = "anjalkeyboard-static.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		424870D942674554BF1C77F9 /* Frameworks */ = {
+		9BC9BF9F15AF4FB699EEF6FD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6E3810F3A042490984868D54 /* Frameworks */ = {
+		E07692AA35514A988610254D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -217,133 +189,136 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		082259105DBE4596B0A884CF /* Products */ = {
+		100F4F5C529B44D3A166B2D9 /* Source Files */ = {
 			isa = PBXGroup;
 			children = (
-				B5069120DE354F12A416EBD2 /* AnjalKeyTranslator */,
-				8535270FD831491F9E427A18 /* AnjalKeyTranslatorShared */,
+				1B4EE5522BEB4970995B43EA /* IndicDevanagariKeymap.c */,
+				991979B287764E5DAFC4E87B /* IndicGurmukhiKeymap.c */,
+				41ED9B0522AD4B0BB9035C84 /* IndicKannadaKeymap.c */,
+				B6DE12FA5DA840BC99EBB1C7 /* IndicMalayalamKeymap.c */,
+				A6788853AAE1445D898E5624 /* IndicNotesIMEngine.c */,
+				F098BA827CB149E8903B91CC /* IndicTamilAnjalKeymap.c */,
+				85CFEC70AF85487A9AAB687C /* IndicTeluguKeymap.c */,
+				C5DD7342BBC44BD9836216E4 /* AnjalKeyMap.c */,
+				01E4433FF06F43679D0E2CEE /* KeyTranslatorTamil.c */,
 			);
-			name = Products;
+			name = "Source Files";
 			sourceTree = "<group>";
 		};
-		2A613CEE98664FF7B5A06459 /* AnjalKeyTranslatorShared */ = {
-			isa = PBXGroup;
-			children = (
-				88329A2F66E143C284F906F7 /* Source Files */,
-				E8D02846594446F4867D86EA /* Header Files */,
-				02C67898A2D841AF8EFD6156 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */,
-			);
-			name = AnjalKeyTranslatorShared;
-			sourceTree = "<group>";
-		};
-		2E5C9DDF7ED04473A97624B4 = {
-			isa = PBXGroup;
-			children = (
-				BE41077551DA4C419D278BCC /* AnjalKeyTranslator */,
-				2A613CEE98664FF7B5A06459 /* AnjalKeyTranslatorShared */,
-				9D6037F81CFF4323AA9E58A9 /* ALL_BUILD */,
-				082259105DBE4596B0A884CF /* Products */,
-				44B26CBAED154B16B39C936E /* Frameworks */,
-				99570E86AF4848419F80DB93 /* Resources */,
-			);
-			sourceTree = "<group>";
-		};
-		44B26CBAED154B16B39C936E /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		773AC7FCC1C7449DB17CBC27 /* CMake Rules */ = {
+		135C932BAEE843C5973D823A /* CMake Rules */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = "CMake Rules";
 			sourceTree = "<group>";
 		};
-		776452A918A949ADA053D4DB /* Source Files */ = {
-			isa = PBXGroup;
-			children = (
-				0271766149C04E56BD82CAE1 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */,
-				BD0069A11CC1464FB7125E72 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */,
-				CEE7F276DB3D40EBBCC09F7E /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */,
-				B0A526F5A0E64A9F8B1F4B33 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */,
-				41FB201F3A814F1CA3E66F2D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */,
-				8F5C014B9DC1435192ADC64D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */,
-				E62211043D774E66B9900023 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */,
-				16DB7CC8F22A467985D8047C /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */,
-				7CB8BEFB1D9C4B74A78347DA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */,
-				D8D1B72CD4B0447F847F71E8 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */,
-			);
-			name = "Source Files";
-			sourceTree = "<group>";
-		};
-		88329A2F66E143C284F906F7 /* Source Files */ = {
-			isa = PBXGroup;
-			children = (
-				BE736C38EF824E6CACB122B2 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */,
-				7B314DA173454C94B107ED69 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */,
-				12999B9CC1E04FD29FABBB95 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */,
-				6FFB45040959451F9A4BDE2E /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */,
-				0C339B504826480E81F74966 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */,
-				6805EB6CF45840A598B19B7D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */,
-				0426C02694654B3F8409B721 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */,
-				F9F384A9A51242CF8562BD8D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */,
-				56BD1263D20E46F59BBC48A5 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */,
-				BF9929FFF59A468D97E6DDF3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */,
-			);
-			name = "Source Files";
-			sourceTree = "<group>";
-		};
-		949C8888A0CF4326BB454B07 /* Header Files */ = {
-			isa = PBXGroup;
-			children = (
-				1C008F3EAB0445EBA0EAAA76 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */,
-				5D130DC6529D4809920FE122 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */,
-				F823239D2DAB4B7A87FDAA2D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */,
-				04962E994A29498784758F2F /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */,
-				0BE837B6F7454C9283D151B3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */,
-				2F073575E2C2440AAAE625A3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */,
-			);
-			name = "Header Files";
-			sourceTree = "<group>";
-		};
-		99570E86AF4848419F80DB93 /* Resources */ = {
+		14BEC3F023DE4F2483384330 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		9D6037F81CFF4323AA9E58A9 /* ALL_BUILD */ = {
+		19BE0B4096B64F18A4FCDE44 = {
 			isa = PBXGroup;
 			children = (
-				773AC7FCC1C7449DB17CBC27 /* CMake Rules */,
-				056F535B57244189AEC839AC /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */,
+				B229BE363A6140AFB42DD92A /* AnjalKeyTranslator */,
+				C3F3707C483246ABA225A26B /* AnjalKeyTranslatorShared */,
+				7213EA4641CE4CF0A746E17D /* ALL_BUILD */,
+				A259AA8DE16E41C3996BC4FD /* Products */,
+				77F8DDAF279D4FF7A01636E3 /* Frameworks */,
+				14BEC3F023DE4F2483384330 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		7213EA4641CE4CF0A746E17D /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				135C932BAEE843C5973D823A /* CMake Rules */,
+				D5CB3B055CEB4415864F0EB5 /* CMakeLists.txt */,
 			);
 			name = ALL_BUILD;
 			sourceTree = "<group>";
 		};
-		BE41077551DA4C419D278BCC /* AnjalKeyTranslator */ = {
+		77F8DDAF279D4FF7A01636E3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				776452A918A949ADA053D4DB /* Source Files */,
-				949C8888A0CF4326BB454B07 /* Header Files */,
-				5FDE6BA921944204813FA2D3 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/CMakeLists.txt */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		81187567BCF7482DA0BECC6F /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				65A8E6FB015F495AB01E364B /* IndicDevanagariKeymap.c */,
+				BD59C942E261484ABFAD19FF /* IndicGurmukhiKeymap.c */,
+				0071AC104CF748738ECE402F /* IndicKannadaKeymap.c */,
+				68A7F57C1D4F4FF7838E3988 /* IndicMalayalamKeymap.c */,
+				E5496EFC0A86456780F692B6 /* IndicNotesIMEngine.c */,
+				02E1FE4CE7F54520B3D6FAE8 /* IndicTamilAnjalKeymap.c */,
+				E5D24E6253A2490E95D31066 /* IndicTeluguKeymap.c */,
+				3218EBF19B3443A2A8B8A680 /* AnjalKeyMap.c */,
+				309F8724742640B5A1153EB0 /* KeyTranslatorTamil.c */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		8D1F7F36190C4A4697C55FF8 /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				BC99E563B26043EB89716642 /* AnjalKeyMap.h */,
+				5D42BC271E6A43B99D60E3C2 /* AnjalKeyMapLookup.h */,
+				3FADFD739A144A579050BCDC /* EncodingTamil.h */,
+				4B0BC4416F7D4777BD774824 /* IndicIMEConstants.h */,
+				4F3C826C427D4A28BDF4368D /* IndicNotesIMEngine.h */,
+				BA5BC1294DAA4036A054FDDD /* KeyTranslatorMultilingual.h */,
+				008BF1A92EA8DEE4004F6F89 /* Package 2.swift */,
+				008BF1AB2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift */,
+				008BF1AD2EA8DF00004F6F89 /* SourcesCAnjalKeyTranslatorincludemodule.modulemap */,
+				008BF1AE2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift */,
+				008BF1B02EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		A259AA8DE16E41C3996BC4FD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FD22C9367A8D494B99C8E8A0 /* anjalkeyboard-static.framework/anjalkeyboard-static */,
+				4677CCF99FFE49C0BE580B8C /* anjalkeyboard.framework/anjalkeyboard */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B229BE363A6140AFB42DD92A /* AnjalKeyTranslator */ = {
+			isa = PBXGroup;
+			children = (
+				100F4F5C529B44D3A166B2D9 /* Source Files */,
+				CE3E9CEEAAF6455BB0081F5A /* Header Files */,
+				C597BE86C92E4EDAA4A35000 /* CMakeLists.txt */,
 			);
 			name = AnjalKeyTranslator;
 			sourceTree = "<group>";
 		};
-		E8D02846594446F4867D86EA /* Header Files */ = {
+		C3F3707C483246ABA225A26B /* AnjalKeyTranslatorShared */ = {
 			isa = PBXGroup;
 			children = (
-				CAF61F1A29664BC3A21D9904 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */,
-				69D6066DAB244618AE4F7077 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */,
-				2813F86A1C0A464481CC10FA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */,
-				735C3D1000CC4AE88483EBF4 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */,
-				6EAEA0804275457D9AC9E312 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */,
-				628947822DCC4E45940E6FAD /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */,
+				81187567BCF7482DA0BECC6F /* Source Files */,
+				8D1F7F36190C4A4697C55FF8 /* Header Files */,
+				B92D6E1CE45D472F84DC159F /* CMakeLists.txt */,
+			);
+			name = AnjalKeyTranslatorShared;
+			sourceTree = "<group>";
+		};
+		CE3E9CEEAAF6455BB0081F5A /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				39DFF7BB156145EF8742DCF2 /* AnjalKeyMap.h */,
+				97F07770A93E4EB6AAAEC90F /* AnjalKeyMapLookup.h */,
+				8345BA3A309344A2B50CCFD5 /* EncodingTamil.h */,
+				4365E42A068F4B219A7E6A90 /* IndicIMEConstants.h */,
+				94E7BF18DFBC4BE4A357F833 /* IndicNotesIMEngine.h */,
+				5683A96D89B6454983CFBABE /* KeyTranslatorMultilingual.h */,
 			);
 			name = "Header Files";
 			sourceTree = "<group>";
@@ -351,29 +326,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		7C7AC84CA6694F68A3758C66 /* Headers */ = {
+		69D277152FC141A68A960D6D /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE116663A48F43C982F3DDFA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */,
-				9B6E2AC04CCD4529986B5C3F /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */,
-				082218E7703B43B381B48479 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */,
-				299A7349D7A0426992D16425 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */,
-				CDE21E398F3342F499C1E242 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */,
-				080F2924E26C459F8CCDA8A8 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */,
+				CE05051138464732AB8F04E4 /* AnjalKeyMap.h in Headers */,
+				0A9F0828E85D4FB6B02B435E /* AnjalKeyMapLookup.h in Headers */,
+				0CC5BF7A073B48328D9296B2 /* EncodingTamil.h in Headers */,
+				1DAB609CA88D42D89566E2E6 /* IndicIMEConstants.h in Headers */,
+				96B30F6551884C8D8D53087C /* IndicNotesIMEngine.h in Headers */,
+				CBA1C46FA02F40828B9C3B3C /* KeyTranslatorMultilingual.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		92CC9B6C9F6B48499D538754 /* Headers */ = {
+		B4B3778053774AF79EDD3F51 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FBEDE1624B74C3BA188DB43 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMap.h */,
-				824596FCCBCB453ABA9FD7FF /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/AnjalKeyMapLookup.h */,
-				B8E29F61552D40D3951369EA /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/EncodingTamil.h */,
-				4D50F3361AA742EE8A012A36 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicIMEConstants.h */,
-				ED58E6C5EAFD4A3D847D2752 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/IndicNotesIMEngine.h */,
-				C5F4DCB774D64A90A2EFA4B4 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include/KeyTranslatorMultilingual.h */,
+				D390B3C03D684D37BFC223E2 /* AnjalKeyMap.h in Headers */,
+				2C3102BE09354E8DA3A16243 /* AnjalKeyMapLookup.h in Headers */,
+				A5C82316B88945E6ACBDB6A6 /* EncodingTamil.h in Headers */,
+				8D830D9B00DE49CC8D48F280 /* IndicIMEConstants.h in Headers */,
+				EBC342AA215B4A78946789C9 /* IndicNotesIMEngine.h in Headers */,
+				940A241661024FC781EDCD7A /* KeyTranslatorMultilingual.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,38 +357,38 @@
 /* Begin PBXNativeTarget section */
 		651E194E34CC97A45136F207 /* AnjalKeyTranslator */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E099602290884495B806A5BD /* Build configuration list for PBXNativeTarget "AnjalKeyTranslator" */;
+			buildConfigurationList = AF232371113D4FB58CACC20E /* Build configuration list for PBXNativeTarget "AnjalKeyTranslator" */;
 			buildPhases = (
-				7C7AC84CA6694F68A3758C66 /* Headers */,
-				690375B29FC744D8A8D00AEF /* Sources */,
-				6E3810F3A042490984868D54 /* Frameworks */,
+				B4B3778053774AF79EDD3F51 /* Headers */,
+				B969B3DCB9A74606AE66AEDF /* Sources */,
+				9BC9BF9F15AF4FB699EEF6FD /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				2C0B28CFA79B444EBCB426F7 /* PBXTargetDependency */,
+				CDB7DC2870D146C38AEA4E53 /* PBXTargetDependency */,
 			);
 			name = AnjalKeyTranslator;
 			productName = AnjalKeyTranslator;
-			productReference = B5069120DE354F12A416EBD2 /* AnjalKeyTranslator */;
+			productReference = FD22C9367A8D494B99C8E8A0 /* anjalkeyboard-static.framework/anjalkeyboard-static */;
 			productType = "com.apple.product-type.framework";
 		};
 		FD7C231E3FD6C2EA5146280F /* AnjalKeyTranslatorShared */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6FAA57B9C09A4E8B9C73F824 /* Build configuration list for PBXNativeTarget "AnjalKeyTranslatorShared" */;
+			buildConfigurationList = 49F102F683254336AC28403A /* Build configuration list for PBXNativeTarget "AnjalKeyTranslatorShared" */;
 			buildPhases = (
-				92CC9B6C9F6B48499D538754 /* Headers */,
-				00B4AAF68CC24F80905D4BA3 /* Sources */,
-				424870D942674554BF1C77F9 /* Frameworks */,
+				69D277152FC141A68A960D6D /* Headers */,
+				87F7E0496C5B49428FCF905E /* Sources */,
+				E07692AA35514A988610254D /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				974599423B5C461ABB7375A6 /* PBXTargetDependency */,
+				F3F8A4B4A0E7440BA48D6A7B /* PBXTargetDependency */,
 			);
 			name = AnjalKeyTranslatorShared;
 			productName = AnjalKeyTranslatorShared;
-			productReference = 8535270FD831491F9E427A18 /* AnjalKeyTranslatorShared */;
+			productReference = 4677CCF99FFE49C0BE580B8C /* anjalkeyboard.framework/anjalkeyboard */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -422,21 +397,17 @@
 		38E84880D9B24118A0CD21E2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2600;
 			};
-			buildConfigurationList = 99E7F747157F4E62BFA28F03 /* Build configuration list for PBXProject "AnjalKeyTranslator" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				518A2824D04B4D988EA00EF2 /* Debug */,
-				2FB15A34EC994E599DBB4731 /* Release */,
-				550687A384994E4DA2448B24 /* MinSizeRel */,
-				EB110C6F9A794AA7AA5A9C02 /* RelWithDebInfo */,
-			);
+			buildConfigurationList = D57E2B54DE5F4395AD9919D3 /* Build configuration list for PBXProject "AnjalKeyTranslator" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
-			mainGroup = 2E5C9DDF7ED04473A97624B4;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 19BE0B4096B64F18A4FCDE44;
 			projectDirPath = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib";
 			projectRoot = "";
 			targets = (
@@ -450,36 +421,6 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3C0110FC8322DE7E50886E21 = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# shell script goes here
-exit 0";
-			showEnvVarsInLog = 0;
-		};
-		87AF4882E018677E2624B544 = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# shell script goes here
-exit 0";
-			showEnvVarsInLog = 0;
-		};
 		91CF91F5364B2AA90B427C16 /* Generate CMakeFiles/ZERO_CHECK */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -490,27 +431,11 @@ exit 0";
 			);
 			name = "Generate CMakeFiles/ZERO_CHECK";
 			outputPaths = (
-"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/ZERO_CHECK"			);
+				"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/ZERO_CHECK",
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e
-if test \"$CONFIGURATION\" = \"Debug\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  make -f /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeScripts/ReRunCMake.make
-fi
-if test \"$CONFIGURATION\" = \"Release\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  make -f /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeScripts/ReRunCMake.make
-fi
-if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  make -f /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeScripts/ReRunCMake.make
-fi
-if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  make -f /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeScripts/ReRunCMake.make
-fi
-";
+			shellScript = "set -e\nif test \"$CONFIGURATION\" = \"Debug\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  make -f /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeScripts/ReRunCMake.make\nfi\nif test \"$CONFIGURATION\" = \"Release\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  make -f /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeScripts/ReRunCMake.make\nfi\nif test \"$CONFIGURATION\" = \"MinSizeRel\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  make -f /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeScripts/ReRunCMake.make\nfi\nif test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  make -f /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeScripts/ReRunCMake.make\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		93426DA6A4AC2C2AC9CE883C /* CMake PostBuild Rules */ = {
@@ -519,44 +444,14 @@ fi
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputPaths = (
+			);
 			name = "CMake PostBuild Rules";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e
-if test \"$CONFIGURATION\" = \"Debug\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  /opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
-fi
-if test \"$CONFIGURATION\" = \"Release\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  /opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
-fi
-if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  /opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
-fi
-if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  /opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake
-fi
-";
-			showEnvVarsInLog = 0;
-		};
-		9B50530E35CC49C82C2FACCF = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# shell script goes here
-exit 0";
+			shellScript = "set -e\nif test \"$CONFIGURATION\" = \"Debug\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  /opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake\nfi\nif test \"$CONFIGURATION\" = \"Release\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  /opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake\nfi\nif test \"$CONFIGURATION\" = \"MinSizeRel\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  /opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake\nfi\nif test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  /opt/homebrew/Cellar/cmake/3.30.5/bin/cmake -DBUILD_TYPE=$CONFIGURATION$EFFECTIVE_PLATFORM_NAME -P cmake_install.cmake\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		F3E33788AE88F455A3F3B8EF /* Generate CMakeFiles/ALL_BUILD */ = {
@@ -569,231 +464,89 @@ exit 0";
 			);
 			name = "Generate CMakeFiles/ALL_BUILD";
 			outputPaths = (
-"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/ALL_BUILD"			);
+				"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/ALL_BUILD",
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e
-if test \"$CONFIGURATION\" = \"Debug\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  echo Build\\ all\\ projects
-fi
-if test \"$CONFIGURATION\" = \"Release\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  echo Build\\ all\\ projects
-fi
-if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  echo Build\\ all\\ projects
-fi
-if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
-  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode
-  echo Build\\ all\\ projects
-fi
-";
+			shellScript = "set -e\nif test \"$CONFIGURATION\" = \"Debug\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  echo Build\\ all\\ projects\nfi\nif test \"$CONFIGURATION\" = \"Release\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  echo Build\\ all\\ projects\nfi\nif test \"$CONFIGURATION\" = \"MinSizeRel\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  echo Build\\ all\\ projects\nfi\nif test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :\n  cd /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode\n  echo Build\\ all\\ projects\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		00B4AAF68CC24F80905D4BA3 /* Sources */ = {
+		87F7E0496C5B49428FCF905E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FA522C3D58F41148D6C52F6 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */,
-				03504223759741529E8BBDE1 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */,
-				733A6346BB814255A45BD7A2 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */,
-				60CBAE1DC33D4686BB801C2A /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */,
-				0A47ABD5E0344280AE56256B /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */,
-				BB3FE895BD18411ABEEED558 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */,
-				3F26ADD39B0E42A58E14F648 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */,
-				CA12BCF19E3E4E7D863F3551 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */,
-				1356AD6B729B4E238EB0EF3F /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */,
-				CA0F68C5C6BD4D49B325C7ED /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */,
+				6F41A074B2034207A5BC1023 /* IndicDevanagariKeymap.c in Sources */,
+				85099E35EE594387A651EBB0 /* IndicGurmukhiKeymap.c in Sources */,
+				3AE24A472AFF4710A7E1D3B0 /* IndicKannadaKeymap.c in Sources */,
+				504647D443A84001BA6CC8C4 /* IndicMalayalamKeymap.c in Sources */,
+				008BF1AC2EA8DEF9004F6F89 /* SourcesAnjalKeyTranslatorMultilingualKeyTranslator.swift in Sources */,
+				210D8D073E0F4AE985395301 /* IndicNotesIMEngine.c in Sources */,
+				008BF1AF2EA8DF11004F6F89 /* ExamplesSwiftUIExampleContentView.swift in Sources */,
+				85502093AC19490FB72E3261 /* IndicTamilAnjalKeymap.c in Sources */,
+				008BF1AA2EA8DEE4004F6F89 /* Package 2.swift in Sources */,
+				ABB0071EB8AE4C1590465D37 /* IndicTeluguKeymap.c in Sources */,
+				ADEECAD5098049E08953AA91 /* AnjalKeyMap.c in Sources */,
+				008BF1B12EA8DF1C004F6F89 /* TestsAnjalKeyTranslatorTestsMultilingualKeyTranslatorTests.swift in Sources */,
+				3FB6081D81B74526A560B0AC /* KeyTranslatorTamil.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		690375B29FC744D8A8D00AEF /* Sources */ = {
+		B969B3DCB9A74606AE66AEDF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BDD598FB014D4179940EE826 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/KeyTranslatorMultilingual.c */,
-				D2A7DFEF3B094B5690E7EF0E /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicDevanagariKeymap.c */,
-				48412F2F43144E7B9BE8CA5C /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicGurmukhiKeymap.c */,
-				E75AF074D19F468E8C978107 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicKannadaKeymap.c */,
-				EE225857F7DF44A286915C47 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicMalayalamKeymap.c */,
-				0B033CB004B8480FB5312F2D /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicNotesIMEngine.c */,
-				E0C39C4111A64E339AF20419 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTamilAnjalKeymap.c */,
-				6671A10AFC1C45B29EF008AE /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/indic/IndicTeluguKeymap.c */,
-				B1557E84F0B94A76BAED7931 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/AnjalKeyMap.c */,
-				2C8F4342871B4148B265A508 /* /Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/src/tamil/KeyTranslatorTamil.c */,
+				3DBCD4045A0B4C58B4CA3E13 /* IndicDevanagariKeymap.c in Sources */,
+				67C8350E3B7C424B944CD6BF /* IndicGurmukhiKeymap.c in Sources */,
+				86E436C91DE24FF48E0CB63D /* IndicKannadaKeymap.c in Sources */,
+				DF3D6ABC28484FF09F4212B5 /* IndicMalayalamKeymap.c in Sources */,
+				398FB57C6D95421F8AA1E18F /* IndicNotesIMEngine.c in Sources */,
+				C7B074D4BEC4460F9A95AA6A /* IndicTamilAnjalKeymap.c in Sources */,
+				ABE5033882D1473CB687CB6F /* IndicTeluguKeymap.c in Sources */,
+				8E21CC562EB243A99D63752F /* AnjalKeyMap.c in Sources */,
+				857C21A65AD44A17AAE58183 /* KeyTranslatorTamil.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0D9DC4A222454097932A9E01 /* PBXTargetDependency */ = {
+		15879A5349784CD5AFA6D470 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A1D147911640D430DAB1BC7A /* ALL_BUILD */;
-			targetProxy = 02FFD928914F4CD5A38BF6EE /* PBXContainerItemProxy */;
+			targetProxy = D2D72EEE9CA84258BE0A794F /* PBXContainerItemProxy */;
 		};
-		2C0B28CFA79B444EBCB426F7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 34D16C826DA5179104BCE887 /* ZERO_CHECK */;
-			targetProxy = 1948921D6179410DA2E9D028 /* PBXContainerItemProxy */;
-		};
-		4CB2767C0DFD42AFA15F7142 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 651E194E34CC97A45136F207 /* AnjalKeyTranslator */;
-			targetProxy = C13624068F174A84993ED02B /* PBXContainerItemProxy */;
-		};
-		948755FD62FC43AC931BC46D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 34D16C826DA5179104BCE887 /* ZERO_CHECK */;
-			targetProxy = 99F6F6902BAF4204B39E8457 /* PBXContainerItemProxy */;
-		};
-		974599423B5C461ABB7375A6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 34D16C826DA5179104BCE887 /* ZERO_CHECK */;
-			targetProxy = 4BD54D539E544773A6EB9F4D /* PBXContainerItemProxy */;
-		};
-		EA246A9AE1E044EAA4DB2D59 /* PBXTargetDependency */ = {
+		6C7E06F272D74F47BF0459A7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FD7C231E3FD6C2EA5146280F /* AnjalKeyTranslatorShared */;
-			targetProxy = 666B51186A4D4EEE8F373646 /* PBXContainerItemProxy */;
+			targetProxy = C044781EDE2D4CA596C995A3 /* PBXContainerItemProxy */;
+		};
+		7A357DA9A83A4BD1BDB2D33B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 651E194E34CC97A45136F207 /* AnjalKeyTranslator */;
+			targetProxy = 9DFD9B4C035D4893987A732B /* PBXContainerItemProxy */;
+		};
+		CDB7DC2870D146C38AEA4E53 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 34D16C826DA5179104BCE887 /* ZERO_CHECK */;
+			targetProxy = F148D6130C954AFEBE001D8F /* PBXContainerItemProxy */;
+		};
+		E7C35A9B692A42C18D11EAE3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 34D16C826DA5179104BCE887 /* ZERO_CHECK */;
+			targetProxy = AF48FB1639EC425CB7E76E2B /* PBXContainerItemProxy */;
+		};
+		F3F8A4B4A0E7440BA48D6A7B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 34D16C826DA5179104BCE887 /* ZERO_CHECK */;
+			targetProxy = 51595017615148F4BFFB96DE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		052048C8AD9F453AA537924A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Debug;
-		};
-		0AC78DBB9A2C4DB4A937F16C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Debug;
-		};
-		0FC315AF085F4AAE972EDAEE /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Release;
-		};
-		191C16E9F1564F3094E584B6 /* RelWithDebInfo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = RelWithDebInfo;
-		};
-		204E604DEC8E4906B2A59A2F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/Debug";
-				EXECUTABLE_PREFIX = "";
-				EXECUTABLE_SUFFIX = "";
-				FRAMEWORK_VERSION = A;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",TARGET_OS_MAC,"$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include","$(inherited)");
-				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslator.dir/Info.plist";
-				INSTALL_PATH = "";
-				MACH_O_TYPE = staticlib;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("   '-std=gnu11' ","$(inherited)");
-				OTHER_LIBTOOLFLAGS = ("");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = anjalkeyboard;
-				SECTORDER_FLAGS = "";
-				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslator.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Debug;
-		};
-		23DB39A371EA4532A0E8AEDD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk;
-				SYMROOT = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build";
-			};
-			name = Debug;
-		};
-		3AC5B351093545CFBEF18CA2 /* Release */ = {
+		08B61B41C2F94408A2A862D5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -808,166 +561,48 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",AnjalKeyTranslatorShared_EXPORTS,TARGET_OS_MAC,"$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					AnjalKeyTranslatorShared_EXPORTS,
+					TARGET_OS_MAC,
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include","$(inherited)");
+				HEADER_SEARCH_PATHS = (
+					"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslatorShared.dir/Info.plist";
 				INSTALL_PATH = "@rpath";
 				LIBRARY_STYLE = DYNAMIC;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("    -DNDEBUG '-std=gnu11' -fPIC ","$(inherited)");
-				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"'-std=gnu11'",
+					"-fPIC",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = " $(inherited)";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = anjalkeyboard;
 				SECTORDER_FLAGS = "";
 				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslatorShared.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
 			name = Release;
 		};
-		3CF65117438D4160A3014149 /* MinSizeRel */ = {
+		1108BF98CEFC4D698AA0B564 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/MinSizeRel";
-				EXECUTABLE_PREFIX = "";
-				EXECUTABLE_SUFFIX = "";
-				FRAMEWORK_VERSION = A;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",TARGET_OS_MAC,"$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include","$(inherited)");
-				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslator.dir/Info.plist";
-				INSTALL_PATH = "";
-				MACH_O_TYPE = staticlib;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("    -DNDEBUG '-std=gnu11' ","$(inherited)");
-				OTHER_LIBTOOLFLAGS = ("");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = anjalkeyboard;
-				SECTORDER_FLAGS = "";
-				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslator.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = MinSizeRel;
-		};
-		4131A2A7814F49B69349DB2A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Debug;
-		};
-		61ED24CD622C4D5AB12081A2 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build";
 			};
 			name = Release;
 		};
-		724BDCF8350B4779B3410ECB /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = install;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = MinSizeRel;
-		};
-		88943B02685D4CD984393C20 /* RelWithDebInfo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = RelWithDebInfo;
-		};
-		935536A0052A4BBD99B2E528 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = MinSizeRel;
-		};
-		954CBB383ED2472BB92922EE /* RelWithDebInfo */ = {
+		137B3A9A8A0A4C5984C554A4 /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -980,25 +615,78 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",TARGET_OS_MAC,"$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					TARGET_OS_MAC,
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include","$(inherited)");
+				HEADER_SEARCH_PATHS = (
+					"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslator.dir/Info.plist";
 				INSTALL_PATH = "";
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("       -DNDEBUG '-std=gnu11' ","$(inherited)");
-				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"'-std=gnu11'",
+					"$(inherited)",
+				);
+				OTHER_LIBTOOLFLAGS = "";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = anjalkeyboard;
+				PRODUCT_NAME = "anjalkeyboard-static";
 				SECTORDER_FLAGS = "";
 				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslator.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
 			name = RelWithDebInfo;
 		};
-		98FE0C6329CD447DAE737F0A /* Release */ = {
+		1839CA85B8984654A633506E /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					TARGET_OS_MAC,
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslator.dir/Info.plist";
+				INSTALL_PATH = "";
+				MACH_O_TYPE = staticlib;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"'-std=gnu11'",
+					"$(inherited)",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "anjalkeyboard-static";
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslator.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = MinSizeRel;
+		};
+		1B0B8536B163494287A68092 /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = arm64;
@@ -1006,9 +694,34 @@ fi
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SYMROOT = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build";
 			};
+			name = RelWithDebInfo;
+		};
+		24111840B773463E9E3376EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
 			name = Release;
 		};
-		A11B11B6A6EE4D3BA3096823 /* Debug */ = {
+		3B9149E78217496FBFEBDA7E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1023,25 +736,37 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",AnjalKeyTranslatorShared_EXPORTS,TARGET_OS_MAC,"$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					AnjalKeyTranslatorShared_EXPORTS,
+					TARGET_OS_MAC,
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include","$(inherited)");
+				HEADER_SEARCH_PATHS = (
+					"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslatorShared.dir/Info.plist";
 				INSTALL_PATH = "@rpath";
 				LIBRARY_STYLE = DYNAMIC;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("   '-std=gnu11' -fPIC ","$(inherited)");
-				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_CFLAGS = (
+					"'-std=gnu11'",
+					"-fPIC",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = " $(inherited)";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = anjalkeyboard;
 				SECTORDER_FLAGS = "";
 				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslatorShared.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
 			name = Debug;
 		};
-		ABA1AF8EB5FB4A2A89058CEB /* RelWithDebInfo */ = {
+		4A5FBEE10C614786A4DE8C62 /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1050,20 +775,89 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INSTALL_PATH = "";
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_LDFLAGS = " $(inherited)";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
+				PRODUCT_NAME = ALL_BUILD;
 				SECTORDER_FLAGS = "";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
-			name = RelWithDebInfo;
+			name = MinSizeRel;
 		};
-		B9FA8D3E7A664818ADDD4D03 /* MinSizeRel */ = {
+		4B1E71E6B1A242E1B1F4B8A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/Debug";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					TARGET_OS_MAC,
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslator.dir/Info.plist";
+				INSTALL_PATH = "";
+				MACH_O_TYPE = staticlib;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"'-std=gnu11'",
+					"$(inherited)",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "anjalkeyboard-static";
+				SECTORDER_FLAGS = "";
+				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslator.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		7F63B4CAB9B14E43B0D29493 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		8A2BB1B9AA794539B5065B71 /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1078,35 +872,113 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",AnjalKeyTranslatorShared_EXPORTS,TARGET_OS_MAC,"$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					AnjalKeyTranslatorShared_EXPORTS,
+					TARGET_OS_MAC,
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include","$(inherited)");
+				HEADER_SEARCH_PATHS = (
+					"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslatorShared.dir/Info.plist";
 				INSTALL_PATH = "@rpath";
 				LIBRARY_STYLE = DYNAMIC;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("    -DNDEBUG '-std=gnu11' -fPIC ","$(inherited)");
-				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"'-std=gnu11'",
+					"-fPIC",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = " $(inherited)";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = anjalkeyboard;
 				SECTORDER_FLAGS = "";
 				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslatorShared.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
 			name = MinSizeRel;
 		};
-		D7C712E823F7420A898AF92D /* RelWithDebInfo */ = {
+		8C8AA8D9E1C64ED88AC5EF6E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = arm64;
-				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SYMROOT = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		904764005A9144E2B4A6FD86 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Release;
+		};
+		AD5EC2315A4D4CD79B869CB9 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
 			};
 			name = RelWithDebInfo;
 		};
-		DCD38BE1C42B4813B477315E /* Release */ = {
+		B09B2EEFC185462D9FF8B47E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1119,25 +991,36 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",TARGET_OS_MAC,"$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					TARGET_OS_MAC,
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include","$(inherited)");
+				HEADER_SEARCH_PATHS = (
+					"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslator.dir/Info.plist";
 				INSTALL_PATH = "";
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("    -DNDEBUG '-std=gnu11' ","$(inherited)");
-				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"'-std=gnu11'",
+					"$(inherited)",
+				);
+				OTHER_LIBTOOLFLAGS = "";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = anjalkeyboard;
+				PRODUCT_NAME = "anjalkeyboard-static";
 				SECTORDER_FLAGS = "";
 				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslator.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
 			name = Release;
 		};
-		E0C826C10B734D8F9C3CE6B0 /* MinSizeRel */ = {
+		CA68951E69CF45FCA56B4D6B /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1146,20 +1029,48 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INSTALL_PATH = "";
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_LDFLAGS = " $(inherited)";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
+				PRODUCT_NAME = ZERO_CHECK;
 				SECTORDER_FLAGS = "";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
 			name = MinSizeRel;
 		};
-		E46B5D3014DD477683FB66AA /* MinSizeRel */ = {
+		CC55A3C64E1D4991B29DB8F5 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = RelWithDebInfo;
+		};
+		CD98583BE7F24762B3D0DB0F /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = arm64;
@@ -1169,7 +1080,82 @@ fi
 			};
 			name = MinSizeRel;
 		};
-		E5A963FA216E4E978625454B /* RelWithDebInfo */ = {
+		F14FB1C665354F66938C9142 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = MinSizeRel;
+		};
+		F20404B921164A0CA319596D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = install;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Release;
+		};
+		F356888D04AB44AFB30831DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		F3B8CC003B8F4885AC5A8598 /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1184,25 +1170,47 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",AnjalKeyTranslatorShared_EXPORTS,TARGET_OS_MAC,"$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					AnjalKeyTranslatorShared_EXPORTS,
+					TARGET_OS_MAC,
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = ("/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include","$(inherited)");
+				HEADER_SEARCH_PATHS = (
+					"/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/include",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/CMakeFiles/AnjalKeyTranslatorShared.dir/Info.plist";
 				INSTALL_PATH = "@rpath";
 				LIBRARY_STYLE = DYNAMIC;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = ("       -DNDEBUG '-std=gnu11' -fPIC ","$(inherited)");
-				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"'-std=gnu11'",
+					"-fPIC",
+					"$(inherited)",
+				);
+				OTHER_LDFLAGS = " $(inherited)";
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = anjalkeyboard;
 				SECTORDER_FLAGS = "";
 				TARGET_TEMP_DIR = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build/AnjalKeyTranslatorShared.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
 			name = RelWithDebInfo;
 		};
-		FE4021A6243D432BBAA5FA5C /* Release */ = {
+		FB6E4CE18DA041A894EE4288 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk;
+				SYMROOT = "/Users/muthu/Projects/SangamKeyboards-2026/Libraries/KeyTanslatorLib/xcode/build";
+			};
+			name = Debug;
+		};
+		FCC1E9A9C6FB4DB5A47EF247 /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1211,84 +1219,87 @@ fi
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INSTALL_PATH = "";
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_LDFLAGS = " $(inherited)";
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
+				PRODUCT_NAME = install;
 				SECTORDER_FLAGS = "";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
+				WARNING_CFLAGS = "$(inherited)";
 			};
-			name = Release;
+			name = RelWithDebInfo;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1285A89F6D044A6E898F2B08 /* Build configuration list for PBXAggregateTarget "install" */ = {
+		32EDB4FD740F44A3B00BA7A9 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4131A2A7814F49B69349DB2A /* Debug */,
-				61ED24CD622C4D5AB12081A2 /* Release */,
-				724BDCF8350B4779B3410ECB /* MinSizeRel */,
-				191C16E9F1564F3094E584B6 /* RelWithDebInfo */,
+				7F63B4CAB9B14E43B0D29493 /* Debug */,
+				904764005A9144E2B4A6FD86 /* Release */,
+				4A5FBEE10C614786A4DE8C62 /* MinSizeRel */,
+				AD5EC2315A4D4CD79B869CB9 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		664B948F4C9E49489E5CF096 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+		369D72DAF1DC40FDBE8F11E1 /* Build configuration list for PBXAggregateTarget "install" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				052048C8AD9F453AA537924A /* Debug */,
-				FE4021A6243D432BBAA5FA5C /* Release */,
-				E0C826C10B734D8F9C3CE6B0 /* MinSizeRel */,
-				88943B02685D4CD984393C20 /* RelWithDebInfo */,
+				8C8AA8D9E1C64ED88AC5EF6E /* Debug */,
+				F20404B921164A0CA319596D /* Release */,
+				F14FB1C665354F66938C9142 /* MinSizeRel */,
+				FCC1E9A9C6FB4DB5A47EF247 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		6FAA57B9C09A4E8B9C73F824 /* Build configuration list for PBXNativeTarget "AnjalKeyTranslatorShared" */ = {
+		49F102F683254336AC28403A /* Build configuration list for PBXNativeTarget "AnjalKeyTranslatorShared" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A11B11B6A6EE4D3BA3096823 /* Debug */,
-				3AC5B351093545CFBEF18CA2 /* Release */,
-				B9FA8D3E7A664818ADDD4D03 /* MinSizeRel */,
-				E5A963FA216E4E978625454B /* RelWithDebInfo */,
+				3B9149E78217496FBFEBDA7E /* Debug */,
+				08B61B41C2F94408A2A862D5 /* Release */,
+				8A2BB1B9AA794539B5065B71 /* MinSizeRel */,
+				F3B8CC003B8F4885AC5A8598 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		954A2774A8854B44B83871E4 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+		AF232371113D4FB58CACC20E /* Build configuration list for PBXNativeTarget "AnjalKeyTranslator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0AC78DBB9A2C4DB4A937F16C /* Debug */,
-				0FC315AF085F4AAE972EDAEE /* Release */,
-				935536A0052A4BBD99B2E528 /* MinSizeRel */,
-				ABA1AF8EB5FB4A2A89058CEB /* RelWithDebInfo */,
+				4B1E71E6B1A242E1B1F4B8A3 /* Debug */,
+				B09B2EEFC185462D9FF8B47E /* Release */,
+				1839CA85B8984654A633506E /* MinSizeRel */,
+				137B3A9A8A0A4C5984C554A4 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		99E7F747157F4E62BFA28F03 /* Build configuration list for PBXProject "AnjalKeyTranslator" */ = {
+		C108BC49A5414E39B42C71F8 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				23DB39A371EA4532A0E8AEDD /* Debug */,
-				98FE0C6329CD447DAE737F0A /* Release */,
-				E46B5D3014DD477683FB66AA /* MinSizeRel */,
-				D7C712E823F7420A898AF92D /* RelWithDebInfo */,
+				F356888D04AB44AFB30831DF /* Debug */,
+				24111840B773463E9E3376EE /* Release */,
+				CA68951E69CF45FCA56B4D6B /* MinSizeRel */,
+				CC55A3C64E1D4991B29DB8F5 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		E099602290884495B806A5BD /* Build configuration list for PBXNativeTarget "AnjalKeyTranslator" */ = {
+		D57E2B54DE5F4395AD9919D3 /* Build configuration list for PBXProject "AnjalKeyTranslator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				204E604DEC8E4906B2A59A2F /* Debug */,
-				DCD38BE1C42B4813B477315E /* Release */,
-				3CF65117438D4160A3014149 /* MinSizeRel */,
-				954CBB383ED2472BB92922EE /* RelWithDebInfo */,
+				FB6E4CE18DA041A894EE4288 /* Debug */,
+				1108BF98CEFC4D698AA0B564 /* Release */,
+				CD98583BE7F24762B3D0DB0F /* MinSizeRel */,
+				1B0B8536B163494287A68092 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
