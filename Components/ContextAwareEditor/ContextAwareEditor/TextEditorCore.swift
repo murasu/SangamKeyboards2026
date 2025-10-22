@@ -48,10 +48,10 @@ public class TextEditorCore: ObservableObject {
     }
     
     private func setupSangamTranslator() {
-        do {
-            sangamTranslator = try SangamKeyTranslator(imeType: kbdAnjal)
-        } catch {
-            print("Failed to initialize SangamKeyTranslator: \(error)")
+        // Use the singleton instead of creating new instances
+        sangamTranslator = SangamKeyTranslator.shared
+        if sangamTranslator?.getLayout() == kbdNone {
+            sangamTranslator?.setLayout(kbdAnjal)
         }
     }
     
@@ -136,7 +136,7 @@ public class TextEditorCore: ObservableObject {
         compositionBuffer += character
         
         // Translate the current composition
-        translateCurrentComposition(isShifted: isShifted)
+        translateCurrentComposition(keyCode: keyCode, isShifted: isShifted)
     }
     
     private func startComposition(at range: NSRange) {
@@ -146,7 +146,7 @@ public class TextEditorCore: ObservableObject {
         onCompositionChange?("", true)
     }
     
-    private func translateCurrentComposition(isShifted: Bool) {
+    private func translateCurrentComposition(keyCode: Int32, isShifted: Bool) {
         guard let translator = sangamTranslator else {
             // Fallback: just display the buffer as-is
             updateCompositionDisplay(compositionBuffer)

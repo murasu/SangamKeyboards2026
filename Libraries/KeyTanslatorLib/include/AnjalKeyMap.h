@@ -53,6 +53,7 @@
 #define MAX_COLS           13  //}
 
 // keyboard types
+#define kbdNone             -1
 #define MAX_KBDTYPES        10
 #define kbdAnjal            0
 #define kbdTamil99          1

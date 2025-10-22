@@ -22,6 +22,9 @@ public enum SangamTranslatorError: Error {
 
 public class SangamKeyTranslator {
     
+    // Singleton instance
+    public static let shared = SangamKeyTranslator()
+    
     // MARK: - Private Properties
     private var prevKeyCode: Int32 = 0
     private var localComposing: String = ""
@@ -32,9 +35,9 @@ public class SangamKeyTranslator {
     
     // MARK: - Initialization
     
-    public init(imeType: Int32) throws {
+    public init() {
         // Call the C function to set keyboard layout
-        SetKeyboardLayout(imeType)
+        SetKeyboardLayout(kbdNone) // Default is -1 : so we know nothing has been set
         prevKeyWasBackspace = false
         clearResults()
         
