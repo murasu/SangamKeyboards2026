@@ -137,7 +137,7 @@ struct MacOSTextEditor: NSViewRepresentable {
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
         
-        // EXPERIMENTAL: Try creating text view with explicit frame and container
+        // CRITICAL: Manual text system setup - this is what makes text visible in SwiftUI
         let textContainer = NSTextContainer()
         let layoutManager = NSLayoutManager()
         let textStorage = NSTextStorage()

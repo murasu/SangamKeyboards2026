@@ -50,19 +50,6 @@ struct ContentView: View {
                 }
                 .frame(minHeight: 300)
                 .border(Color.gray.opacity(0.3), width: 1)
-                .id("text-editor") // Force SwiftUI to treat this as a unique view
-                .onAppear {
-                    // Force refresh after SwiftUI layout
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        // Trigger a state change to force SwiftUI refresh
-                        if currentText.isEmpty {
-                            currentText = " " // Tiny change to trigger refresh
-                            DispatchQueue.main.async {
-                                currentText = ""
-                            }
-                        }
-                    }
-                }
         }
         .padding()
     }
