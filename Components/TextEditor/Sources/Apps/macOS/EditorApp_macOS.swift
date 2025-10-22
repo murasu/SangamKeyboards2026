@@ -8,14 +8,68 @@ import EditorUI
 
 @main
 struct ContextAwareEditorApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    // Additional activation when view appears
+                    DispatchQueue.main.async {
+                        NSApp.activate(ignoringOtherApps: true)
+                    }
+                }
         }
+        .windowStyle(.automatic)
+        .windowToolbarStyle(.automatic)
         .commands {
             // Add custom menu commands here
             CommandGroup(replacing: .newItem) {}
         }
+    }
+}
+
+// MARK: - App Delegate
+
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        print("🚀 App did finish launching")
+        
+        // Force app activation
+        NSApp.activate(ignoringOtherApps: true)
+        
+        // Use a timer to repeatedly try to activate until we succeed
+        var attempts = 0
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            attempts += 1
+            print("🔄 Activation attempt \(attempts)")
+            
+            if let window = NSApp.windows.first {
+                print("🪟 Found window, is key: \(window.isKeyWindow)")
+                window.makeKeyAndOrderFront(nil)
+                NSApp.activate(ignoringOtherApps: true)
+                
+                if window.isKeyWindow {
+                    print("✅ Window successfully became key")
+                    timer.invalidate()
+                } else if attempts >= 10 {
+                    print("❌ Failed to make window key after 10 attempts")
+                    timer.invalidate()
+                }
+            } else if attempts >= 10 {
+                print("❌ No window found after 10 attempts")
+                timer.invalidate()
+            }
+        }
+    }
+    
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        // When app icon is clicked in dock, bring to front
+        NSApp.activate(ignoringOtherApps: true)
+        for window in NSApp.windows {
+            window.makeKeyAndOrderFront(nil)
+        }
+        return !flag
     }
 }
 
@@ -37,6 +91,23 @@ struct ContentView: View {
         .frame(minWidth: 600, minHeight: 400)
         .sheet(isPresented: $showSettings) {
             SettingsView(viewModel: viewModel)
+        }
+        .onAppear {
+            print("💫 ContentView appeared")
+            
+            // Force activation when the content view appears
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                print("💫 Forcing app activation from ContentView")
+                NSApp.activate(ignoringOtherApps: true)
+                
+                // Find our window and force it to become key
+                if let window = NSApp.windows.first(where: { $0.contentView != nil }) {
+                    print("💫 Found content window: \(window)")
+                    window.makeKeyAndOrderFront(nil)
+                    window.orderFrontRegardless()  // Even more aggressive
+                    print("💫 Window is key after orderFrontRegardless: \(window.isKeyWindow)")
+                }
+            }
         }
     }
     
@@ -71,11 +142,7 @@ struct ContentView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        #if canImport(AppKit)
         .background(Color(NSColor.windowBackgroundColor))
-        #else
-        .background(Color(.systemBackground))
-        #endif
     }
     
     private var wordCount: Int {
