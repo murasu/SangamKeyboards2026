@@ -137,8 +137,15 @@ struct MacOSTextEditor: NSViewRepresentable {
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
         
-        // Use our custom text view that can intercept keys
-        let textView = KeyInterceptingTextView()
+        // EXPERIMENTAL: Try creating text view with explicit frame and container
+        let textContainer = NSTextContainer()
+        let layoutManager = NSLayoutManager()
+        let textStorage = NSTextStorage()
+        
+        textStorage.addLayoutManager(layoutManager)
+        layoutManager.addTextContainer(textContainer)
+        
+        let textView = KeyInterceptingTextView(frame: .zero, textContainer: textContainer)
         
         // Configure scroll view
         scrollView.hasVerticalScroller = true
@@ -168,10 +175,14 @@ struct MacOSTextEditor: NSViewRepresentable {
             textView.string = "Working Text Editor - Now we can add features incrementally!"
         }
         
-        // Fix text color visibility - ensure it contrasts with background
-        textView.textColor = NSColor.labelColor
+        // CRITICAL FIX: Apply color directly to textStorage (textColor property is ignored)
+        let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
+        textView.textStorage?.addAttribute(.foregroundColor, value: NSColor.red, range: fullRange)
+        
+        // Fix text color visibility
+        textView.textColor = NSColor.red  // This gets ignored, but set it anyway
         textView.backgroundColor = NSColor.textBackgroundColor
-        textView.insertionPointColor = NSColor.labelColor
+        textView.insertionPointColor = NSColor.red
         
         // Set up delegate for text change notifications
         textView.delegate = context.coordinator
