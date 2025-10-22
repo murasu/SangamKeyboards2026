@@ -137,7 +137,7 @@ struct MacOSTextEditor: NSViewRepresentable {
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
         
-        // CRITICAL: Manual text system setup - this is what makes text visible in SwiftUI
+        // CRITICAL: Manual text system setup - this makes text visible in SwiftUI
         let textContainer = NSTextContainer()
         let layoutManager = NSLayoutManager()
         let textStorage = NSTextStorage()
@@ -175,14 +175,23 @@ struct MacOSTextEditor: NSViewRepresentable {
             textView.string = "Working Text Editor - Now we can add features incrementally!"
         }
         
-        // CRITICAL FIX: Apply color directly to textStorage (textColor property is ignored)
+        // CRITICAL FIX: Apply color directly to textStorage with manual dark/light mode handling
         let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
-        textView.textStorage?.addAttribute(.foregroundColor, value: NSColor.red, range: fullRange)
+        
+        // Manual color selection since NSColor.labelColor doesn't work in SwiftUI context
+        let textColor: NSColor
+        if NSApp.effectiveAppearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua {
+            textColor = NSColor.white  // Dark mode - white text
+        } else {
+            textColor = NSColor.black  // Light mode - black text
+        }
+        
+        textView.textStorage?.addAttribute(.foregroundColor, value: textColor, range: fullRange)
         
         // Fix text color visibility
-        textView.textColor = NSColor.red  // This gets ignored, but set it anyway
+        textView.textColor = textColor  // This gets ignored, but set it anyway
         textView.backgroundColor = NSColor.textBackgroundColor
-        textView.insertionPointColor = NSColor.red
+        textView.insertionPointColor = textColor
         
         // Set up delegate for text change notifications
         textView.delegate = context.coordinator
