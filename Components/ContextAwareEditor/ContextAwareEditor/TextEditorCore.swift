@@ -21,19 +21,19 @@ typealias PlatformColor = UIColor
 
 /// Core text editor logic shared across platforms
 @MainActor
-class TextEditorCore: ObservableObject {
+public class TextEditorCore: ObservableObject {
     @Published var textStorage = NSTextStorage()
     @Published var currentPredictions: [String] = []
     @Published var showingPrediction = false
     @Published var predictionRange: NSRange?
     
-    private let textProcessor = TextProcessor()
-    private let predictionEngine = PredictionEngine()
+    public let textProcessor = TextProcessor()
+    public let predictionEngine = PredictionEngine()
     
     var onTextChange: ((String) -> Void)?
     var onKeyTranslation: ((String, NSRange?) -> Void)?
     
-    init() {
+    public init() {
         setupTextStorage()
     }
     
@@ -49,7 +49,7 @@ class TextEditorCore: ObservableObject {
     }
     
     /// Process a typed character through the translation system
-    func processTypedCharacter(_ character: String, at range: NSRange) {
+    public func processTypedCharacter(_ character: String, at range: NSRange) {
         let translatedText = textProcessor.translateCharacter(character)
         
         if translatedText.deleteCount > 0 {
@@ -73,7 +73,7 @@ class TextEditorCore: ObservableObject {
     }
     
     /// Update word predictions based on current cursor position
-    func updatePredictions(at location: Int) {
+    public func updatePredictions(at location: Int) {
         guard location > 0 else {
             hidePredictions()
             return
@@ -98,7 +98,7 @@ class TextEditorCore: ObservableObject {
     }
     
     /// Accept the current prediction
-    func acceptPrediction(_ prediction: String) {
+    public func acceptPrediction(_ prediction: String) {
         guard let range = predictionRange else { return }
         
         textStorage.replaceCharacters(in: range, with: prediction)
@@ -108,7 +108,7 @@ class TextEditorCore: ObservableObject {
     }
     
     /// Hide predictions
-    func hidePredictions() {
+    public func hidePredictions() {
         showingPrediction = false
         currentPredictions = []
         predictionRange = nil
@@ -144,22 +144,39 @@ class TextEditorCore: ObservableObject {
 }
 
 /// Handles character translation (placeholder implementation)
-class TextProcessor {
-    struct TranslationResult {
-        let newText: String
-        let deleteCount: Int
+public class TextProcessor {
+    public struct TranslationResult {
+        public let newText: String
+        public let deleteCount: Int
+        
+        public init(newText: String, deleteCount: Int) {
+            self.newText = newText
+            self.deleteCount = deleteCount
+        }
     }
     
-    /// Translate a typed character - placeholder implementation
-    func translateCharacter(_ character: String) -> TranslationResult {
-        // For now, just pass through the character
-        // Later, this can be replaced with actual translation logic
+    var customTranslation: ((String) -> TranslationResult)?
+    
+    public init() {}
+    
+    /// Translate a typed character - enhanced with custom function support
+    public func translateCharacter(_ character: String) -> TranslationResult {
+        if let customTranslation = customTranslation {
+            return customTranslation(character)
+        }
+        
+        // Default implementation - just pass through the character
         return TranslationResult(newText: character, deleteCount: 0)
+    }
+    
+    /// Set a custom character translation function
+    public func setTranslationFunction(_ translate: @escaping (String) -> TranslationResult) {
+        self.customTranslation = translate
     }
 }
 
 /// Handles word prediction (placeholder implementation)
-class PredictionEngine {
+public class PredictionEngine {
     private let samplePredictions = [
         "function", "variable", "constant", "import", "export",
         "class", "struct", "protocol", "extension", "enum",
@@ -167,16 +184,41 @@ class PredictionEngine {
         "async", "await", "throws", "return", "guard"
     ]
     
-    /// Get predictions for a word - placeholder implementation
-    func getPrediction(forWord word: String) -> [String] {
+    var customPrediction: ((String) -> [String])?
+    var customWords: [String] = []
+    
+    public init() {}
+    
+    /// Get predictions for a word - enhanced with custom function support
+    public func getPrediction(forWord word: String) -> [String] {
+        if let customPrediction = customPrediction {
+            return customPrediction(word)
+        }
+        
         guard word.count >= 2 else { return [] }
         
         // Filter sample predictions that start with the word
         let filtered = samplePredictions.filter { $0.hasPrefix(word.lowercased()) }
         
-        // Add some random predictions to simulate real behavior
-        let randomPredictions = samplePredictions.shuffled().prefix(2)
+        // Add custom words that match
+        let customMatches = customWords.filter { $0.lowercased().hasPrefix(word.lowercased()) }
         
-        return Array(Set(filtered + randomPredictions)).prefix(3).map { $0 }
+        // Combine and deduplicate
+        let combined = Array(Set(filtered + customMatches))
+        
+        // Add some random predictions to simulate real behavior if we don't have enough matches
+        let randomPredictions = combined.isEmpty ? samplePredictions.shuffled().prefix(2) : []
+        
+        return Array((combined + randomPredictions).prefix(3))
+    }
+    
+    /// Set a custom prediction function
+    public func setPredictionFunction(_ predict: @escaping (String) -> [String]) {
+        self.customPrediction = predict
+    }
+    
+    /// Add custom word list for predictions
+    public func addCustomWords(_ words: [String]) {
+        self.customWords.append(contentsOf: words)
     }
 }
