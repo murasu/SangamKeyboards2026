@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		008BF11C2EA888A6004F6F89 /* ContextAwareEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContextAwareEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		008BF18D2EA89C06004F6F89 /* ContextAwareEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContextAwareEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		008BF11E2EA888A6004F6F89 /* ContextAwareEditor */ = {
+		008BF18F2EA89C06004F6F89 /* ContextAwareEditor */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ContextAwareEditor;
 			sourceTree = "<group>";
@@ -19,7 +19,7 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		008BF1192EA888A6004F6F89 /* Frameworks */ = {
+		008BF18A2EA89C06004F6F89 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -29,18 +29,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		008BF1132EA888A6004F6F89 = {
+		008BF1842EA89C06004F6F89 = {
 			isa = PBXGroup;
 			children = (
-				008BF11E2EA888A6004F6F89 /* ContextAwareEditor */,
-				008BF11D2EA888A6004F6F89 /* Products */,
+				008BF18F2EA89C06004F6F89 /* ContextAwareEditor */,
+				008BF18E2EA89C06004F6F89 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		008BF11D2EA888A6004F6F89 /* Products */ = {
+		008BF18E2EA89C06004F6F89 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				008BF11C2EA888A6004F6F89 /* ContextAwareEditor.app */,
+				008BF18D2EA89C06004F6F89 /* ContextAwareEditor.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,64 +48,64 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		008BF11B2EA888A6004F6F89 /* ContextAwareEditor */ = {
+		008BF18C2EA89C06004F6F89 /* ContextAwareEditor */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 008BF1272EA888A7004F6F89 /* Build configuration list for PBXNativeTarget "ContextAwareEditor" */;
+			buildConfigurationList = 008BF1982EA89C07004F6F89 /* Build configuration list for PBXNativeTarget "ContextAwareEditor" */;
 			buildPhases = (
-				008BF1182EA888A6004F6F89 /* Sources */,
-				008BF1192EA888A6004F6F89 /* Frameworks */,
-				008BF11A2EA888A6004F6F89 /* Resources */,
+				008BF1892EA89C06004F6F89 /* Sources */,
+				008BF18A2EA89C06004F6F89 /* Frameworks */,
+				008BF18B2EA89C06004F6F89 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				008BF11E2EA888A6004F6F89 /* ContextAwareEditor */,
+				008BF18F2EA89C06004F6F89 /* ContextAwareEditor */,
 			);
 			name = ContextAwareEditor;
 			packageProductDependencies = (
 			);
 			productName = ContextAwareEditor;
-			productReference = 008BF11C2EA888A6004F6F89 /* ContextAwareEditor.app */;
+			productReference = 008BF18D2EA89C06004F6F89 /* ContextAwareEditor.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		008BF1142EA888A6004F6F89 /* Project object */ = {
+		008BF1852EA89C06004F6F89 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
-					008BF11B2EA888A6004F6F89 = {
+					008BF18C2EA89C06004F6F89 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
 			};
-			buildConfigurationList = 008BF1172EA888A6004F6F89 /* Build configuration list for PBXProject "ContextAwareEditor" */;
+			buildConfigurationList = 008BF1882EA89C06004F6F89 /* Build configuration list for PBXProject "ContextAwareEditor" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = 008BF1132EA888A6004F6F89;
+			mainGroup = 008BF1842EA89C06004F6F89;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 008BF11D2EA888A6004F6F89 /* Products */;
+			productRefGroup = 008BF18E2EA89C06004F6F89 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				008BF11B2EA888A6004F6F89 /* ContextAwareEditor */,
+				008BF18C2EA89C06004F6F89 /* ContextAwareEditor */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		008BF11A2EA888A6004F6F89 /* Resources */ = {
+		008BF18B2EA89C06004F6F89 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,7 +115,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		008BF1182EA888A6004F6F89 /* Sources */ = {
+		008BF1892EA89C06004F6F89 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -125,7 +125,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		008BF1252EA888A7004F6F89 /* Debug */ = {
+		008BF1962EA89C07004F6F89 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -187,7 +187,7 @@
 			};
 			name = Debug;
 		};
-		008BF1262EA888A7004F6F89 /* Release */ = {
+		008BF1972EA89C07004F6F89 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -241,7 +241,7 @@
 			};
 			name = Release;
 		};
-		008BF1282EA888A7004F6F89 /* Debug */ = {
+		008BF1992EA89C07004F6F89 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -253,10 +253,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/ContextAwareEditor/Frameworks",
-				);
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -289,7 +285,7 @@
 			};
 			name = Debug;
 		};
-		008BF1292EA888A7004F6F89 /* Release */ = {
+		008BF19A2EA89C07004F6F89 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -301,10 +297,6 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/ContextAwareEditor/Frameworks",
-				);
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -340,25 +332,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		008BF1172EA888A6004F6F89 /* Build configuration list for PBXProject "ContextAwareEditor" */ = {
+		008BF1882EA89C06004F6F89 /* Build configuration list for PBXProject "ContextAwareEditor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				008BF1252EA888A7004F6F89 /* Debug */,
-				008BF1262EA888A7004F6F89 /* Release */,
+				008BF1962EA89C07004F6F89 /* Debug */,
+				008BF1972EA89C07004F6F89 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		008BF1272EA888A7004F6F89 /* Build configuration list for PBXNativeTarget "ContextAwareEditor" */ = {
+		008BF1982EA89C07004F6F89 /* Build configuration list for PBXNativeTarget "ContextAwareEditor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				008BF1282EA888A7004F6F89 /* Debug */,
-				008BF1292EA888A7004F6F89 /* Release */,
+				008BF1992EA89C07004F6F89 /* Debug */,
+				008BF19A2EA89C07004F6F89 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 008BF1142EA888A6004F6F89 /* Project object */;
+	rootObject = 008BF1852EA89C06004F6F89 /* Project object */;
 }
