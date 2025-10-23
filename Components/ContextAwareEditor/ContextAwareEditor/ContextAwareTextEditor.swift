@@ -24,7 +24,7 @@ public struct ContextAwareTextEditor: View {
     private var backgroundColor: Color
     
     public init(
-        fontSize: CGFloat = 16,
+        fontSize: CGFloat = 24,
         textColor: Color = .primary,
         backgroundColor: Color = {
             #if canImport(AppKit)

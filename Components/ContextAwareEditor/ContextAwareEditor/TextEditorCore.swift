@@ -64,7 +64,7 @@ public class TextEditorCore: ObservableObject {
         #endif
         
         let defaultAttributes: [NSAttributedString.Key: Any] = [
-            .font: PlatformFont.monospacedSystemFont(ofSize: 14, weight: .regular),
+            .font: PlatformFont.monospacedSystemFont(ofSize: 24, weight: .regular),
             .foregroundColor: textColor
         ]
         
@@ -75,9 +75,9 @@ public class TextEditorCore: ObservableObject {
     /// Process a typed character through the composition system
     public func processKeyInput(_ character: String, keyCode: Int32, isShifted: Bool, at range: NSRange) {
         // Handle cursor movement - commit any active composition
-        if range.location != (compositionRange?.location ?? range.location) {
-            commitComposition()
-        }
+        //if range.location != (compositionRange?.location ?? range.location) {
+        //    commitComposition()
+        //}
         
         if isTranslatableKey(character, keyCode: keyCode) {
             handleTranslatableKey(character, keyCode: keyCode, isShifted: isShifted, at: range)
@@ -133,10 +133,12 @@ public class TextEditorCore: ObservableObject {
         }
         
         // Add character to composition buffer
-        compositionBuffer += character
+        //compositionBuffer += character
+        
+        let charKey = character.unicodeScalars.first?.value ?? 0
         
         // Translate the current composition
-        translateCurrentComposition(keyCode: keyCode, isShifted: isShifted)
+        translateCurrentComposition(keyCode: Int32(charKey), isShifted: isShifted)
     }
     
     private func startComposition(at range: NSRange) {
@@ -154,7 +156,7 @@ public class TextEditorCore: ObservableObject {
         }
         
         // Use the last character for keyCode
-        let keyCode = Int32(compositionBuffer.last?.asciiValue ?? 0)
+        //let keyCode = Int32(compositionBuffer.last?.asciiValue ?? 0)
         
         let translatedResult = translator.translateComposition(
             in: compositionBuffer,
@@ -162,14 +164,16 @@ public class TextEditorCore: ObservableObject {
             shifted: isShifted
         )
         
+        appendComposition(translated: translatedResult)
+        updateCompositionDisplay(compositionBuffer)
+        
         let parsedResult = parseSangamResult(translatedResult)
-        updateCompositionDisplay(parsedResult.translatedText)
+        //updateCompositionDisplay(parsedResult.translatedText)
         
         // Generate candidates for the translated text
         generateCandidates(for: parsedResult.translatedText)
     }
     
-    // This function is from my macOS input method that appends the translated keystroke->String to the composition
     func appendComposition(translated: String) {
         var deleteNext = false
         // We use a temporary variable so typedString is updated in one go
@@ -177,19 +181,19 @@ public class TextEditorCore: ObservableObject {
         var typedStringTemp = compositionBuffer
         
         for c in translated.unicodeScalars {
-//            Log("Append String: checking \(c)")
+            //            Log("Append String: checking \(c)")
             if c.value == DELCODE { //} Character(UnicodeScalar(127) ?? UnicodeScalar(0)) {
-//                Log("Append String: character is DEL")
+                //                Log("Append String: character is DEL")
                 deleteNext = true
             }
             else if Character(c).isNumber && deleteNext {
-//                Log("Append String: character is number and deleteNext is TRUE")
+                //                Log("Append String: character is number and deleteNext is TRUE")
                 let deleteCount = Character(c).wholeNumberValue
                 //Log("TYPED STRING set at appendComposition 1")
                 typedStringTemp = String(typedStringTemp.unicodeScalars.dropLast(deleteCount!))
             }
             else {
-//                Log("Append String: appending c to string")
+                //                Log("Append String: appending c to string")
                 //Log("TYPED STRING appended at appendComposition 2")
                 typedStringTemp.append(Character(c))
             }
@@ -282,7 +286,7 @@ public class TextEditorCore: ObservableObject {
         #endif
         
         return [
-            .font: PlatformFont.monospacedSystemFont(ofSize: 14, weight: .regular),
+            .font: PlatformFont.monospacedSystemFont(ofSize: 24, weight: .regular),
             .foregroundColor: textColor,
             .backgroundColor: backgroundColor,
             .underlineStyle: NSUnderlineStyle.single.rawValue
@@ -297,7 +301,7 @@ public class TextEditorCore: ObservableObject {
         #endif
         
         return [
-            .font: PlatformFont.monospacedSystemFont(ofSize: 14, weight: .regular),
+            .font: PlatformFont.monospacedSystemFont(ofSize: 24, weight: .regular),
             .foregroundColor: textColor
         ]
     }

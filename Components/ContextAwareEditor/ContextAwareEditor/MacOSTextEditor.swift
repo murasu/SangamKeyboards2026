@@ -77,7 +77,7 @@ class PredictionOverlayView: NSView {
         textField.isBordered = false
         textField.isEditable = false
         textField.backgroundColor = .clear
-        textField.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .medium)
+        textField.font = NSFont.monospacedSystemFont(ofSize: 24, weight: .medium)
         textField.textColor = NSColor.secondaryLabelColor
         
         addSubview(textField)
@@ -157,7 +157,7 @@ struct MacOSTextEditor: NSViewRepresentable {
         textView.isAutomaticTextReplacementEnabled = false
         textView.isAutomaticSpellingCorrectionEnabled = false
         textView.isContinuousSpellCheckingEnabled = false
-        textView.font = NSFont.monospacedSystemFont(ofSize: 14, weight: .regular)
+        textView.font = NSFont.monospacedSystemFont(ofSize: 24, weight: .regular)
         textView.isRichText = true
         textView.allowsUndo = true
         textView.isEditable = true
