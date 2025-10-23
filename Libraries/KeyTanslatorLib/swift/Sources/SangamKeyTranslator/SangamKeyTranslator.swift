@@ -128,55 +128,55 @@ public class SangamKeyTranslator {
     }
     
     public func deleteLastChar(in composition: String) -> String {
-        var mutableComposition = composition
-        let len = mutableComposition.count
+        var scalars = Array(composition.unicodeScalars)
+        let len = scalars.count
         var shouldResetPrevKeyType = false
         
         if delInRevTypingOrder && IsCurrentKeyboardWytiwyg() && len >= 2 {
-            let lastChar = mutableComposition.last!.utf16.first! // Get last character as UTF-16
+            let lastScalar = scalars[len - 1].value
             
-            if IsLeftVowelSign(wchar_t(lastChar)) {
-                let secondLastChar = mutableComposition.dropLast().last!.utf16.first!
+            if IsLeftVowelSign(wchar_t(lastScalar)) {
+                let secondLastScalar = scalars[len - 2].value
                 
-                if IsConsonant(wchar_t(secondLastChar)) {
+                if IsConsonant(wchar_t(secondLastScalar)) {
                     // Replace consonant with ZWSPACE
-                    mutableComposition.removeLast(2)
-                    mutableComposition += "\(Character(UnicodeScalar(ZWSPACE)!))"
-                    mutableComposition += String(mutableComposition.last!)
-                } else if secondLastChar == ZWSPACE {
+                    scalars.removeLast(2)
+                    scalars.append(UnicodeScalar(ZWSPACE)!)
+                    scalars.append(scalars.last!)
+                } else if secondLastScalar == UInt32(ZWSPACE) {
                     // Delete the vowel sign and the ZWSPACE
-                    mutableComposition.removeLast(2)
+                    scalars.removeLast(2)
                     SetWytiwygVowelLeftHalf(0)
                     shouldResetPrevKeyType = true
                 } else {
-                    // Just delete the last char
-                    mutableComposition.removeLast()
+                    // Just delete the last scalar
+                    scalars.removeLast()
                 }
-            } else if IsTwoPartVowelSign(wchar_t(lastChar)) {
-                let secondLastChar = mutableComposition.dropLast().last!.utf16.first!
+            } else if IsTwoPartVowelSign(wchar_t(lastScalar)) {
+                let secondLastScalar = scalars[len - 2].value
                 
-                if IsConsonant(wchar_t(secondLastChar)) {
+                if IsConsonant(wchar_t(secondLastScalar)) {
                     // Replace the vowel sign with the left component
-                    let leftVowelSign = LeftVowelSignFor(wchar_t(lastChar))
+                    let leftVowelSign = LeftVowelSignFor(wchar_t(lastScalar))
                     SetWytiwygVowelLeftHalf(leftVowelSign)
-                    mutableComposition.removeLast()
-                    mutableComposition += String(Character(UnicodeScalar(UInt32(leftVowelSign))!))
+                    scalars.removeLast()
+                    scalars.append(UnicodeScalar(UInt32(leftVowelSign))!)
                 } else {
-                    // Just delete the last char
-                    mutableComposition.removeLast()
+                    // Just delete the last scalar
+                    scalars.removeLast()
                 }
             } else {
-                // Just delete the last char
-                mutableComposition.removeLast()
+                // Just delete the last scalar
+                scalars.removeLast()
             }
         } else if len > 0 {
-            // Just delete the last char
-            mutableComposition.removeLast()
+            // Just delete the last scalar
+            scalars.removeLast()
             
             // If this is a WYTIWYG keyboard, check for place-holder ZWSPACE
-            if !mutableComposition.isEmpty && IsCurrentKeyboardWytiwyg() {
-                let lastChar = mutableComposition.last!.utf16.first!
-                if IsVowelSign(wchar_t(lastChar)) {
+            if !scalars.isEmpty && IsCurrentKeyboardWytiwyg() {
+                let lastScalar = scalars.last!.value
+                if IsVowelSign(wchar_t(lastScalar)) {
                     SetWytiwygVowelLeftHalf(0)
                     shouldResetPrevKeyType = true
                 }
@@ -184,13 +184,13 @@ public class SangamKeyTranslator {
         }
         
         // If we have a ZWNJ lingering as a result of deleting ஷ in க்+ஷ, delete it
-        if !mutableComposition.isEmpty && mutableComposition.last!.utf16.first! == ZWNJ {
-            mutableComposition.removeLast()
+        if !scalars.isEmpty && scalars.last!.value == UInt32(ZWNJ) {
+            scalars.removeLast()
         }
         
-        if !mutableComposition.isEmpty {
-            let lastChar = mutableComposition.last!.utf16.first!
-            UpdatePrevKeyTypesForLastChar(wchar_t(lastChar))
+        if !scalars.isEmpty {
+            let lastScalar = scalars.last!.value
+            UpdatePrevKeyTypesForLastChar(wchar_t(lastScalar))
             if shouldResetPrevKeyType {
                 ResetPrevKeyType()
             }
@@ -198,25 +198,25 @@ public class SangamKeyTranslator {
             ResetKeyStringGlobals()
         }
         
-        return mutableComposition
+        return String(String.UnicodeScalarView(scalars))
     }
     
     public func cleanupStrayVowelSign(_ composition: String) -> String {
-        var mutableComposition = composition
-        let len = mutableComposition.count
+        var scalars = Array(composition.unicodeScalars)
+        let len = scalars.count
         
         if IsCurrentKeyboardWytiwyg() && len >= 2 {
-            let lastChar = mutableComposition.last!.utf16.first!
-            if IsLeftVowelSign(wchar_t(lastChar)) {
-                let secondLastChar = mutableComposition.dropLast().last!.utf16.first!
-                if secondLastChar == ZWSPACE {
+            let lastScalar = scalars[len - 1].value
+            if IsLeftVowelSign(wchar_t(lastScalar)) {
+                let secondLastScalar = scalars[len - 2].value
+                if secondLastScalar == UInt32(ZWSPACE) {
                     // Delete the vowel sign and the ZWSPACE
-                    mutableComposition.removeLast(2)
+                    scalars.removeLast(2)
                 }
             }
         }
         
-        return mutableComposition
+        return String(String.UnicodeScalarView(scalars))
     }
     
     public func getUnmappedChar(for keyCode: Int32, composing: String, shifted: Bool) -> String {
