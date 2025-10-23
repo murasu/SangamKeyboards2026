@@ -139,9 +139,6 @@ public class TextEditorCore: ObservableObject {
             return
         }
         
-        // Add character to composition buffer
-        //compositionBuffer += character
-        
         let charKey = character.unicodeScalars.first?.value ?? 0
         
         // Translate the current composition
@@ -162,17 +159,15 @@ public class TextEditorCore: ObservableObject {
             return
         }
         
-        // Use the last character for keyCode
-        //let keyCode = Int32(compositionBuffer.last?.asciiValue ?? 0)
-        
         let translatedResult = translator.translateComposition(
             in: compositionBuffer,
             newKeyCode: keyCode,
             shifted: isShifted
         )
         
-        appendComposition(translated: translatedResult)
-        updateCompositionDisplay(compositionBuffer)
+        let updatedComposition = appendComposition(translated: translatedResult)
+        updateCompositionDisplay(updatedComposition)
+        compositionBuffer = updatedComposition
         
         let parsedResult = parseSangamResult(translatedResult)
         //updateCompositionDisplay(parsedResult.translatedText)
@@ -183,11 +178,11 @@ public class TextEditorCore: ObservableObject {
         }
     }
     
-    func appendComposition(translated: String) {
+    func appendComposition(translated: String) -> String {
         var deleteNext = false
         // We use a temporary variable so typedString is updated in one go
         // This will prevent candidates from loadig for every char appended
-        var typedStringTemp = compositionBuffer
+        var newComposition = compositionBuffer
         
         for c in translated.unicodeScalars {
             //            Log("Append String: checking \(c)")
@@ -199,17 +194,18 @@ public class TextEditorCore: ObservableObject {
                 //                Log("Append String: character is number and deleteNext is TRUE")
                 let deleteCount = Character(c).wholeNumberValue
                 //Log("TYPED STRING set at appendComposition 1")
-                typedStringTemp = String(typedStringTemp.unicodeScalars.dropLast(deleteCount!))
+                newComposition = String(newComposition.unicodeScalars.dropLast(deleteCount!))
             }
             else {
                 //                Log("Append String: appending c to string")
                 //Log("TYPED STRING appended at appendComposition 2")
-                typedStringTemp.append(Character(c))
+                newComposition.append(Character(c))
             }
             //Log("Append String: typedString is now \(typedString)")
         }
         
-        compositionBuffer = typedStringTemp
+        //compositionBuffer = typedStringTemp
+        return newComposition
     }
     
     private func handleBackspaceInComposition() {
