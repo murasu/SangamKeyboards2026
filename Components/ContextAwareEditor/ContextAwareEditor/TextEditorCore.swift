@@ -70,7 +70,7 @@ public class TextEditorCore: ObservableObject {
         
         // TODO: Read candidate window preference from UserDefaults
         //showCandidateWindow = UserDefaults.standard.object(forKey: "showCandidateWindow") as? Bool ?? true
-        showCandidateWindow = false
+        showCandidateWindow = true
     }
     
     private func registerDefaultFontPreferences() {
@@ -448,6 +448,117 @@ public class TextEditorCore: ObservableObject {
         }
     }
     
+    // MARK: - Candidate Window Positioning
+    
+    /// Calculate the appropriate size for the candidate window based on content
+    public func calculateCandidateWindowSize(for predictions: [String], maxWidth: CGFloat = 250) -> CGSize {
+        guard !predictions.isEmpty else {
+            return CGSize(width: 150, height: 30)
+        }
+        
+        // Base dimensions
+        let padding: CGFloat = 16 // 8px on each side
+        let lineHeight: CGFloat = 18 // Height per line of text
+        let headerHeight: CGFloat = 16 // Height for the arrow indicator
+        
+        // Calculate width based on longest prediction
+        let longestPrediction = predictions.max { $0.count < $1.count } ?? ""
+        let estimatedTextWidth = CGFloat(longestPrediction.count) * 8 + 20 // Rough estimate: 8pts per char + number prefix
+        let width = min(maxWidth, max(120, estimatedTextWidth + padding))
+        
+        // Calculate height based on number of predictions
+        let contentHeight = headerHeight + CGFloat(predictions.count) * lineHeight
+        let height = contentHeight + padding
+        
+        return CGSize(width: width, height: height)
+    }
+    
+    /// Calculate the ideal position for the candidate window relative to the composition range
+    /// 
+    /// This method implements smart positioning logic that:
+    /// 1. Positions the candidate window below the composition by default
+    /// 2. Adjusts horizontally if the window would overflow the right edge
+    /// 3. Positions above the composition if it would overflow the bottom edge
+    /// 4. Ensures the window stays within the editor bounds
+    ///
+    /// - Parameters:
+    ///   - editorBounds: The bounds of the text editor view
+    ///   - compositionRect: The rectangle containing the composition text
+    ///   - candidateWindowSize: The desired size of the candidate window
+    /// - Returns: A tuple containing the calculated position and a boolean indicating if positioned above
+    public func calculateCandidateWindowPosition(
+        editorBounds: CGRect,
+        compositionRect: CGRect,
+        candidateWindowSize: CGSize
+    ) -> (position: CGPoint, shouldShowAbove: Bool) {
+        
+        let margin: CGFloat = 4.0 // Small margin from the composition
+        let minMarginFromEdge: CGFloat = 8.0 // Minimum margin from editor edges
+        
+        // Start with positioning below the composition
+        var candidateX = compositionRect.minX
+        var candidateY = compositionRect.maxY + margin
+        var shouldShowAbove = false
+        
+        // Check if we'll overshoot the right edge
+        let rightEdge = candidateX + candidateWindowSize.width
+        if rightEdge > (editorBounds.maxX - minMarginFromEdge) {
+            // Align to the right edge of the editor with margin
+            candidateX = editorBounds.maxX - candidateWindowSize.width - minMarginFromEdge
+            // Ensure we don't go past the left edge
+            candidateX = max(candidateX, editorBounds.minX + minMarginFromEdge)
+        }
+        
+        // Check if we'll overshoot the bottom
+        let bottomEdge = candidateY + candidateWindowSize.height
+        if bottomEdge > (editorBounds.maxY - minMarginFromEdge) {
+            // Position above the composition instead
+            candidateY = compositionRect.minY - candidateWindowSize.height - margin
+            shouldShowAbove = true
+            
+            // Ensure we don't go past the top edge
+            if candidateY < (editorBounds.minY + minMarginFromEdge) {
+                candidateY = editorBounds.minY + minMarginFromEdge
+                // If we still don't fit, we might need to position beside instead
+                // For now, just clamp to the top
+            }
+        }
+        
+        // Final bounds check to ensure we're always within the editor
+        candidateX = max(editorBounds.minX + minMarginFromEdge, 
+                        min(candidateX, editorBounds.maxX - candidateWindowSize.width - minMarginFromEdge))
+        candidateY = max(editorBounds.minY + minMarginFromEdge,
+                        min(candidateY, editorBounds.maxY - candidateWindowSize.height - minMarginFromEdge))
+        
+        return (CGPoint(x: candidateX, y: candidateY), shouldShowAbove)
+    }
+    
+    /// Get the composition rectangle in the text coordinate system
+    public func getCompositionRect(
+        layoutManager: NSLayoutManager,
+        textContainer: NSTextContainer,
+        textContainerInset: CGSize = .zero
+    ) -> CGRect? {
+        guard let range = compositionRange else { return nil }
+        
+        // Ensure the range is valid
+        guard range.location + range.length <= layoutManager.numberOfGlyphs else { return nil }
+        
+        // Get the glyph range for the composition
+        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+        
+        // Get the bounding rect for the composition
+        let rect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+        
+        // Adjust for text container inset
+        return CGRect(
+            x: rect.origin.x + textContainerInset.width,
+            y: rect.origin.y + textContainerInset.height,
+            width: max(rect.width, 10), // Ensure minimum width for cursor position
+            height: rect.height
+        )
+    }
+    
     // MARK: - Helper Methods
     
     private func parseSangamResult(_ result: String) -> (translatedText: String, deleteCount: Int) {
@@ -594,6 +705,109 @@ public class TextEditorCore: ObservableObject {
             textStorage.processEditing()
             onTextChange?(textStorage.string)
         }
+    }
+    
+    // MARK: - Testing Helpers
+    
+    /// Test the candidate window positioning logic with various scenarios
+    public func testCandidatePositioning() -> [(scenario: String, position: CGPoint, shouldShowAbove: Bool)] {
+        var results: [(String, CGPoint, Bool)] = []
+        
+        // Test scenario 1: Normal positioning (below, fits within bounds)
+        let editorBounds1 = CGRect(x: 0, y: 0, width: 400, height: 300)
+        let compositionRect1 = CGRect(x: 50, y: 50, width: 20, height: 20)
+        let candidateSize = CGSize(width: 150, height: 30)
+        
+        let result1 = calculateCandidateWindowPosition(
+            editorBounds: editorBounds1,
+            compositionRect: compositionRect1,
+            candidateWindowSize: candidateSize
+        )
+        results.append(("Normal below", result1.position, result1.shouldShowAbove))
+        
+        // Test scenario 2: Right edge overflow
+        let compositionRect2 = CGRect(x: 350, y: 50, width: 20, height: 20)
+        let result2 = calculateCandidateWindowPosition(
+            editorBounds: editorBounds1,
+            compositionRect: compositionRect2,
+            candidateWindowSize: candidateSize
+        )
+        results.append(("Right overflow", result2.position, result2.shouldShowAbove))
+        
+        // Test scenario 3: Bottom overflow (should show above)
+        let compositionRect3 = CGRect(x: 50, y: 280, width: 20, height: 20)
+        let result3 = calculateCandidateWindowPosition(
+            editorBounds: editorBounds1,
+            compositionRect: compositionRect3,
+            candidateWindowSize: candidateSize
+        )
+        results.append(("Bottom overflow", result3.position, result3.shouldShowAbove))
+        
+        // Test scenario 4: Both right and bottom overflow
+        let compositionRect4 = CGRect(x: 350, y: 280, width: 20, height: 20)
+        let result4 = calculateCandidateWindowPosition(
+            editorBounds: editorBounds1,
+            compositionRect: compositionRect4,
+            candidateWindowSize: candidateSize
+        )
+        results.append(("Both overflows", result4.position, result4.shouldShowAbove))
+        
+        // Test scenario 5: Near top edge (when showing above)
+        let editorBounds5 = CGRect(x: 0, y: 0, width: 400, height: 300)
+        let compositionRect5 = CGRect(x: 50, y: 10, width: 20, height: 20)
+        let result5 = calculateCandidateWindowPosition(
+            editorBounds: editorBounds5,
+            compositionRect: compositionRect5,
+            candidateWindowSize: candidateSize
+        )
+        results.append(("Near top", result5.position, result5.shouldShowAbove))
+        
+        return results
+    }
+    
+    /// Print test results for debugging
+    public func printPositioningTests() {
+        let results = testCandidatePositioning()
+        print("📍 Candidate Window Positioning Tests:")
+        print("=====================================")
+        
+        for (scenario, position, showingAbove) in results {
+            let direction = showingAbove ? "above" : "below"
+            print("✓ \(scenario): x=\(Int(position.x)), y=\(Int(position.y)) (\(direction))")
+        }
+        print("=====================================")
+        print("Expected Results:")
+        print("• Normal below: Should be at (50, 74) below composition")
+        print("• Right overflow: Should align right with margin from edge")
+        print("• Bottom overflow: Should be above composition")
+        print("• Both overflows: Should be above and right-aligned with margins")
+        print("• Near top: Should maintain minimum margin from top")
+        print("=====================================")
+        
+        // Additional validation
+        let candidateSize = CGSize(width: 150, height: 30)
+        let editorBounds = CGRect(x: 0, y: 0, width: 400, height: 300)
+        
+        for (scenario, position, _) in results {
+            let fitsHorizontally = position.x >= 8 && (position.x + candidateSize.width) <= (400 - 8)
+            let fitsVertically = position.y >= 8 && (position.y + candidateSize.height) <= (300 - 8)
+            let status = (fitsHorizontally && fitsVertically) ? "✅" : "⚠️"
+            print("\(status) \(scenario): Bounds check \(fitsHorizontally ? "✓" : "✗")H \(fitsVertically ? "✓" : "✗")V")
+        }
+        print("=====================================")
+    }
+    
+    /// Create a test composition at a specific location for testing
+    public func simulateCompositionForTesting(at location: Int, text: String) {
+        // Simulate a composition being active
+        isComposing = true
+        compositionBuffer = text
+        compositionRange = NSRange(location: location, length: text.count)
+        
+        // Generate some test candidates
+        generateCandidates(for: text)
+        
+        print("🧪 Test composition created: '\(text)' at location \(location)")
     }
     
     /// Get the current word being typed

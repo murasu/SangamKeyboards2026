@@ -53,6 +53,13 @@ struct ContentView: View {
                 }
             }()
             
+            // Test button for positioning logic
+            Button("Test Candidate Positioning") {
+                editor.textEditorCore.printPositioningTests()
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.small)
+            
             editor
                 .frame(minHeight: 400)
                 .border(Color.gray.opacity(0.3), width: 1)

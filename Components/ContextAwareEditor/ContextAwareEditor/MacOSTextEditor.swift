@@ -50,6 +50,8 @@ class CustomNSTextView: NSTextView {
 /// Simple prediction overlay view for macOS
 class PredictionOverlayView: NSView {
     private let textField = NSTextField()
+    private var arrowIndicator: NSView?
+    private var isShowingAbove = false
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -77,26 +79,49 @@ class PredictionOverlayView: NSView {
         textField.isBordered = false
         textField.isEditable = false
         textField.backgroundColor = .clear
-        textField.font = NSFont.monospacedSystemFont(ofSize: 24, weight: .medium)
+        textField.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular) // Smaller font for multiple lines
         textField.textColor = NSColor.secondaryLabelColor
+        textField.alignment = .left
+        textField.maximumNumberOfLines = 0 // Allow unlimited lines
+        textField.cell?.wraps = true
+        textField.cell?.isScrollable = false
         
         addSubview(textField)
         textField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            textField.centerYAnchor.constraint(equalTo: centerYAnchor)
+            textField.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            textField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4)
         ])
     }
     
-    func configure(with predictions: [String]) {
-        guard let firstPrediction = predictions.first, !firstPrediction.isEmpty else { 
+    func configure(with predictions: [String], showingAbove: Bool = false) {
+        guard !predictions.isEmpty else { 
             textField.stringValue = ""
             return 
         }
         
-        // Show first prediction with a subtle hint about Tab to accept
-        textField.stringValue = "💡 \(firstPrediction) (Tab to accept)"
+        self.isShowingAbove = showingAbove
+        
+        // Show all predictions, each on a separate line
+        let candidateText = predictions.enumerated().map { index, prediction in
+            "\(index + 1). \(prediction)"
+        }.joined(separator: "\n")
+        
+        let prefix = showingAbove ? "▲" : "▼"
+        textField.stringValue = "\(prefix)\n\(candidateText)"
+        
+        // Adjust shadow direction based on position
+        if showingAbove {
+            layer?.shadowOffset = CGSize(width: 0, height: -2)
+        } else {
+            layer?.shadowOffset = CGSize(width: 0, height: 2)
+        }
+    }
+    
+    func configure(with predictions: [String]) {
+        configure(with: predictions, showingAbove: false)
     }
 }
 
@@ -279,11 +304,43 @@ struct MacOSTextEditor: NSViewRepresentable {
             guard let layoutManager = textView.layoutManager,
                   let textContainer = textView.textContainer else { return }
             
-            // Calculate position for the prediction overlay
-            let insertionPoint = textView.selectedRange().location
-            let glyphIndex = layoutManager.glyphIndexForCharacter(at: insertionPoint)
-            let rect = layoutManager.boundingRect(forGlyphRange: NSRange(location: glyphIndex, length: 0),
-                                                in: textContainer)
+            // Get composition rect or fallback to cursor position
+            let compositionRect: CGRect
+            if let rect = parent.core.getCompositionRect(
+                layoutManager: layoutManager,
+                textContainer: textContainer,
+                textContainerInset: textView.textContainerInset
+            ) {
+                compositionRect = rect
+            } else {
+                // Fallback to cursor position
+                let insertionPoint = textView.selectedRange().location
+                let glyphIndex = layoutManager.glyphIndexForCharacter(at: insertionPoint)
+                let rect = layoutManager.boundingRect(forGlyphRange: NSRange(location: glyphIndex, length: 0),
+                                                    in: textContainer)
+                compositionRect = CGRect(
+                    x: rect.origin.x + textView.textContainerInset.width,
+                    y: rect.origin.y + textView.textContainerInset.height,
+                    width: max(rect.width, 10),
+                    height: rect.height
+                )
+            }
+            
+            // Get editor bounds (text view's visible rect)
+            let editorBounds = textView.visibleRect
+            
+            // Calculate candidate window size based on content
+            let candidateWindowSize = parent.core.calculateCandidateWindowSize(
+                for: parent.core.currentPredictions,
+                maxWidth: min(300, editorBounds.width * 0.4) // Max 40% of editor width
+            )
+            
+            // Calculate optimal position using the core's positioning logic
+            let positionResult = parent.core.calculateCandidateWindowPosition(
+                editorBounds: editorBounds,
+                compositionRect: compositionRect,
+                candidateWindowSize: candidateWindowSize
+            )
             
             // Create or update prediction overlay
             if predictionOverlay == nil {
@@ -291,17 +348,21 @@ struct MacOSTextEditor: NSViewRepresentable {
                 textView.addSubview(predictionOverlay!)
             }
             
-            predictionOverlay?.configure(with: parent.core.currentPredictions)
+            predictionOverlay?.configure(with: parent.core.currentPredictions, showingAbove: positionResult.shouldShowAbove)
             
-            // Position the overlay to the right of the cursor
-            let overlayWidth: CGFloat = 200
-            let overlayHeight: CGFloat = 30
+            // Apply the calculated position
             predictionOverlay?.frame = CGRect(
-                x: rect.maxX + textView.textContainerInset.width,
-                y: rect.minY + textView.textContainerInset.height,
-                width: overlayWidth,
-                height: overlayHeight
+                origin: positionResult.position,
+                size: candidateWindowSize
             )
+            
+            // Optional: Add visual indication if showing above
+            if positionResult.shouldShowAbove {
+                // Could add an arrow or different styling to indicate it's above
+                print("📍 Candidate window positioned above composition (bottom overflow detected)")
+            } else {
+                print("📍 Candidate window positioned below composition")
+            }
         }
         
         private func hidePredictionOverlay() {

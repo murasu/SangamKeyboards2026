@@ -175,8 +175,21 @@ class CustomUITextView: UITextView {
     private func showPredictionOverlay() {
         guard let editorCore = editorCore else { return }
         
-        // Calculate position for the prediction overlay
-        let cursorRect = caretRect(for: selectedTextRange?.start ?? beginningOfDocument)
+        // Get composition rect or fallback to cursor position
+        let compositionRect: CGRect
+        if let layoutManager = layoutManager,
+           let textContainer = textContainer,
+           let rect = editorCore.getCompositionRect(
+               layoutManager: layoutManager,
+               textContainer: textContainer,
+               textContainerInset: textContainerInset
+           ) {
+            compositionRect = rect
+        } else {
+            // Fallback to cursor position
+            let cursorRect = caretRect(for: selectedTextRange?.start ?? beginningOfDocument)
+            compositionRect = cursorRect
+        }
         
         // Create or update prediction overlay
         if predictionOverlay == nil {
@@ -188,13 +201,36 @@ class CustomUITextView: UITextView {
             addSubview(predictionOverlay!)
         }
         
-        predictionOverlay?.configure(with: editorCore.currentPredictions)
-        predictionOverlay?.frame = CGRect(
-            x: cursorRect.maxX,
-            y: cursorRect.minY - 35, // Position above cursor
-            width: min(200, frame.width - cursorRect.maxX - 10),
-            height: 30
+        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove)
+        
+        // Calculate candidate window size based on content
+        let candidateWindowSize = editorCore.calculateCandidateWindowSize(
+            for: editorCore.currentPredictions,
+            maxWidth: min(250, frame.width * 0.7)
         )
+        
+        // Get editor bounds (text view's bounds)
+        let editorBounds = bounds
+        
+        // Calculate optimal position using the core's positioning logic
+        let positionResult = editorCore.calculateCandidateWindowPosition(
+            editorBounds: editorBounds,
+            compositionRect: compositionRect,
+            candidateWindowSize: candidateWindowSize
+        )
+        
+        // Apply the calculated position
+        predictionOverlay?.frame = CGRect(
+            origin: positionResult.position,
+            size: candidateWindowSize
+        )
+        
+        // Optional: Add visual indication if showing above
+        if positionResult.shouldShowAbove {
+            print("📍 Candidate window positioned above composition (bottom overflow detected)")
+        } else {
+            print("📍 Candidate window positioned below composition")
+        }
     }
     
     private func hidePredictionOverlay() {
@@ -245,9 +281,10 @@ class PredictionOverlayUIView: UIView {
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         
         // Setup label
-        label.font = UIFont.monospacedSystemFont(ofSize: 14, weight: .medium)
+        label.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular) // Smaller font for multiple lines
         label.textColor = UIColor.secondaryLabel
         label.textAlignment = .left
+        label.numberOfLines = 0 // Allow unlimited lines
         
         backgroundView.addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -258,9 +295,10 @@ class PredictionOverlayUIView: UIView {
             backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
             backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
             
-            label.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 12),
-            label.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -12),
-            label.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor)
+            label.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 8),
+            label.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -8),
+            label.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 4),
+            label.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -4)
         ])
         
         // Add tap gesture
@@ -273,9 +311,33 @@ class PredictionOverlayUIView: UIView {
         onTap?(currentPrediction)
     }
     
-    func configure(with predictions: [String]) {
+    func configure(with predictions: [String], showingAbove: Bool = false) {
+        guard !predictions.isEmpty else {
+            currentPrediction = ""
+            label.text = ""
+            return
+        }
+        
         currentPrediction = predictions.first ?? ""
-        label.text = currentPrediction
+        
+        // Show all predictions, each on a separate line
+        let candidateText = predictions.enumerated().map { index, prediction in
+            "\(index + 1). \(prediction)"
+        }.joined(separator: "\n")
+        
+        let prefix = showingAbove ? "▲" : "▼"
+        label.text = "\(prefix)\n\(candidateText)"
+        
+        // Adjust shadow direction based on position
+        if showingAbove {
+            backgroundView.layer.shadowOffset = CGSize(width: 0, height: -2)
+        } else {
+            backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        }
+    }
+    
+    func configure(with predictions: [String]) {
+        configure(with: predictions, showingAbove: false)
     }
 }
 
