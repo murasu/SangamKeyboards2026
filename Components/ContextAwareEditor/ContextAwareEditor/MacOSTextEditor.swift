@@ -229,6 +229,11 @@ struct MacOSTextEditor: NSViewRepresentable {
         
         func setTextView(_ textView: NSTextView) {
             self.textView = textView
+            
+            // Pass delete key handling to text view when we don't handle it
+            parent.core.onBackspacePassThrough = { [weak textView] in
+                textView?.deleteBackward(nil)
+            }
         }
         
         func textDidChange(_ notification: Notification) {

@@ -59,6 +59,7 @@ public class TextEditorCore: ObservableObject {
     var onTextChange: ((String) -> Void)?
     var onKeyTranslation: ((String, NSRange?) -> Void)?
     var onCompositionChange: ((String, Bool) -> Void)? // compositionText, isActive
+    var onBackspacePassThrough: (() -> Void)? // Called when backspace should be handled by text view
     
     public init() {
         // Register default font preferences
@@ -162,7 +163,13 @@ public class TextEditorCore: ObservableObject {
         
         // Handle backspace specially
         if keyCode == 51 { // Backspace
-            handleBackspaceInComposition()
+            // If not composing or composition buffer is empty, pass to text view
+            if !isComposing || compositionBuffer.isEmpty {
+                onBackspacePassThrough?()
+            } else {
+                // Handle backspace within composition
+                handleBackspaceInComposition()
+            }
             return
         }
         

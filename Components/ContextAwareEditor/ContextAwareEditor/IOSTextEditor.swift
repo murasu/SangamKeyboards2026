@@ -64,6 +64,11 @@ class CustomUITextView: UITextView {
     func configure(with core: TextEditorCore) {
         self.editorCore = core
         
+        // Pass delete event to textview to handle when we are not composing
+        core.onBackspacePassThrough = { [weak self] in
+            self?.deleteBackward()
+        }
+        
         // Set the attributed text
         attributedText = core.textStorage
     }
