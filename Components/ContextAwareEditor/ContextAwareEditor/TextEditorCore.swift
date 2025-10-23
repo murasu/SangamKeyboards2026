@@ -92,6 +92,7 @@ public class TextEditorCore: ObservableObject {
         } else {
             commitComposition()
             insertRegularText(character, at: range)
+            updateCompositionDisplay(character)
         }
     }
     
@@ -339,7 +340,8 @@ public class TextEditorCore: ObservableObject {
         
         // Remove composition styling and apply normal text attributes
         let normalAttributes = getNormalTextAttributes()
-        textStorage.addAttributes(normalAttributes, range: range)
+        //textStorage.addAttributes(normalAttributes, range: range)
+        textStorage.setAttributes(normalAttributes, range: range)
         
         // Clear composition state
         isComposing = false

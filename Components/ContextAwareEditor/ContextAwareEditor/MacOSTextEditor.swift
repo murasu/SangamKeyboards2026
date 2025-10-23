@@ -330,13 +330,14 @@ struct MacOSTextEditor: NSViewRepresentable {
                 }
                 // Let the return key be processed normally
                 return false
+                /*
             case 49: // Space key - commit composition and insert space
                 if parent.core.isCurrentlyComposing {
                     parent.core.forceCommitComposition()
                     updateTextViewFromCore(textView)
                 }
                 // Let the space key be processed normally
-                return false
+                return false */
             default:
                 break
             }
