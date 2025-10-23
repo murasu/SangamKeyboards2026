@@ -177,12 +177,13 @@ class CustomUITextView: UITextView {
         
         // Get composition rect or fallback to cursor position
         let compositionRect: CGRect
-        if let layoutManager = layoutManager,
-           let textContainer = textContainer,
-           let rect = editorCore.getCompositionRect(
+        if let rect = editorCore.getCompositionRect(
                layoutManager: layoutManager,
                textContainer: textContainer,
-               textContainerInset: textContainerInset
+               textContainerInset: CGSize(
+                   width: textContainerInset.left + textContainerInset.right,
+                   height: textContainerInset.top + textContainerInset.bottom
+               )
            ) {
             compositionRect = rect
         } else {
@@ -190,18 +191,6 @@ class CustomUITextView: UITextView {
             let cursorRect = caretRect(for: selectedTextRange?.start ?? beginningOfDocument)
             compositionRect = cursorRect
         }
-        
-        // Create or update prediction overlay
-        if predictionOverlay == nil {
-            predictionOverlay = PredictionOverlayUIView()
-            predictionOverlay?.onTap = { [weak self] prediction in
-                self?.editorCore?.acceptPrediction(prediction)
-                self?.updateTextFromCore()
-            }
-            addSubview(predictionOverlay!)
-        }
-        
-        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove)
         
         // Calculate candidate window size based on content
         let candidateWindowSize = editorCore.calculateCandidateWindowSize(
@@ -218,6 +207,18 @@ class CustomUITextView: UITextView {
             compositionRect: compositionRect,
             candidateWindowSize: candidateWindowSize
         )
+        
+        // Create or update prediction overlay
+        if predictionOverlay == nil {
+            predictionOverlay = PredictionOverlayUIView()
+            predictionOverlay?.onTap = { [weak self] prediction in
+                self?.editorCore?.acceptPrediction(prediction)
+                self?.updateTextFromCore()
+            }
+            addSubview(predictionOverlay!)
+        }
+        
+        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove)
         
         // Apply the calculated position
         predictionOverlay?.frame = CGRect(
@@ -320,13 +321,12 @@ class PredictionOverlayUIView: UIView {
         
         currentPrediction = predictions.first ?? ""
         
-        // Show all predictions, each on a separate line
+        // Show all predictions, each on a separate line, numbered
         let candidateText = predictions.enumerated().map { index, prediction in
             "\(index + 1). \(prediction)"
         }.joined(separator: "\n")
         
-        let prefix = showingAbove ? "▲" : "▼"
-        label.text = "\(prefix)\n\(candidateText)"
+        label.text = candidateText
         
         // Adjust shadow direction based on position
         if showingAbove {

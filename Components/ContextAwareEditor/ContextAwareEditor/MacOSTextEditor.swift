@@ -104,13 +104,12 @@ class PredictionOverlayView: NSView {
         
         self.isShowingAbove = showingAbove
         
-        // Show all predictions, each on a separate line
+        // Show all predictions, each on a separate line, numbered
         let candidateText = predictions.enumerated().map { index, prediction in
             "\(index + 1). \(prediction)"
         }.joined(separator: "\n")
         
-        let prefix = showingAbove ? "▲" : "▼"
-        textField.stringValue = "\(prefix)\n\(candidateText)"
+        textField.stringValue = candidateText
         
         // Adjust shadow direction based on position
         if showingAbove {

@@ -38,6 +38,9 @@ public class TextEditorCore: ObservableObject {
     
     // User properties
     private var showCandidateWindow: Bool = true
+    private var maxCandidates: Int {
+        return UserDefaults.standard.object(forKey: "MaxCandidates") as? Int ?? 3
+    }
     
     // Font configuration
     private var defaultFont: PlatformFont {
@@ -76,7 +79,8 @@ public class TextEditorCore: ObservableObject {
     private func registerDefaultFontPreferences() {
         let defaults: [String: Any] = [
             "TextEditorFontName": "Tamil Sangam MN",
-            "TextEditorFontSize": 24.0
+            "TextEditorFontSize": 24.0,
+            "MaxCandidates": 3
         ]
         UserDefaults.standard.register(defaults: defaults)
     }
@@ -436,8 +440,8 @@ public class TextEditorCore: ObservableObject {
         // For now, generate dummy Tamil candidates
         // You can replace this with actual candidate generation logic
         let dummyTamilCandidates = [
-            "அன்பு", "இன்பம்", "உயிர்", "எழுத்து", "ஒலி"
-        ].shuffled().prefix(3)
+            "அன்பு", "இன்பம்", "உயிர்", "எழுத்து", "ஒலி", "கல்வி", "நட்பு"
+        ].shuffled().prefix(maxCandidates)
         
         if !dummyTamilCandidates.isEmpty {
             currentPredictions = Array(dummyTamilCandidates)
@@ -457,17 +461,16 @@ public class TextEditorCore: ObservableObject {
         }
         
         // Base dimensions
-        let padding: CGFloat = 16 // 8px on each side
+        let padding: CGFloat = 16 // 8px on each side (top/bottom + left/right)
         let lineHeight: CGFloat = 18 // Height per line of text
-        let headerHeight: CGFloat = 16 // Height for the arrow indicator
         
         // Calculate width based on longest prediction
         let longestPrediction = predictions.max { $0.count < $1.count } ?? ""
         let estimatedTextWidth = CGFloat(longestPrediction.count) * 8 + 20 // Rough estimate: 8pts per char + number prefix
         let width = min(maxWidth, max(120, estimatedTextWidth + padding))
         
-        // Calculate height based on number of predictions
-        let contentHeight = headerHeight + CGFloat(predictions.count) * lineHeight
+        // Calculate height based on number of predictions (no header now)
+        let contentHeight = CGFloat(predictions.count) * lineHeight
         let height = contentHeight + padding
         
         return CGSize(width: width, height: height)
@@ -606,7 +609,7 @@ public class TextEditorCore: ObservableObject {
         }
         
         // Get predictions for the current word
-        let predictions = predictionEngine.getPrediction(forWord: currentWord)
+        let predictions = predictionEngine.getPrediction(forWord: currentWord, maxCount: maxCandidates)
         
         if !predictions.isEmpty {
             currentPredictions = predictions
@@ -694,6 +697,17 @@ public class TextEditorCore: ObservableObject {
     /// Get current font size
     public var currentFontSize: CGFloat {
         return UserDefaults.standard.object(forKey: "TextEditorFontSize") as? CGFloat ?? 24.0
+    }
+    
+    /// Update the max candidates preference (3, 4, or 5)
+    public func setMaxCandidates(_ count: Int) {
+        let clampedCount = max(3, min(5, count)) // Ensure it's between 3 and 5
+        UserDefaults.standard.set(clampedCount, forKey: "MaxCandidates")
+    }
+    
+    /// Get current max candidates setting
+    public var currentMaxCandidates: Int {
+        return maxCandidates
     }
     
     /// Refresh the text storage font after preference changes
@@ -886,9 +900,10 @@ public class PredictionEngine {
     public init() {}
     
     /// Get predictions for a word - enhanced with custom function support
-    public func getPrediction(forWord word: String) -> [String] {
+    public func getPrediction(forWord word: String, maxCount: Int = 3) -> [String] {
         if let customPrediction = customPrediction {
-            return customPrediction(word)
+            let results = customPrediction(word)
+            return Array(results.prefix(maxCount))
         }
         
         guard word.count >= 2 else { return [] }
@@ -903,9 +918,9 @@ public class PredictionEngine {
         let combined = Array(Set(filtered + customMatches))
         
         // Add some random predictions to simulate real behavior if we don't have enough matches
-        let randomPredictions = combined.isEmpty ? samplePredictions.shuffled().prefix(2) : []
+        let randomPredictions = combined.isEmpty ? samplePredictions.shuffled().prefix(maxCount) : []
         
-        return Array((combined + randomPredictions).prefix(3))
+        return Array((combined + randomPredictions).prefix(maxCount))
     }
     
     /// Set a custom prediction function
