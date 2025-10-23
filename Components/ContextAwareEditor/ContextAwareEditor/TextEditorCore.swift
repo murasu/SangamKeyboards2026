@@ -73,7 +73,7 @@ public class TextEditorCore: ObservableObject {
         
         // TODO: Read candidate window preference from UserDefaults
         //showCandidateWindow = UserDefaults.standard.object(forKey: "showCandidateWindow") as? Bool ?? true
-        showCandidateWindow = true
+        showCandidateWindow = false
     }
     
     private func registerDefaultFontPreferences() {
@@ -673,6 +673,11 @@ public class TextEditorCore: ObservableObject {
     /// Get current composition text
     public var currentComposition: String {
         return compositionBuffer
+    }
+    
+    /// Get current composition range
+    public var currentCompositionRange: NSRange? {
+        return compositionRange
     }
     
     // MARK: - Font Configuration

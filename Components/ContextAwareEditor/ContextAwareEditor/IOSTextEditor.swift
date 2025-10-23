@@ -64,63 +64,42 @@ class CustomUITextView: UITextView {
     func configure(with core: TextEditorCore) {
         self.editorCore = core
         
-        // Pass delete event to textview to handle when we are not composing
-        core.onBackspacePassThrough = { [weak self] in
-            self?.deleteBackward()
-        }
-        
-        // Set the attributed text
+        // Set initial content
         attributedText = core.textStorage
-    }
-    
-    // MARK: - Text Input Handling
-    
-    override func insertText(_ text: String) {
-        guard let editorCore = editorCore else {
-            super.insertText(text)
-            return
-        }
         
-        // Handle special keys from external keyboard
-        if text == "\t" { // Tab key - accept prediction
-            if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
-                editorCore.acceptPrediction(editorCore.currentPredictions[0])
-                updateTextFromCore()
-                return
+        // Set up callback for when core updates text
+        core.onTextChange = { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.syncFromCore()
             }
         }
-        
-        // Process the character through our core
-        let currentRange = selectedRange
-        editorCore.processTypedCharacter(text, at: currentRange)
-        
-        // Update the display
-        updateTextFromCore()
-        updatePredictionDisplay()
-        handleTextChange()
     }
     
-    override func deleteBackward() {
-        guard let editorCore = editorCore else {
-            super.deleteBackward()
-            return
-        }
+    /// Sync the text view content from the core's text storage
+    func syncFromCore() {
+        guard let editorCore = editorCore else { return }
         
-        // Handle delete through our system
-        let currentRange = selectedRange
-        if currentRange.length == 0 && currentRange.location > 0 {
-            let deleteRange = NSRange(location: currentRange.location - 1, length: 1)
-            editorCore.textStorage.deleteCharacters(in: deleteRange)
-            
-            updateTextFromCore()
-            updatePredictionDisplay()
-            handleTextChange()
-        } else if currentRange.length > 0 {
-            editorCore.textStorage.deleteCharacters(in: currentRange)
-            updateTextFromCore()
-            updatePredictionDisplay()
-            handleTextChange()
-        }
+        print("🔄 Syncing from core:")
+        print("  - Core text: '\(editorCore.textStorage.string)'")
+        print("  - TextView text: '\(text ?? "")'")
+        
+        // Save current cursor position
+        let currentPosition = selectedRange
+        
+        // Update content
+        attributedText = editorCore.textStorage
+        
+        // Restore cursor position, but ensure it's within bounds
+        let newPosition = NSRange(
+            location: min(currentPosition.location, text.count),
+            length: 0
+        )
+        selectedRange = newPosition
+        
+        print("  - Updated cursor position: \(selectedRange)")
+        
+        // Update prediction display
+        updatePredictionDisplay()
     }
     
     // MARK: - Keyboard Input (for external keyboards)
@@ -142,21 +121,7 @@ class CustomUITextView: UITextView {
         
         if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
             editorCore.acceptPrediction(editorCore.currentPredictions[0])
-            updateTextFromCore()
-        }
-    }
-    
-    // MARK: - Text Updates
-    
-    private func updateTextFromCore() {
-        guard let editorCore = editorCore else { return }
-        
-        let currentSelection = selectedRange
-        attributedText = editorCore.textStorage
-        
-        // Restore selection if possible
-        if currentSelection.location <= text.count {
-            selectedRange = currentSelection
+            syncFromCore()
         }
     }
     
@@ -213,7 +178,7 @@ class CustomUITextView: UITextView {
             predictionOverlay = PredictionOverlayUIView()
             predictionOverlay?.onTap = { [weak self] prediction in
                 self?.editorCore?.acceptPrediction(prediction)
-                self?.updateTextFromCore()
+                self?.syncFromCore()
             }
             addSubview(predictionOverlay!)
         }
@@ -353,10 +318,8 @@ struct IOSTextEditor: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: CustomUITextView, context: Context) {
-        // Update text if needed
-        if uiView.attributedText.string != core.textStorage.string {
-            uiView.attributedText = core.textStorage
-        }
+        // The text view syncs from the core automatically through callbacks
+        // No manual synchronization needed
     }
     
     func makeCoordinator() -> Coordinator {
@@ -370,20 +333,62 @@ struct IOSTextEditor: UIViewRepresentable {
             self.parent = parent
         }
         
-        func textViewDidChange(_ textView: UITextView) {
-            // Notify the core of text changes
-            parent.core.onTextChange?(textView.text)
+        func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            print("📝 shouldChangeTextIn: range=\(range), text='\(text)'")
             
-            // If this is our CustomUITextView, trigger its text change handling
-            if let customTextView = textView as? CustomUITextView {
-                customTextView.handleTextChange()
+            // Handle special keys
+            if text == "\t" && parent.core.showingPrediction && !parent.core.currentPredictions.isEmpty {
+                parent.core.acceptPrediction(parent.core.currentPredictions[0])
+                if let customTextView = textView as? CustomUITextView {
+                    customTextView.syncFromCore()
+                }
+                return false
             }
+            
+            if text == "\n" {
+                // Handle enter key - commit any composition and insert newline
+                parent.core.forceCommitComposition()
+                // Let UITextView handle the newline insertion
+                return true
+            }
+            
+            // For backspace during composition, handle it through our system
+            if text.isEmpty && parent.core.isCurrentlyComposing {
+                // Let our core handle the backspace in composition
+                parent.core.processKeyInput("", keyCode: 51, isShifted: false, at: range)
+                if let customTextView = textView as? CustomUITextView {
+                    customTextView.syncFromCore()
+                }
+                return false
+            }
+            
+            // For regular characters, process through our translation system
+            if !text.isEmpty {
+                // Process through the core translation system
+                parent.core.processTypedCharacter(text, at: range)
+                
+                // Update the text view with the translated content
+                if let customTextView = textView as? CustomUITextView {
+                    customTextView.syncFromCore()
+                }
+                return false // We handled the text change
+            }
+            
+            // For other cases (like regular backspace), let UITextView handle it
+            return true
         }
         
         func textViewDidChangeSelection(_ textView: UITextView) {
+            print("🎯 Selection changed to: \(textView.selectedRange)")
+            
             // Update predictions when cursor moves
             let location = textView.selectedRange.location
             parent.core.updatePredictions(at: location)
+        }
+        
+        func textViewDidChange(_ textView: UITextView) {
+            print("📝 Text changed, length: \(textView.text.count)")
+            // This will be called after UITextView handles allowed changes
         }
     }
 }
