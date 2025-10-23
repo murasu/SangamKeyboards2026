@@ -39,6 +39,20 @@ public class TextEditorCore: ObservableObject {
     // User properties
     private var showCandidateWindow: Bool = true
     
+    // Font configuration
+    private var defaultFont: PlatformFont {
+        let fontName = UserDefaults.standard.string(forKey: "TextEditorFontName") ?? "Tamil Sangam MN"
+        let fontSize = UserDefaults.standard.object(forKey: "TextEditorFontSize") as? CGFloat ?? 24.0
+        
+        if let customFont = PlatformFont(name: fontName, size: fontSize) {
+            return customFont
+        } else {
+            // Fallback to system monospaced font if Tamil Sangam MN is not available
+            print("⚠️ Font '\(fontName)' not available, falling back to system monospaced font")
+            return PlatformFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
+        }
+    }
+    
     public let textProcessor = TextProcessor()
     public let predictionEngine = PredictionEngine()
     
@@ -47,12 +61,23 @@ public class TextEditorCore: ObservableObject {
     var onCompositionChange: ((String, Bool) -> Void)? // compositionText, isActive
     
     public init() {
+        // Register default font preferences
+        registerDefaultFontPreferences()
+        
         setupTextStorage()
         setupSangamTranslator()
         
         // TODO: Read candidate window preference from UserDefaults
         //showCandidateWindow = UserDefaults.standard.object(forKey: "showCandidateWindow") as? Bool ?? true
         showCandidateWindow = false
+    }
+    
+    private func registerDefaultFontPreferences() {
+        let defaults: [String: Any] = [
+            "TextEditorFontName": "Tamil Sangam MN",
+            "TextEditorFontSize": 24.0
+        ]
+        UserDefaults.standard.register(defaults: defaults)
     }
     
     private func setupSangamTranslator() {
@@ -72,7 +97,7 @@ public class TextEditorCore: ObservableObject {
         #endif
         
         let defaultAttributes: [NSAttributedString.Key: Any] = [
-            .font: PlatformFont.monospacedSystemFont(ofSize: 24, weight: .regular),
+            .font: defaultFont,
             .foregroundColor: textColor
         ]
         
@@ -374,7 +399,7 @@ public class TextEditorCore: ObservableObject {
         #endif
         
         return [
-            .font: PlatformFont.monospacedSystemFont(ofSize: 24, weight: .regular),
+            .font: defaultFont,
             .foregroundColor: textColor,
             .backgroundColor: backgroundColor,
             .underlineStyle: NSUnderlineStyle.single.rawValue
@@ -389,7 +414,7 @@ public class TextEditorCore: ObservableObject {
         #endif
         
         return [
-            .font: PlatformFont.monospacedSystemFont(ofSize: 24, weight: .regular),
+            .font: defaultFont,
             .foregroundColor: textColor
         ]
     }
@@ -523,6 +548,41 @@ public class TextEditorCore: ObservableObject {
     /// Get current composition text
     public var currentComposition: String {
         return compositionBuffer
+    }
+    
+    // MARK: - Font Configuration
+    
+    /// Update the font name preference
+    public func setFontName(_ fontName: String) {
+        UserDefaults.standard.set(fontName, forKey: "TextEditorFontName")
+        refreshTextStorageFont()
+    }
+    
+    /// Update the font size preference
+    public func setFontSize(_ fontSize: CGFloat) {
+        UserDefaults.standard.set(fontSize, forKey: "TextEditorFontSize")
+        refreshTextStorageFont()
+    }
+    
+    /// Get current font name
+    public var currentFontName: String {
+        return UserDefaults.standard.string(forKey: "TextEditorFontName") ?? "Tamil Sangam MN"
+    }
+    
+    /// Get current font size
+    public var currentFontSize: CGFloat {
+        return UserDefaults.standard.object(forKey: "TextEditorFontSize") as? CGFloat ?? 24.0
+    }
+    
+    /// Refresh the text storage font after preference changes
+    private func refreshTextStorageFont() {
+        let fullRange = NSRange(location: 0, length: textStorage.length)
+        if fullRange.length > 0 {
+            let normalAttributes = getNormalTextAttributes()
+            textStorage.addAttributes(normalAttributes, range: fullRange)
+            textStorage.processEditing()
+            onTextChange?(textStorage.string)
+        }
     }
     
     /// Get the current word being typed
