@@ -359,14 +359,24 @@ struct IOSTextEditor: UIViewRepresentable {
                 return true
             }
             
-            // For backspace during composition, handle it through our system
-            if text.isEmpty && parent.core.isCurrentlyComposing {
-                // Let our core handle the backspace in composition
-                parent.core.processKeyInput("", keyCode: 51, isShifted: false, at: range)
-                if let customTextView = textView as? CustomUITextView {
-                    customTextView.syncFromCore()
+            // Handle delete operations (empty text means delete)
+            if text.isEmpty {
+                print("🗑️ Delete operation: range=\(range)")
+                
+                // If we're composing, handle through our system
+                if parent.core.isCurrentlyComposing {
+                    parent.core.processKeyInput("", keyCode: 51, isShifted: false, at: range)
+                    if let customTextView = textView as? CustomUITextView {
+                        customTextView.syncFromCore()
+                    }
+                    return false
+                } else {
+                    // For regular delete, update our text storage manually then let UITextView handle it
+                    parent.core.textStorage.deleteCharacters(in: range)
+                    print("🗑️ Updated core text storage after delete: '\(parent.core.textStorage.string)'")
+                    // Let UITextView handle the delete visually
+                    return true
                 }
-                return false
             }
             
             // For regular characters, process through our translation system
@@ -381,7 +391,7 @@ struct IOSTextEditor: UIViewRepresentable {
                 return false // We handled the text change
             }
             
-            // For other cases (like regular backspace), let UITextView handle it
+            // For other cases, let UITextView handle it
             return true
         }
         
