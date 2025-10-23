@@ -33,6 +33,7 @@ public class TextEditorCore: ObservableObject {
     @Published var isComposing = false
     private var compositionBuffer = ""
     private var compositionRange: NSRange?
+    private var compositionStartIndex: String.Index?  // Track using String.Index
     private var sangamTranslator: SangamKeyTranslator?
     
     // User properties
@@ -240,20 +241,97 @@ public class TextEditorCore: ObservableObject {
     }
     
     private func updateCompositionDisplay(_ text: String) {
-        guard let range = compositionRange else { return }
+        guard let range = compositionRange else { 
+            print("❌ updateCompositionDisplay: No composition range")
+            return 
+        }
+        
+        let currentStorageText = textStorage.string
+        
+        print("🔍 updateCompositionDisplay:")
+        debugStringLengths(text, label: "Input text '\(text)'")
+        debugStringLengths(currentStorageText, label: "Current storage '\(currentStorageText)'")
+        print("  - Current range: \(range)")
+        print("  - Text storage length (UTF-16): \(textStorage.length)")
+        
+        // Convert the composition range to use grapheme-accurate length
+        let workingRange = getGraphemeAwareRange(nsRange: range, in: currentStorageText)
+        
+        print("  - Working range: \(workingRange)")
+        
+        // Validate range
+        if workingRange.location + workingRange.length > textStorage.length {
+            print("  - ⚠️ Working range is invalid!")
+            return
+        }
+        
+        // Get current text in the range for comparison
+        let currentText = textStorage.attributedSubstring(from: workingRange).string
+        debugStringLengths(currentText, label: "Current text in range '\(currentText)'")
         
         // Create attributed string with composition styling
         let attributes = getCompositionAttributes()
         let attributedText = NSAttributedString(string: text, attributes: attributes)
         
-        // Replace the composition range with new text
-        textStorage.replaceCharacters(in: range, with: attributedText)
+        // Clear the old composition range completely first
+        print("  - Clearing range \(workingRange)")
+        textStorage.deleteCharacters(in: workingRange)
         
-        // Update the composition range
-        compositionRange = NSRange(location: range.location, length: text.count)
+        // Then insert the new text at the location
+        print("  - Inserting '\(text)' at location \(range.location)")
+        textStorage.insert(attributedText, at: range.location)
+        
+        // Force text storage to process the change
+        textStorage.processEditing()
+        
+        // Update the composition range based on UTF-16 length of new text
+        let newLength = utf16Length(of: text) // Use UTF-16 length for NSRange
+        let newRange = NSRange(location: range.location, length: newLength)
+        compositionRange = newRange
+        
+        print("  - New range: \(newRange)")
+        print("  - Text storage after: '\(textStorage.string)'")
+        
+        // Verify the new range
+        if newRange.location + newRange.length <= textStorage.length {
+            let verifyText = textStorage.attributedSubstring(from: newRange).string
+            debugStringLengths(verifyText, label: "Verified text in new range '\(verifyText)'")
+        }
         
         onTextChange?(textStorage.string)
         onCompositionChange?(text, true)
+    }
+    
+    // Helper function to count grapheme clusters properly
+    private func graphemeCount(of string: String) -> Int {
+        return string.count // This already gives us grapheme cluster count
+    }
+    
+    // Helper function to get UTF-16 length (what NSRange uses)
+    private func utf16Length(of string: String) -> Int {
+        return string.utf16.count
+    }
+    
+    // Helper function to get Unicode scalar count
+    private func unicodeScalarCount(of string: String) -> Int {
+        return string.unicodeScalars.count
+    }
+    
+    // Debug helper to show all string length representations
+    private func debugStringLengths(_ string: String, label: String) {
+        print("  \(label):")
+        print("    - Graphemes: \(string.count)")
+        print("    - Unicode scalars: \(string.unicodeScalars.count)")
+        print("    - UTF-16: \(string.utf16.count)")
+        print("    - UTF-8: \(string.utf8.count)")
+    }
+    
+    // Helper function to create grapheme-aware range
+    private func getGraphemeAwareRange(nsRange: NSRange, in string: String) -> NSRange {
+        // For now, return the original range, but this could be enhanced
+        // to properly handle grapheme cluster boundaries
+        let maxLength = min(nsRange.length, string.utf16.count - nsRange.location)
+        return NSRange(location: nsRange.location, length: max(0, maxLength))
     }
     
     private func commitComposition() {
