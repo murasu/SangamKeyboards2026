@@ -38,7 +38,7 @@ struct ContentView: View {
             }
             
             let editor = ContextAwareTextEditor()
-                .text("// Tamil Input Method Test\n// Type English letters to compose Tamil text\n// Press Space or Return to commit\n// Try typing some letters...\n")
+                //.text("// Tamil Input Method Test\n// Type English letters to compose Tamil text\n// Press Space or Return to commit\n// Try typing some letters...\n")
                 .onTextChange { text in
                     currentText = text
                 }

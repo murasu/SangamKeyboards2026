@@ -35,6 +35,9 @@ public class TextEditorCore: ObservableObject {
     private var compositionRange: NSRange?
     private var sangamTranslator: SangamKeyTranslator?
     
+    // User properties
+    private var showCandidateWindow: Bool = true
+    
     public let textProcessor = TextProcessor()
     public let predictionEngine = PredictionEngine()
     
@@ -45,6 +48,10 @@ public class TextEditorCore: ObservableObject {
     public init() {
         setupTextStorage()
         setupSangamTranslator()
+        
+        // TODO: Read candidate window preference from UserDefaults
+        //showCandidateWindow = UserDefaults.standard.object(forKey: "showCandidateWindow") as? Bool ?? true
+        showCandidateWindow = false
     }
     
     private func setupSangamTranslator() {
@@ -170,8 +177,10 @@ public class TextEditorCore: ObservableObject {
         let parsedResult = parseSangamResult(translatedResult)
         //updateCompositionDisplay(parsedResult.translatedText)
         
-        // Generate candidates for the translated text
-        generateCandidates(for: parsedResult.translatedText)
+        // Generate candidates for the translated text only if user preference allows
+        if showCandidateWindow {
+            generateCandidates(for: parsedResult.translatedText)
+        }
     }
     
     func appendComposition(translated: String) {
@@ -224,7 +233,10 @@ public class TextEditorCore: ObservableObject {
                 commitComposition()
             } else {
                 updateCompositionDisplay(compositionBuffer)
-                generateCandidates(for: compositionBuffer)
+                // Generate candidates only if user preference allows
+                if showCandidateWindow {
+                    generateCandidates(for: compositionBuffer)
+                }
             }
         } else {
             commitComposition()
@@ -353,6 +365,12 @@ public class TextEditorCore: ObservableObject {
     
     /// Update word predictions based on current cursor position
     public func updatePredictions(at location: Int) {
+        // Check user preference first - don't generate predictions if disabled
+        guard showCandidateWindow else {
+            hidePredictions()
+            return
+        }
+        
         guard location > 0 else {
             hidePredictions()
             return
