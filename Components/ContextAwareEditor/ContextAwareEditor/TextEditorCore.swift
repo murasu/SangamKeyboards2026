@@ -169,6 +169,7 @@ public class TextEditorCore: ObservableObject {
         generateCandidates(for: parsedResult.translatedText)
     }
     
+    // This function is from my macOS input method that appends the translated keystroke->String to the composition
     func appendComposition(translated: String) {
         var deleteNext = false
         // We use a temporary variable so typedString is updated in one go
