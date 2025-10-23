@@ -138,6 +138,11 @@ public class TextEditorCore: ObservableObject {
     private func isTranslatableKey(_ character: String, keyCode: Int32) -> Bool {
         // For now, let's consider letters and some punctuation as translatable
         // You can refine this based on your Tamil input requirements
+        
+        // Special keys by keyCode (backspace, etc.)
+        if keyCode == 51 { return true } // Backspace
+        
+        
         if character.isEmpty { return false }
         
         let char = character.first!
@@ -151,9 +156,6 @@ public class TextEditorCore: ObservableObject {
         
         // Numbers might be translatable in some contexts
         if char.isNumber { return true }
-        
-        // Special keys by keyCode (backspace, etc.)
-        if keyCode == 51 { return true } // Backspace
         
         return false
     }

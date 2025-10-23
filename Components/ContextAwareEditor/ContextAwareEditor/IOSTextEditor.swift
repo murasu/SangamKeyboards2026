@@ -364,13 +364,24 @@ struct IOSTextEditor: UIViewRepresentable {
                 print("🗑️ Delete operation: range=\(range)")
                 
                 // If we're composing, handle through our system
+                // If we're composing, handle through our system
                 if parent.core.isCurrentlyComposing {
+                    // Use the composition range instead of the text view's selection range
+                    if let compositionRange = parent.core.currentCompositionRange {
+                        parent.core.processKeyInput("", keyCode: 51, isShifted: false, at: compositionRange)
+                    }
+                    if let customTextView = textView as? CustomUITextView {
+                        customTextView.syncFromCore()
+                    }
+                    return false
+                }
+                /*if parent.core.isCurrentlyComposing {
                     parent.core.processKeyInput("", keyCode: 51, isShifted: false, at: range)
                     if let customTextView = textView as? CustomUITextView {
                         customTextView.syncFromCore()
                     }
                     return false
-                } else {
+                } */else {
                     // For regular delete, update our text storage manually then let UITextView handle it
                     parent.core.textStorage.deleteCharacters(in: range)
                     print("🗑️ Updated core text storage after delete: '\(parent.core.textStorage.string)'")
