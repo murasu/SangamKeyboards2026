@@ -64,7 +64,7 @@ struct ContentView: View {
             HStack {
                 Text("Max Candidates:")
                     .font(.caption)
-                Picker("Max Candidates", selection: Binding(
+                Picker(""/*Max Candidates"*/, selection: Binding(
                     get: { editor.textEditorCore.currentMaxCandidates },
                     set: { editor.textEditorCore.setMaxCandidates($0) }
                 )) {

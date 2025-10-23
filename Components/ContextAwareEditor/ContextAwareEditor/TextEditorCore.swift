@@ -416,8 +416,8 @@ public class TextEditorCore: ObservableObject {
         return [
             .font: defaultFont,
             .foregroundColor: textColor,
-            .backgroundColor: backgroundColor,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
+            .backgroundColor: backgroundColor//,
+            //.underlineStyle: NSUnderlineStyle.single.rawValue
         ]
     }
     
