@@ -73,7 +73,7 @@ public class TextEditorCore: ObservableObject {
         
         // TODO: Read candidate window preference from UserDefaults
         //showCandidateWindow = UserDefaults.standard.object(forKey: "showCandidateWindow") as? Bool ?? true
-        showCandidateWindow = false
+        showCandidateWindow = maxCandidates > 0
     }
     
     private func registerDefaultFontPreferences() {

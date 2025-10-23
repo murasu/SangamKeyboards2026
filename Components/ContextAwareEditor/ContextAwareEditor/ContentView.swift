@@ -68,6 +68,7 @@ struct ContentView: View {
                     get: { editor.textEditorCore.currentMaxCandidates },
                     set: { editor.textEditorCore.setMaxCandidates($0) }
                 )) {
+                    Text("0").tag(0)
                     Text("3").tag(3)
                     Text("4").tag(4)
                     Text("5").tag(5)
