@@ -236,26 +236,30 @@ public class TextEditorCore: ObservableObject {
     }
     
     private func handleBackspaceInComposition() {
+        var deletedComposition = compositionBuffer
         guard let translator = sangamTranslator else {
             // Simple backspace
-            if !compositionBuffer.isEmpty {
-                compositionBuffer.removeLast()
-                updateCompositionDisplay(compositionBuffer)
+            if !deletedComposition.isEmpty {
+                deletedComposition.removeLast()
+                updateCompositionDisplay(deletedComposition)
             } else {
                 commitComposition()
             }
+            
+            compositionBuffer = deletedComposition
             return
         }
         
         // Use translator's delete functionality
-        if !compositionBuffer.isEmpty {
-            let deletedComposition = translator.deleteLastChar(in: compositionBuffer)
-            compositionBuffer = deletedComposition
-            
+        if !deletedComposition.isEmpty {
+            deletedComposition = translator.deleteLastChar(in: deletedComposition)
+        
             if compositionBuffer.isEmpty {
                 commitComposition()
             } else {
-                updateCompositionDisplay(compositionBuffer)
+                updateCompositionDisplay(deletedComposition)
+                compositionBuffer = deletedComposition
+
                 // Generate candidates only if user preference allows
                 if showCandidateWindow {
                     generateCandidates(for: compositionBuffer)
