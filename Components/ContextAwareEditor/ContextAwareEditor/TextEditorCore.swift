@@ -209,10 +209,8 @@ public class TextEditorCore: ObservableObject {
         updateCompositionDisplay(updatedComposition)
         compositionBuffer = updatedComposition
         
-        let parsedResult = parseSangamResult(translatedResult)
-        //updateCompositionDisplay(parsedResult.translatedText)
-        
         // Generate candidates for the translated text only if user preference allows
+        let parsedResult = parseSangamResult(translatedResult)
         if showCandidateWindow {
             generateCandidates(for: parsedResult.translatedText)
         }

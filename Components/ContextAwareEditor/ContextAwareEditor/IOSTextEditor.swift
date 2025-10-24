@@ -134,7 +134,7 @@ class CustomUITextView: UITextView {
     
     // MARK: - Prediction Display
     
-    private func updatePredictionDisplay() {
+    func updatePredictionDisplay() {
         guard let editorCore = editorCore else { return }
         
         if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
@@ -348,6 +348,8 @@ struct IOSTextEditor: UIViewRepresentable {
                 parent.core.acceptPrediction(parent.core.currentPredictions[0])
                 if let customTextView = textView as? CustomUITextView {
                     customTextView.syncFromCore()
+                    
+                    customTextView.updatePredictionDisplay()
                 }
                 return false
             }
@@ -412,11 +414,19 @@ struct IOSTextEditor: UIViewRepresentable {
             // Update predictions when cursor moves
             let location = textView.selectedRange.location
             parent.core.updatePredictions(at: location)
+            
+            if let customTextView = textView as? CustomUITextView {
+                customTextView.updatePredictionDisplay()
+            }
         }
         
         func textViewDidChange(_ textView: UITextView) {
             print("📝 Text changed, length: \(textView.text.count)")
             // This will be called after UITextView handles allowed changes
+            
+            if let customTextView = textView as? CustomUITextView {
+                customTextView.handleTextChange()
+            }
         }
     }
 }
