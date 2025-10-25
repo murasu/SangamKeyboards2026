@@ -137,6 +137,7 @@ class CustomUITextView: UITextView {
     func updatePredictionDisplay() {
         guard let editorCore = editorCore else { return }
         
+        print ("updatePredictionDisplay: showingPrediction=\(editorCore.showingPrediction), currentPredictions=\(editorCore.currentPredictions)")
         if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
             showPredictionOverlay()
         } else {

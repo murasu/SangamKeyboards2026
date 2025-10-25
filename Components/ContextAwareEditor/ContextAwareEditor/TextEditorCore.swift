@@ -591,31 +591,49 @@ public class TextEditorCore: ObservableObject {
     
     /// Update word predictions based on current cursor position
     public func updatePredictions(at location: Int) {
+        print("🔍 updatePredictions called at location \(location)")
+        
         // Check user preference first - don't generate predictions if disabled
         guard showCandidateWindow else {
+            print("🔍 Candidate window disabled, hiding predictions")
             hidePredictions()
             return
         }
         
+        // If we're currently composing, always show predictions for the composition
+        if isCurrentlyComposing, let compositionText = getCurrentCompositionText() {
+            print("🔍 Currently composing '\(compositionText)', generating predictions")
+            // Generate predictions for the current composition
+            generateCandidates(for: compositionText)
+            return
+        }
+        
         guard location > 0 else {
+            print("🔍 Location is 0, hiding predictions")
             hidePredictions()
             return
         }
         
         let currentWord = getCurrentWord(at: location)
+        print("🔍 Current word at location \(location): '\(currentWord)'")
+        
         if currentWord.isEmpty {
+            print("🔍 Current word is empty, hiding predictions")
             hidePredictions()
             return
         }
         
         // Get predictions for the current word
         let predictions = predictionEngine.getPrediction(forWord: currentWord, maxCount: maxCandidates)
+        print("🔍 Got \(predictions.count) predictions for '\(currentWord)'")
         
         if !predictions.isEmpty {
             currentPredictions = predictions
             predictionRange = getCurrentWordRange(at: location)
             showingPrediction = true
+            print("🔍 Showing predictions: \(predictions)")
         } else {
+            print("🔍 No predictions found, hiding")
             hidePredictions()
         }
     }
@@ -855,6 +873,20 @@ public class TextEditorCore: ObservableObject {
         }
         
         return NSRange(location: start, length: location - start)
+    }
+    
+    /// Get the current composition text being typed
+    private func getCurrentCompositionText() -> String? {
+        guard isCurrentlyComposing, let range = compositionRange else {
+            return nil
+        }
+        
+        let text = textStorage.string
+        guard range.location + range.length <= text.count else {
+            return nil
+        }
+        
+        return (text as NSString).substring(with: range)
     }
 }
 
