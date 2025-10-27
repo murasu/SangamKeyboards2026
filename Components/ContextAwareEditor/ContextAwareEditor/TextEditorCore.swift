@@ -850,7 +850,7 @@ public class TextEditorCore: ObservableObject {
     /// Get the current word being typed
     private func getCurrentWord(at location: Int) -> String {
         let text = textStorage.string
-        guard location <= text.count else { return "" }
+        guard location <= text.unicodeScalars.count else { return "" }
         
         let substring = String(text.prefix(location))
         let components = substring.components(separatedBy: .whitespacesAndNewlines)
