@@ -455,25 +455,77 @@ public class TextEditorCore: ObservableObject {
     // MARK: - Candidate Window Positioning
     
     /// Calculate the appropriate size for the candidate window based on content
-    public func calculateCandidateWindowSize(for predictions: [String], maxWidth: CGFloat = 250) -> CGSize {
+    /// This unified function works across both iOS and macOS platforms
+    func calculateCandidateWindowSize(
+        for predictions: [String], 
+        editorBounds: CGRect,
+        font: PlatformFont
+    ) -> CGSize {
         guard !predictions.isEmpty else {
             return CGSize(width: 150, height: 30)
         }
         
-        // Base dimensions
-        let padding: CGFloat = 16 // 8px on each side (top/bottom + left/right)
-        let lineHeight: CGFloat = 18 // Height per line of text
+        // 1. Limit candidates to 5 max
+        let limitedPredictions = Array(predictions.prefix(5))
         
-        // Calculate width based on longest prediction
-        let longestPrediction = predictions.max { $0.count < $1.count } ?? ""
-        let estimatedTextWidth = CGFloat(longestPrediction.count) * 8 + 20 // Rough estimate: 8pts per char + number prefix
-        let width = min(maxWidth, max(120, estimatedTextWidth + padding))
+        // 2. Calculate maxWidth as 30% of editor size
+        let maxWidth = editorBounds.width * 0.3
+        let minWidth: CGFloat = 120 // Minimum reasonable width
         
-        // Calculate height based on number of predictions (no header now)
-        let contentHeight = CGFloat(predictions.count) * lineHeight
-        let height = contentHeight + padding
+        // Base padding
+        let padding: CGFloat = 16 // 8px on each side (left/right + top/bottom)
         
-        return CGSize(width: width, height: height)
+        // 3. Calculate actual width needed by measuring each candidate line
+        var maxNaturalWidth: CGFloat = 0
+        var totalHeight: CGFloat = 0
+        
+        for (index, prediction) in limitedPredictions.enumerated() {
+            // Create the actual display text (numbered)
+            let candidateText = "\(index + 1). \(prediction)"
+            
+            // Measure natural size without width constraint
+            let textSize = (candidateText as NSString).boundingRect(
+                with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude),
+                options: [.usesLineFragmentOrigin, .usesFontLeading],
+                attributes: [.font: font],
+                context: nil
+            ).size
+            
+            // Track maximum width needed
+            maxNaturalWidth = max(maxNaturalWidth, textSize.width)
+            
+            // Add height for this line
+            totalHeight += textSize.height
+        }
+        
+        // 4. Determine final width (natural width constrained by maxWidth)
+        let finalWidth = min(maxWidth, max(minWidth, maxNaturalWidth + padding))
+        
+        // If we had to constrain width significantly, recalculate height with wrapping
+        let finalHeight: CGFloat
+        if maxNaturalWidth + padding > maxWidth {
+            // Recalculate height with width constraint (text may wrap)
+            let allCandidatesText = limitedPredictions.enumerated().map { index, prediction in
+                "\(index + 1). \(prediction)"
+            }.joined(separator: "\n")
+            
+            let constrainedSize = (allCandidatesText as NSString).boundingRect(
+                with: CGSize(width: finalWidth - padding, height: CGFloat.greatestFiniteMagnitude),
+                options: [.usesLineFragmentOrigin, .usesFontLeading],
+                attributes: [.font: font],
+                context: nil
+            ).size
+            
+            finalHeight = constrainedSize.height + padding
+        } else {
+            // Use natural height (no wrapping needed)
+            finalHeight = totalHeight + padding
+        }
+        
+        return CGSize(
+            width: ceil(finalWidth),
+            height: ceil(finalHeight)
+        )
     }
     
     /// Calculate the ideal position for the candidate window relative to the composition range

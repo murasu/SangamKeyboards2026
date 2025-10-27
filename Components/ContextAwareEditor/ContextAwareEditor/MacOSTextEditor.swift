@@ -331,7 +331,8 @@ struct MacOSTextEditor: NSViewRepresentable {
             // Calculate candidate window size based on content
             let candidateWindowSize = parent.core.calculateCandidateWindowSize(
                 for: parent.core.currentPredictions,
-                maxWidth: min(300, editorBounds.width * 0.4) // Max 40% of editor width
+                editorBounds: editorBounds,
+                font: textView.font ?? NSFont.monospacedSystemFont(ofSize: 16, weight: .regular)
             )
             
             // Calculate optimal position using the core's positioning logic
