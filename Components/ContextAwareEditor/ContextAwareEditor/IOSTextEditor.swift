@@ -14,19 +14,8 @@ class CustomUITextView: UITextView {
     weak var editorCore: TextEditorCore?
     private var predictionOverlay: PredictionOverlayUIView?
     private var keyboardObserver: NSObjectProtocol?
-    
-    /// Calculate maximum candidate window width based on editor size and minimum word requirements
-    private func calculateMaxCandidateWidth() -> CGFloat {
-        let fontSize = self.font?.pointSize ?? 16
-        
-        // Get minimum width required for long words from the unified core method
-        let requiredWidth = editorCore?.calculateMinimumCandidateWidth(fontSize: fontSize) ?? 200
-        
-        // Use 40% of editor width, but ensure it can fit long words
-        let preferredWidth = bounds.width * 0.4
-        
-        return max(preferredWidth, requiredWidth)
-    }
+    private var cachedMaxCandidateWidth: CGFloat = 0
+    private var lastEditorWidth: CGFloat = 0
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -80,12 +69,43 @@ class CustomUITextView: UITextView {
         // Set initial content
         attributedText = core.textStorage
         
+        // Calculate the cached max candidate width once during initialization
+        calculateMaxCandidateWidth()
+        
         // Set up callback for when core updates text
         core.onTextChange = { [weak self] _ in
             DispatchQueue.main.async {
                 self?.syncFromCore()
             }
         }
+    }
+    
+    /// Calculate maximum candidate window width once and cache it
+    private func calculateMaxCandidateWidth() {
+        let fontSize = self.font?.pointSize ?? 16
+        
+        // Get minimum width required for long words from the unified core method
+        let requiredWidth = editorCore?.calculateMinimumCandidateWidth(fontSize: fontSize) ?? 200
+        
+        // Use 40% of editor width, but ensure it can fit long words
+        let preferredWidth = bounds.width * 0.4
+        
+        cachedMaxCandidateWidth = max(preferredWidth, requiredWidth)
+        lastEditorWidth = bounds.width
+    }
+    
+    /// Get the cached max candidate width, recalculating if editor width changed significantly
+    private func getMaxCandidateWidth() -> CGFloat {
+        // Recalculate if editor width changed by more than 50px (device rotation, etc.)
+        if abs(bounds.width - lastEditorWidth) > 50 {
+            calculateMaxCandidateWidth()
+        }
+        return cachedMaxCandidateWidth
+    }
+    
+    /// Force recalculation of max candidate width (call when user changes font preferences)
+    func refreshMaxCandidateWidth() {
+        calculateMaxCandidateWidth()
     }
     
     /// Sync the text view content from the core's text storage
@@ -188,8 +208,8 @@ class CustomUITextView: UITextView {
             addSubview(predictionOverlay!)
         }
 
-        // Calculate candidate window size based on content
-        let maxCandidateWidth = calculateMaxCandidateWidth()
+        // Calculate candidate window size based on content (using cached width)
+        let maxCandidateWidth = getMaxCandidateWidth()
         let candidateWindowSize = editorCore.calculateCandidateWindowSize(
             for: editorCore.currentPredictions,
             fontSize: self.font?.pointSize ?? 16,

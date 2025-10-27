@@ -246,6 +246,8 @@ struct MacOSTextEditor: NSViewRepresentable {
         let parent: MacOSTextEditor
         private var predictionOverlay: PredictionOverlayView?
         private weak var textView: NSTextView?
+        private var cachedMaxCandidateWidth: CGFloat = 0
+        private var lastEditorWidth: CGFloat = 0
         
         init(_ parent: MacOSTextEditor) {
             self.parent = parent
@@ -254,10 +256,39 @@ struct MacOSTextEditor: NSViewRepresentable {
         func setTextView(_ textView: NSTextView) {
             self.textView = textView
             
+            // Calculate the cached max candidate width once during initialization
+            calculateMaxCandidateWidth(editorWidth: textView.visibleRect.width)
+            
             // Pass delete key handling to text view when we don't handle it
             parent.core.onBackspacePassThrough = { [weak textView] in
                 textView?.deleteBackward(nil)
             }
+        }
+        
+        /// Calculate maximum candidate window width once and cache it
+        private func calculateMaxCandidateWidth(editorWidth: CGFloat) {
+            // TODO: Get font size from user defaults later
+            let fontSize: CGFloat = 12 // Match the PredictionOverlayView font size
+            let requiredWidth = parent.core.calculateMinimumCandidateWidth(fontSize: fontSize)
+            let preferredWidth = editorWidth * 0.4
+            
+            cachedMaxCandidateWidth = max(preferredWidth, requiredWidth)
+            lastEditorWidth = editorWidth
+        }
+        
+        /// Get the cached max candidate width, recalculating if editor width changed significantly
+        private func getMaxCandidateWidth(editorWidth: CGFloat) -> CGFloat {
+            // Recalculate if editor width changed by more than 50px (window resize)
+            if abs(editorWidth - lastEditorWidth) > 50 {
+                calculateMaxCandidateWidth(editorWidth: editorWidth)
+            }
+            return cachedMaxCandidateWidth
+        }
+        
+        /// Force recalculation of max candidate width (call when user changes font preferences)
+        func refreshMaxCandidateWidth() {
+            guard let textView = self.textView else { return }
+            calculateMaxCandidateWidth(editorWidth: textView.visibleRect.width)
         }
         
         func textDidChange(_ notification: Notification) {
@@ -328,16 +359,13 @@ struct MacOSTextEditor: NSViewRepresentable {
             // Get editor bounds (text view's visible rect)
             let editorBounds = textView.visibleRect
             
-            // Calculate maximum candidate window width using unified core method
-            let fontSize: CGFloat = 12 // Match the PredictionOverlayView font size
-            let requiredWidth = parent.core.calculateMinimumCandidateWidth(fontSize: fontSize)
-            let preferredWidth = editorBounds.width * 0.4
-            let maxCandidateWidth = max(preferredWidth, requiredWidth)
+            // Get cached maximum candidate window width (efficient - no recalculation)
+            let maxCandidateWidth = getMaxCandidateWidth(editorWidth: editorBounds.width)
             
             // Calculate candidate window size based on content
             let candidateWindowSize = parent.core.calculateCandidateWindowSize(
                 for: parent.core.currentPredictions,
-                fontSize: fontSize,
+                fontSize: 12, // Match the PredictionOverlayView font size
                 maxWidth: maxCandidateWidth
             )
             
