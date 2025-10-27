@@ -175,15 +175,11 @@ class CustomUITextView: UITextView {
             addSubview(predictionOverlay!)
         }
 
+        // Calculate candidate window size based on content
+        let candidateWindowSize = predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: false, font: self.font) ?? CGSize.zero
+        
         // Get editor bounds (text view's bounds)
         let editorBounds = bounds
-        
-        // Calculate candidate window size using unified core function
-        let candidateWindowSize = editorCore.calculateCandidateWindowSize(
-            for: editorCore.currentPredictions,
-            editorBounds: editorBounds,
-            font: self.font ?? UIFont.monospacedSystemFont(ofSize: 16, weight: .regular)
-        )
         
         // Calculate optimal position using the core's positioning logic
         let positionResult = editorCore.calculateCandidateWindowPosition(
@@ -193,7 +189,7 @@ class CustomUITextView: UITextView {
         )
         
         // Configure the overlay with the correct showingAbove value
-        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove, font: self.font)
+        _ = predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove, font: self.font)
         
         // Apply the calculated position
         predictionOverlay?.frame = CGRect(
@@ -228,6 +224,10 @@ class CustomUITextView: UITextView {
 class PredictionOverlayUIView: UIView {
     private let label = UILabel()
     private let backgroundView = UIView()
+    
+    // Arbitary value. Need to figure a better way to set this.
+    // Also need to take into acount CandidateWindowSize preference
+    private let kMaxCandidateWidth = 800.0
     
     var onTap: ((String) -> Void)?
     private var currentPrediction: String = ""
@@ -305,25 +305,26 @@ class PredictionOverlayUIView: UIView {
         onTap?(currentPrediction)
     }
     
-    func configure(with predictions: [String], showingAbove: Bool = false, font: UIFont? = nil) {
+    func configure(with predictions: [String], showingAbove: Bool = false, font: UIFont? = nil) -> CGSize {
         guard !predictions.isEmpty else {
             currentPrediction = ""
             label.text = ""
-            return
+            return CGSize.zero
         }
         
         // Use provided font or keep current font
+        let actualFont: UIFont
         if let font = font {
             label.font = font
+            actualFont = font
+        } else {
+            actualFont = label.font
         }
         
         currentPrediction = predictions.first ?? ""
         
-        // Limit to 5 predictions to match core function
-        let limitedPredictions = Array(predictions.prefix(5))
-        
         // Show all predictions, each on a separate line, numbered
-        let candidateText = limitedPredictions.enumerated().map { index, prediction in
+        let candidateText = predictions.enumerated().map { index, prediction in
             "\(index + 1). \(prediction)"
         }.joined(separator: "\n")
         
@@ -335,6 +336,13 @@ class PredictionOverlayUIView: UIView {
         } else {
             backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
         }
+        
+        // Calculate and return the required size
+        return calculateRequiredSize(for: predictions, with: actualFont, maxWidth: kMaxCandidateWidth)
+    }
+
+    func configure(with predictions: [String]) -> CGSize {
+        return configure(with: predictions, showingAbove: false, font: nil)
     }
 }
 
