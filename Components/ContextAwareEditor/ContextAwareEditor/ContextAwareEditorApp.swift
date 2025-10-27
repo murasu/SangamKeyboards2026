@@ -13,5 +13,15 @@ struct ContextAwareEditorApp: App {
         WindowGroup {
             ContentView()
         }
+        #if os(macOS)
+        .commands {
+            CommandGroup(replacing: .appSettings) {
+                Button("Settings...") {
+                    SettingsPresenter.presentSettings()
+                }
+                .keyboardShortcut(",")
+            }
+        }
+        #endif
     }
 }

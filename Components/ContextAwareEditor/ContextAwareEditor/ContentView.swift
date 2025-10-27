@@ -12,11 +12,33 @@ struct ContentView: View {
     @State private var compositionText = ""
     @State private var isComposing = false
     
+    // iOS settings presentation
+    #if os(iOS)
+    @State private var showingSettings = false
+    #endif
+    
     var body: some View {
         VStack(spacing: 16) {
+            // iOS Settings Button at the top
+            #if os(iOS)
+            HStack {
+                Text("Tamil Input Method Editor")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                Button("Settings") {
+                    showingSettings = true
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+            }
+            #else
             Text("Tamil Input Method Editor")
                 .font(.title2)
                 .fontWeight(.semibold)
+            #endif
             
             HStack {
                 Text("Text length: \(currentText.count)")
@@ -96,6 +118,11 @@ struct ContentView: View {
             .foregroundColor(.secondary)
         }
         .padding()
+        #if os(iOS)
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
+        }
+        #endif
     }
 }
 
