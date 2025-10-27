@@ -15,9 +15,18 @@ class CustomUITextView: UITextView {
     private var predictionOverlay: PredictionOverlayUIView?
     private var keyboardObserver: NSObjectProtocol?
     
-    // Arbitary value. Need to figure a better way to set this.
-    // Also need to take into acount CandidateWindowSize preference
-    private let kMaxCandidateWidth = 800.0
+    /// Calculate maximum candidate window width based on editor size and minimum word requirements
+    private func calculateMaxCandidateWidth() -> CGFloat {
+        let fontSize = self.font?.pointSize ?? 16
+        
+        // Get minimum width required for long words from the unified core method
+        let requiredWidth = editorCore?.calculateMinimumCandidateWidth(fontSize: fontSize) ?? 200
+        
+        // Use 40% of editor width, but ensure it can fit long words
+        let preferredWidth = bounds.width * 0.4
+        
+        return max(preferredWidth, requiredWidth)
+    }
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -180,10 +189,11 @@ class CustomUITextView: UITextView {
         }
 
         // Calculate candidate window size based on content
+        let maxCandidateWidth = calculateMaxCandidateWidth()
         let candidateWindowSize = editorCore.calculateCandidateWindowSize(
             for: editorCore.currentPredictions,
             fontSize: self.font?.pointSize ?? 16,
-            maxWidth: kMaxCandidateWidth
+            maxWidth: maxCandidateWidth
         )
         
         // Get editor bounds (text view's bounds)

@@ -328,11 +328,17 @@ struct MacOSTextEditor: NSViewRepresentable {
             // Get editor bounds (text view's visible rect)
             let editorBounds = textView.visibleRect
             
+            // Calculate maximum candidate window width using unified core method
+            let fontSize: CGFloat = 12 // Match the PredictionOverlayView font size
+            let requiredWidth = parent.core.calculateMinimumCandidateWidth(fontSize: fontSize)
+            let preferredWidth = editorBounds.width * 0.4
+            let maxCandidateWidth = max(preferredWidth, requiredWidth)
+            
             // Calculate candidate window size based on content
             let candidateWindowSize = parent.core.calculateCandidateWindowSize(
                 for: parent.core.currentPredictions,
-                fontSize: 12, // Match the PredictionOverlayView font size
-                maxWidth: min(300, editorBounds.width * 0.4) // Max 40% of editor width
+                fontSize: fontSize,
+                maxWidth: maxCandidateWidth
             )
             
             // Calculate optimal position using the core's positioning logic

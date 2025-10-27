@@ -454,6 +454,17 @@ public class TextEditorCore: ObservableObject {
     
     // MARK: - Candidate Window Positioning
     
+    /// Calculate the minimum width required to display long words in the candidate window
+    public func calculateMinimumCandidateWidth(fontSize: CGFloat = 14) -> CGFloat {
+        // Test with a long Tamil word to ensure it fits
+        let testWord = "திருவண்ணாமலையாருடைய"
+        let font = fontForSize(fontSize)
+        let testSize = measureText(testWord, font: font, maxWidth: CGFloat.greatestFiniteMagnitude)
+        
+        // Add space for "1. " prefix and padding
+        return testSize.width + 40
+    }
+    
     /// Calculate the appropriate size for the candidate window based on content
     public func calculateCandidateWindowSize(for predictions: [String], fontSize: CGFloat = 14, maxWidth: CGFloat = 250) -> CGSize {
         guard !predictions.isEmpty else {
