@@ -90,6 +90,7 @@ public class TextEditorCore: ObservableObject {
         sangamTranslator = SangamKeyTranslator.shared
         if sangamTranslator?.getLayout() == kbdNone {
             sangamTranslator?.setLayout(kbdAnjal)
+            //sangamTranslator?.setLayout(kbdTWNew)
         }
     }
     
