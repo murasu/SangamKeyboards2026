@@ -191,7 +191,7 @@ class CustomUITextView: UITextView {
             addSubview(predictionOverlay!)
         }
         
-        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove)
+        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove, font: self.font)
         
         // Apply the calculated position
         predictionOverlay?.frame = CGRect(
@@ -255,7 +255,7 @@ class PredictionOverlayUIView: UIView {
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         
         // Setup label
-        label.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular) // Smaller font for multiple lines
+        label.font = UIFont.monospacedSystemFont(ofSize: 18, weight: .regular) // Smaller font for multiple lines
         label.textColor = UIColor.secondaryLabel
         label.textAlignment = .left
         label.numberOfLines = 0 // Allow unlimited lines
@@ -285,11 +285,16 @@ class PredictionOverlayUIView: UIView {
         onTap?(currentPrediction)
     }
     
-    func configure(with predictions: [String], showingAbove: Bool = false) {
+    func configure(with predictions: [String], showingAbove: Bool = false, font: UIFont? = nil) {
         guard !predictions.isEmpty else {
             currentPrediction = ""
             label.text = ""
             return
+        }
+        
+        // Use provided font or keep current font
+        if let font = font {
+            label.font = font
         }
         
         currentPrediction = predictions.first ?? ""
@@ -310,7 +315,7 @@ class PredictionOverlayUIView: UIView {
     }
     
     func configure(with predictions: [String]) {
-        configure(with: predictions, showingAbove: false)
+        configure(with: predictions, showingAbove: false, font: nil)
     }
 }
 
