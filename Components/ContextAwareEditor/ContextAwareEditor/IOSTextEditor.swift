@@ -15,6 +15,10 @@ class CustomUITextView: UITextView {
     private var predictionOverlay: PredictionOverlayUIView?
     private var keyboardObserver: NSObjectProtocol?
     
+    // Arbitary value. Need to figure a better way to set this.
+    // Also need to take into acount CandidateWindowSize preference
+    private let kMaxCandidateWidth = 800.0
+    
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         setupTextView()
@@ -176,7 +180,11 @@ class CustomUITextView: UITextView {
         }
 
         // Calculate candidate window size based on content
-        let candidateWindowSize = predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: false, font: self.font) ?? CGSize.zero
+        let candidateWindowSize = editorCore.calculateCandidateWindowSize(
+            for: editorCore.currentPredictions,
+            fontSize: self.font?.pointSize ?? 16,
+            maxWidth: kMaxCandidateWidth
+        )
         
         // Get editor bounds (text view's bounds)
         let editorBounds = bounds
@@ -189,7 +197,7 @@ class CustomUITextView: UITextView {
         )
         
         // Configure the overlay with the correct showingAbove value
-        _ = predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove, font: self.font)
+        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove, font: self.font)
         
         // Apply the calculated position
         predictionOverlay?.frame = CGRect(
@@ -224,11 +232,7 @@ class CustomUITextView: UITextView {
 class PredictionOverlayUIView: UIView {
     private let label = UILabel()
     private let backgroundView = UIView()
-    
-    // Arbitary value. Need to figure a better way to set this.
-    // Also need to take into acount CandidateWindowSize preference
-    private let kMaxCandidateWidth = 800.0
-    
+        
     var onTap: ((String) -> Void)?
     private var currentPrediction: String = ""
     
@@ -282,34 +286,16 @@ class PredictionOverlayUIView: UIView {
         )
     }
     
-    private func calculateRequiredSize(for predictions: [String], with font: UIFont, maxWidth: CGFloat) -> CGSize {
-        let candidateText = predictions.enumerated().map { index, prediction in
-            "\(index + 1). \(prediction)"
-        }.joined(separator: "\n")
-        
-        let textSize = candidateText.boundingRect(
-            with: CGSize(width: maxWidth - 16, height: .greatestFiniteMagnitude),
-            options: [.usesLineFragmentOrigin, .usesFontLeading],
-            attributes: [.font: font],
-            context: nil
-        ).size
-        
-        print ("candidateText: \(candidateText), textSize: \(textSize)")
-        return CGSize(
-            width: ceil(textSize.width) + 16,
-            height: ceil(textSize.height) + 8
-        )
-    }
-    
+
     @objc private func overlayTapped() {
         onTap?(currentPrediction)
     }
     
-    func configure(with predictions: [String], showingAbove: Bool = false, font: UIFont? = nil) -> CGSize {
+    func configure(with predictions: [String], showingAbove: Bool = false, font: UIFont? = nil) {
         guard !predictions.isEmpty else {
             currentPrediction = ""
             label.text = ""
-            return CGSize.zero
+            return
         }
         
         // Use provided font or keep current font
@@ -336,13 +322,10 @@ class PredictionOverlayUIView: UIView {
         } else {
             backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
         }
-        
-        // Calculate and return the required size
-        return calculateRequiredSize(for: predictions, with: actualFont, maxWidth: kMaxCandidateWidth)
     }
 
-    func configure(with predictions: [String]) -> CGSize {
-        return configure(with: predictions, showingAbove: false, font: nil)
+    func configure(with predictions: [String]) {
+        configure(with: predictions, showingAbove: false, font: nil)
     }
 }
 

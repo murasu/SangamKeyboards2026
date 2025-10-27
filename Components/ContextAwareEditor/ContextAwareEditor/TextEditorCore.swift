@@ -455,26 +455,53 @@ public class TextEditorCore: ObservableObject {
     // MARK: - Candidate Window Positioning
     
     /// Calculate the appropriate size for the candidate window based on content
-    public func calculateCandidateWindowSize(for predictions: [String], maxWidth: CGFloat = 250) -> CGSize {
+    public func calculateCandidateWindowSize(for predictions: [String], fontSize: CGFloat = 14, maxWidth: CGFloat = 250) -> CGSize {
         guard !predictions.isEmpty else {
             return CGSize(width: 150, height: 30)
         }
         
-        // Base dimensions
-        let padding: CGFloat = 16 // 8px on each side (top/bottom + left/right)
-        let lineHeight: CGFloat = 18 // Height per line of text
+        // Create numbered candidate text like the iOS version
+        let candidateText = predictions.enumerated().map { index, prediction in
+            "\(index + 1). \(prediction)"
+        }.joined(separator: "\n")
         
-        // Calculate width based on longest prediction
-        let longestPrediction = predictions.max { $0.count < $1.count } ?? ""
-        let estimatedTextWidth = CGFloat(longestPrediction.count) * 8 + 20 // Rough estimate: 8pts per char + number prefix
-        let width = min(maxWidth, max(120, estimatedTextWidth + padding))
+        // Use platform-agnostic text measurement
+        let font = fontForSize(fontSize)
+        let textSize = measureText(candidateText, font: font, maxWidth: maxWidth - 16)
         
-        // Calculate height based on number of predictions (no header now)
-        let contentHeight = CGFloat(predictions.count) * lineHeight
-        let height = contentHeight + padding
-        
-        return CGSize(width: width, height: height)
+        return CGSize(
+            width: ceil(textSize.width) + 16,
+            height: ceil(textSize.height) + 8
+        )
     }
+    
+    // Platform-agnostic font and text measurement helpers
+    #if canImport(UIKit)
+    private func fontForSize(_ size: CGFloat) -> UIFont {
+        return UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
+    }
+    
+    private func measureText(_ text: String, font: UIFont, maxWidth: CGFloat) -> CGSize {
+        return text.boundingRect(
+            with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: [.font: font],
+            context: nil
+        ).size
+    }
+    #elseif canImport(AppKit)
+    private func fontForSize(_ size: CGFloat) -> NSFont {
+        return NSFont.monospacedSystemFont(ofSize: size, weight: .regular) ?? NSFont.systemFont(ofSize: size)
+    }
+    
+    private func measureText(_ text: String, font: NSFont, maxWidth: CGFloat) -> CGSize {
+        return text.boundingRect(
+            with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: [.font: font]
+        ).size
+    }
+    #endif
     
     /// Calculate the ideal position for the candidate window relative to the composition range
     /// 

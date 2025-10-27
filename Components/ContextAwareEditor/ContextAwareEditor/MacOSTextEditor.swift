@@ -331,6 +331,7 @@ struct MacOSTextEditor: NSViewRepresentable {
             // Calculate candidate window size based on content
             let candidateWindowSize = parent.core.calculateCandidateWindowSize(
                 for: parent.core.currentPredictions,
+                fontSize: 12, // Match the PredictionOverlayView font size
                 maxWidth: min(300, editorBounds.width * 0.4) // Max 40% of editor width
             )
             
