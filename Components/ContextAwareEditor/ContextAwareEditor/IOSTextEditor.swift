@@ -165,11 +165,18 @@ class CustomUITextView: UITextView {
             compositionRect = cursorRect
         }
         
+        // Create overlay if needed to calculate size
+        if predictionOverlay == nil {
+            predictionOverlay = PredictionOverlayUIView()
+            predictionOverlay?.onTap = { [weak self] prediction in
+                self?.editorCore?.acceptPrediction(prediction)
+                self?.syncFromCore()
+            }
+            addSubview(predictionOverlay!)
+        }
+
         // Calculate candidate window size based on content
-        let candidateWindowSize = editorCore.calculateCandidateWindowSize(
-            for: editorCore.currentPredictions,
-            maxWidth: min(250, frame.width * 0.7)
-        )
+        let candidateWindowSize = predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: false, font: self.font) ?? CGSize.zero
         
         // Get editor bounds (text view's bounds)
         let editorBounds = bounds
@@ -181,17 +188,8 @@ class CustomUITextView: UITextView {
             candidateWindowSize: candidateWindowSize
         )
         
-        // Create or update prediction overlay
-        if predictionOverlay == nil {
-            predictionOverlay = PredictionOverlayUIView()
-            predictionOverlay?.onTap = { [weak self] prediction in
-                self?.editorCore?.acceptPrediction(prediction)
-                self?.syncFromCore()
-            }
-            addSubview(predictionOverlay!)
-        }
-        
-        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove, font: self.font)
+        // Configure the overlay with the correct showingAbove value
+        _ = predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove, font: self.font)
         
         // Apply the calculated position
         predictionOverlay?.frame = CGRect(
@@ -227,6 +225,10 @@ class PredictionOverlayUIView: UIView {
     private let label = UILabel()
     private let backgroundView = UIView()
     
+    // Arbitary value. Need to figure a better way to set this.
+    // Also need to take into acount CandidateWindowSize preference
+    private let kMaxCandidateWidth = 800.0
+    
     var onTap: ((String) -> Void)?
     private var currentPrediction: String = ""
     
@@ -252,28 +254,14 @@ class PredictionOverlayUIView: UIView {
         backgroundView.layer.shadowRadius = 4
         
         addSubview(backgroundView)
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
         
         // Setup label
-        label.font = UIFont.monospacedSystemFont(ofSize: 18, weight: .regular) // Smaller font for multiple lines
+        label.font = UIFont.monospacedSystemFont(ofSize: 18, weight: .regular)
         label.textColor = UIColor.secondaryLabel
         label.textAlignment = .left
         label.numberOfLines = 0 // Allow unlimited lines
         
         backgroundView.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            backgroundView.topAnchor.constraint(equalTo: topAnchor),
-            backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
-            label.leadingAnchor.constraint(equalTo: backgroundView.leadingAnchor, constant: 8),
-            label.trailingAnchor.constraint(equalTo: backgroundView.trailingAnchor, constant: -8),
-            label.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 4),
-            label.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -4)
-        ])
         
         // Add tap gesture
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
@@ -281,20 +269,56 @@ class PredictionOverlayUIView: UIView {
         isUserInteractionEnabled = true
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // Manually layout the background and label
+        backgroundView.frame = bounds
+        label.frame = CGRect(
+            x: 8,
+            y: 4,
+            width: bounds.width - 16,
+            height: bounds.height - 8
+        )
+    }
+    
+    private func calculateRequiredSize(for predictions: [String], with font: UIFont, maxWidth: CGFloat) -> CGSize {
+        let candidateText = predictions.enumerated().map { index, prediction in
+            "\(index + 1). \(prediction)"
+        }.joined(separator: "\n")
+        
+        let textSize = candidateText.boundingRect(
+            with: CGSize(width: maxWidth - 16, height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading],
+            attributes: [.font: font],
+            context: nil
+        ).size
+        
+        print ("candidateText: \(candidateText), textSize: \(textSize)")
+        return CGSize(
+            width: ceil(textSize.width) + 16,
+            height: ceil(textSize.height) + 8
+        )
+    }
+    
     @objc private func overlayTapped() {
         onTap?(currentPrediction)
     }
     
-    func configure(with predictions: [String], showingAbove: Bool = false, font: UIFont? = nil) {
+    func configure(with predictions: [String], showingAbove: Bool = false, font: UIFont? = nil) -> CGSize {
         guard !predictions.isEmpty else {
             currentPrediction = ""
             label.text = ""
-            return
+            return CGSize.zero
         }
         
         // Use provided font or keep current font
+        let actualFont: UIFont
         if let font = font {
             label.font = font
+            actualFont = font
+        } else {
+            actualFont = label.font
         }
         
         currentPrediction = predictions.first ?? ""
@@ -312,10 +336,13 @@ class PredictionOverlayUIView: UIView {
         } else {
             backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
         }
+        
+        // Calculate and return the required size
+        return calculateRequiredSize(for: predictions, with: actualFont, maxWidth: kMaxCandidateWidth)
     }
-    
-    func configure(with predictions: [String]) {
-        configure(with: predictions, showingAbove: false, font: nil)
+
+    func configure(with predictions: [String]) -> CGSize {
+        return configure(with: predictions, showingAbove: false, font: nil)
     }
 }
 
