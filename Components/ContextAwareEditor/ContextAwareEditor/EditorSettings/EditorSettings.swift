@@ -9,6 +9,7 @@ enum SuggestionsFontSize: String, CaseIterable {
     case small = "Small"
     case regular = "Regular"
     case medium = "Medium"
+    case large = "Large"
 }
 
 enum AppTheme: String, CaseIterable {
@@ -282,11 +283,43 @@ class EditorSettings: ObservableObject {
     func getSuggestionsFontPointSize() -> CGFloat {
         switch suggestionsFontSize {
         case .small:
-            return 10.0
+            return 16.0
         case .regular:
-            return 12.0
+            return 18.0
         case .medium:
-            return 14.0
+            return 20.0
+        case .large:
+            return 22.0
         }
     }
+    
+    // MARK: - Font Creation Methods
+    
+    #if canImport(AppKit)
+    /// Create the main editor font for macOS using current settings
+    func createEditorFont() -> NSFont {
+        let fontSize = CGFloat(editorFontSize)
+        return NSFont(name: fontFamily, size: fontSize) ?? NSFont.systemFont(ofSize: fontSize)
+    }
+    
+    /// Create the suggestions font for macOS using current settings
+    func createSuggestionsFont() -> NSFont {
+        let fontSize = getSuggestionsFontPointSize()
+        return NSFont(name: fontFamily, size: fontSize) ?? NSFont.systemFont(ofSize: fontSize)
+    }
+    #endif
+    
+    #if canImport(UIKit)
+    /// Create the main editor font for iOS using current settings
+    func createEditorFont() -> UIFont {
+        let fontSize = CGFloat(editorFontSize)
+        return UIFont(name: fontFamily, size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)
+    }
+    
+    /// Create the suggestions font for iOS using current settings
+    func createSuggestionsFont() -> UIFont {
+        let fontSize = getSuggestionsFontPointSize()
+        return UIFont(name: fontFamily, size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)
+    }
+    #endif
 }

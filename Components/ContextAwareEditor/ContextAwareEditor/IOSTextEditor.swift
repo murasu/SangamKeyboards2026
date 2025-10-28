@@ -40,16 +40,18 @@ class CustomUITextView: UITextView {
     }
     
     private func setupSettingsObserver() {
-        settingsObserver = settings.$suggestionsFontSize.sink { [weak self] _ in
-            self?.updateFont()
-            self?.refreshMaxCandidateWidth()
-            self?.updatePredictionDisplay()
-        }
+        // Observe editor font changes (fontFamily + editorFontSize) and suggestion font changes
+        settingsObserver = settings.$fontFamily
+            .combineLatest(settings.$editorFontSize, settings.$suggestionsFontSize)
+            .sink { [weak self] _, _, _ in
+                self?.updateEditorFont()
+                self?.refreshMaxCandidateWidth()
+                self?.updatePredictionDisplay()
+            }
     }
     
-    private func updateFont() {
-        let fontSize = settings.getSuggestionsFontPointSize()
-        font = UIFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
+    private func updateEditorFont() {
+        font = settings.createEditorFont()
     }
     
     private func setupTextView() {
@@ -64,7 +66,7 @@ class CustomUITextView: UITextView {
         // Enable rich text but we'll handle formatting ourselves
         allowsEditingTextAttributes = true
         
-        updateFont() // Use settings-based font size
+        font = settings.createEditorFont() // Use settings-based editor font
         backgroundColor = UIColor.systemBackground
         textColor = UIColor.label
         
@@ -304,14 +306,15 @@ class PredictionOverlayUIView: UIView {
     }
     
     private func setupSettingsObserver() {
-        settingsObserver = settings.$suggestionsFontSize.sink { [weak self] _ in
-            self?.updateFont()
-        }
+        settingsObserver = settings.$suggestionsFontSize
+            .combineLatest(settings.$fontFamily)
+            .sink { [weak self] _, _ in
+                self?.updateFont()
+            }
     }
     
     private func updateFont() {
-        let fontSize = settings.getSuggestionsFontPointSize()
-        label.font = UIFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
+        label.font = settings.createSuggestionsFont()
     }
     
     private func setupView() {

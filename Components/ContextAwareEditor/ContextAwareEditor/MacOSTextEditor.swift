@@ -73,14 +73,15 @@ class PredictionOverlayView: NSView {
     }
     
     private func setupSettingsObserver() {
-        settingsObserver = settings.$suggestionsFontSize.sink { [weak self] _ in
-            self?.updateFont()
-        }
+        settingsObserver = settings.$suggestionsFontSize
+            .combineLatest(settings.$fontFamily)
+            .sink { [weak self] _, _ in
+                self?.updateFont()
+            }
     }
     
     private func updateFont() {
-        let fontSize = settings.getSuggestionsFontPointSize()
-        textField.font = NSFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
+        textField.font = settings.createSuggestionsFont()
     }
     
     private func setupView() {
@@ -175,6 +176,7 @@ struct MacOSTextEditorView: View {
 /// SwiftUI wrapper for the macOS text editor
 struct MacOSTextEditor: NSViewRepresentable {
     @ObservedObject var core: TextEditorCore
+    private let settings = EditorSettings.shared
     
     func makeNSView(context: Context) -> NSScrollView {
         let scrollView = NSScrollView()
@@ -201,7 +203,7 @@ struct MacOSTextEditor: NSViewRepresentable {
         textView.isAutomaticTextReplacementEnabled = false
         textView.isAutomaticSpellingCorrectionEnabled = false
         textView.isContinuousSpellCheckingEnabled = false
-        textView.font = NSFont.monospacedSystemFont(ofSize: 24, weight: .regular)
+        textView.font = settings.createEditorFont() // Use settings-based font
         textView.isRichText = true
         textView.allowsUndo = true
         textView.isEditable = true
@@ -282,9 +284,23 @@ struct MacOSTextEditor: NSViewRepresentable {
         }
         
         private func setupSettingsObserver() {
-            settingsObserver = settings.$suggestionsFontSize.sink { [weak self] _ in
-                self?.refreshMaxCandidateWidth()
-                self?.updatePredictionDisplay(for: self?.textView)
+            settingsObserver = settings.$suggestionsFontSize
+                .combineLatest(settings.$fontFamily, settings.$editorFontSize)
+                .sink { [weak self] _, _, _ in
+                    self?.refreshMaxCandidateWidth()
+                    self?.updateTextViewFont()
+                    self?.updatePredictionDisplay(for: self?.textView)
+                }
+        }
+        
+        private func updateTextViewFont() {
+            guard let textView = self.textView else { return }
+            textView.font = settings.createEditorFont()
+            
+            // Update the text storage font attributes to match
+            let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
+            if fullRange.length > 0 {
+                textView.textStorage?.addAttribute(.font, value: settings.createEditorFont(), range: fullRange)
             }
         }
         
