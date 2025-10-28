@@ -526,7 +526,7 @@ public class TextEditorCore: ObservableObject {
         candidateWindowSize: CGSize
     ) -> (position: CGPoint, shouldShowAbove: Bool) {
         
-        let margin: CGFloat = 4.0 // Small margin from the composition
+        let margin: CGFloat = -8.0 // Small margin from the composition
         let minMarginFromEdge: CGFloat = 8.0 // Minimum margin from editor edges
         
         // Start with positioning below the composition
