@@ -275,4 +275,18 @@ class EditorSettings: ObservableObject {
         keyboardStyle = .default
         #endif
     }
+    
+    // MARK: - Font Size Mapping
+    
+    /// Get the actual font point size for suggestions based on the enum setting
+    func getSuggestionsFontPointSize() -> CGFloat {
+        switch suggestionsFontSize {
+        case .small:
+            return 10.0
+        case .regular:
+            return 12.0
+        case .medium:
+            return 14.0
+        }
+    }
 }

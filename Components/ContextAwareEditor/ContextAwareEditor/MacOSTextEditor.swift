@@ -36,6 +36,7 @@
 #if canImport(AppKit)
 import AppKit
 import SwiftUI
+import Combine
 
 /// Custom NSTextView for macOS with key interception and prediction support
 /// NOTE: This was the original approach but subclassing breaks in SwiftUI NSViewRepresentable
@@ -52,15 +53,34 @@ class PredictionOverlayView: NSView {
     private let textField = NSTextField()
     private var arrowIndicator: NSView?
     private var isShowingAbove = false
+    private let settings = EditorSettings.shared
+    private var settingsObserver: AnyCancellable?
     
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         setupView()
+        setupSettingsObserver()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
+        setupSettingsObserver()
+    }
+    
+    deinit {
+        settingsObserver?.cancel()
+    }
+    
+    private func setupSettingsObserver() {
+        settingsObserver = settings.$suggestionsFontSize.sink { [weak self] _ in
+            self?.updateFont()
+        }
+    }
+    
+    private func updateFont() {
+        let fontSize = settings.getSuggestionsFontPointSize()
+        textField.font = NSFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
     }
     
     private func setupView() {
@@ -79,7 +99,7 @@ class PredictionOverlayView: NSView {
         textField.isBordered = false
         textField.isEditable = false
         textField.backgroundColor = .clear
-        textField.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular) // Smaller font for multiple lines
+        updateFont() // Use settings-based font size
         textField.textColor = NSColor.secondaryLabelColor
         textField.alignment = .left
         textField.maximumNumberOfLines = 0 // Allow unlimited lines
@@ -248,9 +268,24 @@ struct MacOSTextEditor: NSViewRepresentable {
         private weak var textView: NSTextView?
         private var cachedMaxCandidateWidth: CGFloat = 0
         private var lastEditorWidth: CGFloat = 0
+        private let settings = EditorSettings.shared
+        private var settingsObserver: AnyCancellable?
         
         init(_ parent: MacOSTextEditor) {
             self.parent = parent
+            super.init()
+            setupSettingsObserver()
+        }
+        
+        deinit {
+            settingsObserver?.cancel()
+        }
+        
+        private func setupSettingsObserver() {
+            settingsObserver = settings.$suggestionsFontSize.sink { [weak self] _ in
+                self?.refreshMaxCandidateWidth()
+                self?.updatePredictionDisplay(for: self?.textView)
+            }
         }
         
         func setTextView(_ textView: NSTextView) {
@@ -267,8 +302,7 @@ struct MacOSTextEditor: NSViewRepresentable {
         
         /// Calculate maximum candidate window width once and cache it
         private func calculateMaxCandidateWidth(editorWidth: CGFloat) {
-            // TODO: Get font size from user defaults later
-            let fontSize: CGFloat = 12 // Match the PredictionOverlayView font size
+            let fontSize = settings.getSuggestionsFontPointSize()
             let requiredWidth = parent.core.calculateMinimumCandidateWidth(fontSize: fontSize)
             let preferredWidth = editorWidth * 0.4
             
@@ -322,7 +356,8 @@ struct MacOSTextEditor: NSViewRepresentable {
         
         // MARK: - Prediction Display
         
-        private func updatePredictionDisplay(for textView: NSTextView) {
+        private func updatePredictionDisplay(for textView: NSTextView?) {
+            guard let textView = textView else { return }
             if parent.core.showingPrediction && !parent.core.currentPredictions.isEmpty {
                 showPredictionOverlay(for: textView)
             } else {
@@ -365,7 +400,7 @@ struct MacOSTextEditor: NSViewRepresentable {
             // Calculate candidate window size based on content
             let candidateWindowSize = parent.core.calculateCandidateWindowSize(
                 for: parent.core.currentPredictions,
-                fontSize: 16, // Match the PredictionOverlayView font size
+                fontSize: settings.getSuggestionsFontPointSize(),
                 maxWidth: maxCandidateWidth
             )
             

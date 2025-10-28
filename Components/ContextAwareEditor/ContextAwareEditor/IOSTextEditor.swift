@@ -8,6 +8,7 @@
 #if canImport(UIKit)
 import UIKit
 import SwiftUI
+import Combine
 
 /// Custom UITextView for iOS with key interception and prediction support
 class CustomUITextView: UITextView {
@@ -16,21 +17,39 @@ class CustomUITextView: UITextView {
     private var keyboardObserver: NSObjectProtocol?
     private var cachedMaxCandidateWidth: CGFloat = 0
     private var lastEditorWidth: CGFloat = 0
+    private let settings = EditorSettings.shared
+    private var settingsObserver: AnyCancellable?
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         setupTextView()
+        setupSettingsObserver()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupTextView()
+        setupSettingsObserver()
     }
     
     deinit {
         if let observer = keyboardObserver {
             NotificationCenter.default.removeObserver(observer)
         }
+        settingsObserver?.cancel()
+    }
+    
+    private func setupSettingsObserver() {
+        settingsObserver = settings.$suggestionsFontSize.sink { [weak self] _ in
+            self?.updateFont()
+            self?.refreshMaxCandidateWidth()
+            self?.updatePredictionDisplay()
+        }
+    }
+    
+    private func updateFont() {
+        let fontSize = settings.getSuggestionsFontPointSize()
+        font = UIFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
     }
     
     private func setupTextView() {
@@ -45,7 +64,7 @@ class CustomUITextView: UITextView {
         // Enable rich text but we'll handle formatting ourselves
         allowsEditingTextAttributes = true
         
-        font = UIFont.monospacedSystemFont(ofSize: 16, weight: .regular)
+        updateFont() // Use settings-based font size
         backgroundColor = UIColor.systemBackground
         textColor = UIColor.label
         
@@ -82,7 +101,7 @@ class CustomUITextView: UITextView {
     
     /// Calculate maximum candidate window width once and cache it
     private func calculateMaxCandidateWidth() {
-        let fontSize = self.font?.pointSize ?? 16
+        let fontSize = settings.getSuggestionsFontPointSize()
         
         // Get minimum width required for long words from the unified core method
         let requiredWidth = editorCore?.calculateMinimumCandidateWidth(fontSize: fontSize) ?? 200
@@ -212,7 +231,7 @@ class CustomUITextView: UITextView {
         let maxCandidateWidth = getMaxCandidateWidth()
         let candidateWindowSize = editorCore.calculateCandidateWindowSize(
             for: editorCore.currentPredictions,
-            fontSize: self.font?.pointSize ?? 16,
+            fontSize: settings.getSuggestionsFontPointSize(),
             maxWidth: maxCandidateWidth
         )
         
@@ -227,7 +246,7 @@ class CustomUITextView: UITextView {
         )
         
         // Configure the overlay with the correct showingAbove value
-        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove, font: self.font)
+        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove)
         
         // Apply the calculated position
         predictionOverlay?.frame = CGRect(
@@ -262,6 +281,8 @@ class CustomUITextView: UITextView {
 class PredictionOverlayUIView: UIView {
     private let label = UILabel()
     private let backgroundView = UIView()
+    private let settings = EditorSettings.shared
+    private var settingsObserver: AnyCancellable?
         
     var onTap: ((String) -> Void)?
     private var currentPrediction: String = ""
@@ -269,11 +290,28 @@ class PredictionOverlayUIView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        setupSettingsObserver()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupView()
+        setupSettingsObserver()
+    }
+    
+    deinit {
+        settingsObserver?.cancel()
+    }
+    
+    private func setupSettingsObserver() {
+        settingsObserver = settings.$suggestionsFontSize.sink { [weak self] _ in
+            self?.updateFont()
+        }
+    }
+    
+    private func updateFont() {
+        let fontSize = settings.getSuggestionsFontPointSize()
+        label.font = UIFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
     }
     
     private func setupView() {
@@ -290,7 +328,7 @@ class PredictionOverlayUIView: UIView {
         addSubview(backgroundView)
         
         // Setup label
-        label.font = UIFont.monospacedSystemFont(ofSize: 18, weight: .regular)
+        updateFont() // Use settings-based font size
         label.textColor = UIColor.secondaryLabel
         label.textAlignment = .left
         label.numberOfLines = 0 // Allow unlimited lines
@@ -321,20 +359,11 @@ class PredictionOverlayUIView: UIView {
         onTap?(currentPrediction)
     }
     
-    func configure(with predictions: [String], showingAbove: Bool = false, font: UIFont? = nil) {
+    func configure(with predictions: [String], showingAbove: Bool = false) {
         guard !predictions.isEmpty else {
             currentPrediction = ""
             label.text = ""
             return
-        }
-        
-        // Use provided font or keep current font
-        let actualFont: UIFont
-        if let font = font {
-            label.font = font
-            actualFont = font
-        } else {
-            actualFont = label.font
         }
         
         currentPrediction = predictions.first ?? ""
@@ -352,10 +381,6 @@ class PredictionOverlayUIView: UIView {
         } else {
             backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
         }
-    }
-
-    func configure(with predictions: [String]) {
-        configure(with: predictions, showingAbove: false, font: nil)
     }
 }
 
