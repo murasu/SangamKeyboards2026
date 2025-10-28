@@ -25,8 +25,8 @@ struct PredictorOptions {
     var enableUserDictionary: Bool = false
     var scoreThreshold: Float = 1.0  // Default to 1.0 to maintain default weights
     
-    func toCOptions() -> PredictorOptions {
-        var options = PredictorOptions()
+    func toCOptions() -> MurasuIMEngine.PredictorOptions {  // ← Return C struct
+        var options = MurasuIMEngine.PredictorOptions()     // ← Create C struct
         options.allow_variations = allowVariations ? 1 : 0
         options.enable_user_dictionary = enableUserDictionary ? 1 : 0
         options.score_threshold = scoreThreshold
