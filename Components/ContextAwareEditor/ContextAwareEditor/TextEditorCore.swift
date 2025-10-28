@@ -943,8 +943,9 @@ public class TextProcessor {
     }
 }
 
-/// Handles word prediction (placeholder implementation)
+/// Handles word prediction using MurasuIMEngine
 public class PredictionEngine {
+    private let predictorManager = PredictorManager.shared
     private let samplePredictions = [
         "function", "variable", "constant", "import", "export",
         "class", "struct", "protocol", "extension", "enum",
@@ -957,13 +958,58 @@ public class PredictionEngine {
     
     public init() {}
     
-    /// Get predictions for a word - enhanced with custom function support
+    /// Get predictions for a word - uses MurasuIMEngine predictor
     public func getPrediction(forWord word: String, maxCount: Int = 3) -> [String] {
+        // Try custom prediction first (for backward compatibility)
         if let customPrediction = customPrediction {
             let results = customPrediction(word)
             return Array(results.prefix(maxCount))
         }
         
+        // Use MurasuIMEngine predictor
+        guard let predictor = predictorManager.getPredictor() else {
+            return fallbackPredictions(for: word, maxCount: maxCount)
+        }
+        
+        do {
+            let results = try predictor.getWordPredictions(
+                prefix: word,
+                targetScript: .tamil,
+                annotationType: .notrequired,
+                maxResults: maxCount
+            )
+            return results.map { $0.word }
+        } catch {
+            print("Prediction error: \(error)")
+            return fallbackPredictions(for: word, maxCount: maxCount)
+        }
+    }
+    
+    /// Get contextual predictions (bigram/trigram) - new method using MurasuIMEngine
+    public func getContextualPredictions(baseWord: String, secondWord: String, 
+                                       prefix: String, maxCount: Int = 3) -> [String] {
+        guard let predictor = predictorManager.getPredictor() else {
+            return fallbackPredictions(for: prefix, maxCount: maxCount)
+        }
+        
+        do {
+            let results = try predictor.getNgramPredictions(
+                baseWord: baseWord,
+                secondWord: secondWord,
+                prefix: prefix,
+                targetScript: .tamil,
+                annotationType: .notrequired,
+                maxResults: maxCount
+            )
+            return results.map { $0.word }
+        } catch {
+            print("Contextual prediction error: \(error)")
+            return fallbackPredictions(for: prefix, maxCount: maxCount)
+        }
+    }
+    
+    /// Fallback predictions when MurasuIMEngine is not available
+    private func fallbackPredictions(for word: String, maxCount: Int) -> [String] {
         guard word.count >= 2 else { return [] }
         
         // Filter sample predictions that start with the word
