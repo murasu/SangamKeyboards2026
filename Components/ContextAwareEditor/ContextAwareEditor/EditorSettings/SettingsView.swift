@@ -173,6 +173,7 @@ struct SettingsView: View {
                 
                 Picker("Max Suggestions", selection: $settings.maxSuggestions) {
                     Text("3").tag(3)
+                    Text("4").tag(4)
                     Text("5").tag(5)
                 }
                 #if os(iOS)

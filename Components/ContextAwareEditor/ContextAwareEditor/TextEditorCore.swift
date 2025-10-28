@@ -36,11 +36,8 @@ public class TextEditorCore: ObservableObject {
     private var compositionStartIndex: String.Index?  // Track using String.Index
     private var sangamTranslator: SangamKeyTranslator?
     
-    // User properties
-    private var showCandidateWindow: Bool = true
-    private var maxCandidates: Int {
-        return UserDefaults.standard.object(forKey: "MaxCandidates") as? Int ?? 3
-    }
+    // Settings reference
+    private let settings = EditorSettings.shared
     
     // Font configuration
     private var defaultFont: PlatformFont {
@@ -70,17 +67,12 @@ public class TextEditorCore: ObservableObject {
         
         setupTextStorage()
         setupSangamTranslator()
-        
-        // TODO: Read candidate window preference from UserDefaults
-        //showCandidateWindow = UserDefaults.standard.object(forKey: "showCandidateWindow") as? Bool ?? true
-        showCandidateWindow = maxCandidates > 0
     }
     
     private func registerDefaultFontPreferences() {
         let defaults: [String: Any] = [
             "TextEditorFontName": "Tamil Sangam MN",
-            "TextEditorFontSize": 24.0,
-            "MaxCandidates": 3
+            "TextEditorFontSize": 24.0
         ]
         UserDefaults.standard.register(defaults: defaults)
     }
@@ -210,9 +202,9 @@ public class TextEditorCore: ObservableObject {
         updateCompositionDisplay(updatedComposition)
         compositionBuffer = updatedComposition
         
-        // Generate candidates for the translated text only if user preference allows
+        // Generate candidates for the translated text only if suggestions are enabled
         let parsedResult = parseSangamResult(translatedResult)
-        if showCandidateWindow {
+        if settings.enableSuggestions {
             generateCandidates(for: parsedResult.translatedText)
         }
     }
@@ -272,8 +264,8 @@ public class TextEditorCore: ObservableObject {
                 updateCompositionDisplay(deletedComposition)
                 compositionBuffer = deletedComposition
 
-                // Generate candidates only if user preference allows
-                if showCandidateWindow {
+                // Generate candidates only if suggestions are enabled
+                if settings.enableSuggestions {
                     generateCandidates(for: compositionBuffer)
                 }
             }
@@ -442,7 +434,7 @@ public class TextEditorCore: ObservableObject {
         // You can replace this with actual candidate generation logic
         let dummyTamilCandidates = [
             "அன்பு", "இன்பம்", "உயிர்", "எழுத்து", "ஒலி", "கல்வி", "நட்பு"
-        ].shuffled().prefix(maxCandidates)
+        ].shuffled().prefix(settings.maxSuggestions)
         
         if !dummyTamilCandidates.isEmpty {
             currentPredictions = Array(dummyTamilCandidates)
@@ -633,8 +625,8 @@ public class TextEditorCore: ObservableObject {
         print("🔍 updatePredictions called at location \(location)")
         
         // Check user preference first - don't generate predictions if disabled
-        guard showCandidateWindow else {
-            print("🔍 Candidate window disabled, hiding predictions")
+        guard settings.enableSuggestions else {
+            print("🔍 Suggestions disabled, hiding predictions")
             hidePredictions()
             return
         }
@@ -663,7 +655,7 @@ public class TextEditorCore: ObservableObject {
         }
         
         // Get predictions for the current word
-        let predictions = predictionEngine.getPrediction(forWord: currentWord, maxCount: maxCandidates)
+        let predictions = predictionEngine.getPrediction(forWord: currentWord, maxCount: settings.maxSuggestions)
         print("🔍 Got \(predictions.count) predictions for '\(currentWord)'")
         
         if !predictions.isEmpty {
@@ -761,17 +753,7 @@ public class TextEditorCore: ObservableObject {
         return UserDefaults.standard.object(forKey: "TextEditorFontSize") as? CGFloat ?? 24.0
     }
     
-    /// Update the max candidates preference (3, 4, or 5)
-    public func setMaxCandidates(_ count: Int) {
-        let clampedCount = max(3, min(5, count)) // Ensure it's between 3 and 5
-        UserDefaults.standard.set(clampedCount, forKey: "MaxCandidates")
-    }
-    
-    /// Get current max candidates setting
-    public var currentMaxCandidates: Int {
-        return maxCandidates
-    }
-    
+
     /// Refresh the text storage font after preference changes
     private func refreshTextStorageFont() {
         let fullRange = NSRange(location: 0, length: textStorage.length)
