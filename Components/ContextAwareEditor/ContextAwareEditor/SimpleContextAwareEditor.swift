@@ -10,7 +10,7 @@ import SwiftUI
 /// Simplified context-aware text editor that actually works
 public struct SimpleContextAwareEditor: View {
     @State private var text: String
-    @State private var predictions: [String] = []
+    @State private var predictions: [PredictionResult] = []
     @State private var showingPredictions = false
     
     private let core = TextEditorCore()
@@ -35,8 +35,8 @@ public struct SimpleContextAwareEditor: View {
                 HStack {
                     Text("Predictions:")
                         .font(.caption)
-                    ForEach(predictions.prefix(3), id: \.self) { prediction in
-                        Button(prediction) {
+                    ForEach(predictions.prefix(3), id: \.wordId) { prediction in
+                        Button(prediction.word) {
                             acceptPrediction(prediction)
                         }
                         .buttonStyle(.bordered)
@@ -69,11 +69,11 @@ public struct SimpleContextAwareEditor: View {
         showingPredictions = !predictions.isEmpty
     }
     
-    private func acceptPrediction(_ prediction: String) {
+    private func acceptPrediction(_ prediction: PredictionResult) {
         // Replace the last word with the prediction
         var words = text.split(separator: " ").map(String.init)
         if !words.isEmpty {
-            words[words.count - 1] = prediction
+            words[words.count - 1] = prediction.word
             text = words.joined(separator: " ") + " "
         }
         

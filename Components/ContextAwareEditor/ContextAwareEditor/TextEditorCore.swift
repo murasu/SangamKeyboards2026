@@ -25,7 +25,7 @@ typealias PlatformColor = UIColor
 @MainActor
 public class TextEditorCore: ObservableObject {
     @Published var textStorage = NSTextStorage()
-    @Published var currentPredictions: [String] = []
+    @Published var currentPredictions: [PredictionResult] = []
     @Published var showingPrediction = false
     @Published var predictionRange: NSRange?
     
@@ -430,14 +430,11 @@ public class TextEditorCore: ObservableObject {
     // MARK: - Candidate Generation
     
     private func generateCandidates(for text: String) {
-        // For now, generate dummy Tamil candidates
-        // You can replace this with actual candidate generation logic
-        let dummyTamilCandidates = [
-            "அன்பு", "இன்பம்", "உயிர்", "எழுத்து", "ஒலி", "கல்வி", "நட்பு"
-        ].shuffled().prefix(settings.maxSuggestions)
+        // Use the prediction engine to get real predictions
+        let predictions = predictionEngine.getPrediction(forWord: text, maxCount: settings.maxSuggestions)
         
-        if !dummyTamilCandidates.isEmpty {
-            currentPredictions = Array(dummyTamilCandidates)
+        if !predictions.isEmpty {
+            currentPredictions = predictions
             predictionRange = compositionRange
             showingPrediction = true
         } else {
@@ -459,14 +456,14 @@ public class TextEditorCore: ObservableObject {
     }
     
     /// Calculate the appropriate size for the candidate window based on content
-    public func calculateCandidateWindowSize(for predictions: [String], fontSize: CGFloat = 14, maxWidth: CGFloat = 250) -> CGSize {
+    public func calculateCandidateWindowSize(for predictions: [PredictionResult], fontSize: CGFloat = 14, maxWidth: CGFloat = 250) -> CGSize {
         guard !predictions.isEmpty else {
             return CGSize(width: 150, height: 30)
         }
         
         // Create numbered candidate text like the iOS version
         let candidateText = predictions.enumerated().map { index, prediction in
-            "\(index + 1). \(prediction)"
+            "\(index + 1). \(prediction.word)"
         }.joined(separator: "\n")
         
         // Use platform-agnostic text measurement
@@ -670,13 +667,13 @@ public class TextEditorCore: ObservableObject {
     }
     
     /// Accept the current prediction
-    public func acceptPrediction(_ prediction: String) {
+    public func acceptPrediction(_ prediction: PredictionResult) {
         if isComposing {
             // Replace composition with selected candidate
             guard let range = compositionRange else { return }
             
             let attributes = getNormalTextAttributes()
-            let attributedText = NSAttributedString(string: prediction, attributes: attributes)
+            let attributedText = NSAttributedString(string: prediction.word, attributes: attributes)
             
             textStorage.replaceCharacters(in: range, with: attributedText)
             
@@ -688,7 +685,7 @@ public class TextEditorCore: ObservableObject {
             // Legacy behavior for word predictions
             guard let range = predictionRange else { return }
             
-            textStorage.replaceCharacters(in: range, with: prediction)
+            textStorage.replaceCharacters(in: range, with: prediction.word)
             hidePredictions()
             
             onTextChange?(textStorage.string)
@@ -959,11 +956,22 @@ public class PredictionEngine {
     public init() {}
     
     /// Get predictions for a word - uses MurasuIMEngine predictor
-    public func getPrediction(forWord word: String, maxCount: Int = 3) -> [String] {
+    public func getPrediction(forWord word: String, maxCount: Int = 3) -> [PredictionResult] {
         // Try custom prediction first (for backward compatibility)
         if let customPrediction = customPrediction {
-            let results = customPrediction(word)
-            return Array(results.prefix(maxCount))
+            let stringResults = customPrediction(word)
+            // Convert strings to PredictionResult objects for backward compatibility
+            return Array(stringResults.prefix(maxCount).enumerated().map { index, word in
+                PredictionResult(
+                    word: word,
+                    annotation: "",
+                    frequency: 1.0,
+                    wordId: Int32(index),
+                    finalScore: Float(maxCount - index), // Higher score for earlier results
+                    userWord: false,
+                    isEmoji: false
+                )
+            })
         }
         
         // Use MurasuIMEngine predictor
@@ -978,7 +986,9 @@ public class PredictionEngine {
                 annotationType: .notrequired,
                 maxResults: maxCount
             )
-            return results.map { $0.word }
+            
+            // Sort by finalScore (highest first) and return rich results
+            return results.sorted { $0.finalScore > $1.finalScore }
         } catch {
             print("Prediction error: \(error)")
             return fallbackPredictions(for: word, maxCount: maxCount)
@@ -987,7 +997,7 @@ public class PredictionEngine {
     
     /// Get contextual predictions (bigram/trigram) - new method using MurasuIMEngine
     public func getContextualPredictions(baseWord: String, secondWord: String, 
-                                       prefix: String, maxCount: Int = 3) -> [String] {
+                                       prefix: String, maxCount: Int = 3) -> [PredictionResult] {
         guard let predictor = predictorManager.getPredictor() else {
             return fallbackPredictions(for: prefix, maxCount: maxCount)
         }
@@ -1001,7 +1011,9 @@ public class PredictionEngine {
                 annotationType: .notrequired,
                 maxResults: maxCount
             )
-            return results.map { $0.word }
+            
+            // Sort by finalScore (highest first) and return rich results
+            return results.sorted { $0.finalScore > $1.finalScore }
         } catch {
             print("Contextual prediction error: \(error)")
             return fallbackPredictions(for: prefix, maxCount: maxCount)
@@ -1009,8 +1021,12 @@ public class PredictionEngine {
     }
     
     /// Fallback predictions when MurasuIMEngine is not available
-    private func fallbackPredictions(for word: String, maxCount: Int) -> [String] {
-        guard word.count >= 2 else { return [] }
+    private func fallbackPredictions(for word: String, maxCount: Int) -> [PredictionResult] {
+        guard word.count >= 2 else { 
+            // Return empty array with debug message
+            print("No predictions: word too short")
+            return []
+        }
         
         // Filter sample predictions that start with the word
         let filtered = samplePredictions.filter { $0.hasPrefix(word.lowercased()) }
@@ -1022,9 +1038,25 @@ public class PredictionEngine {
         let combined = Array(Set(filtered + customMatches))
         
         // Add some random predictions to simulate real behavior if we don't have enough matches
-        let randomPredictions = combined.isEmpty ? samplePredictions.shuffled().prefix(maxCount) : []
+        let allCandidates = combined.isEmpty ? Array(samplePredictions.shuffled().prefix(maxCount)) : Array(combined.prefix(maxCount))
         
-        return Array((combined + randomPredictions).prefix(maxCount))
+        if allCandidates.isEmpty {
+            print("No predictions: no matches found")
+            return []
+        }
+        
+        // Convert to PredictionResult objects
+        return allCandidates.enumerated().map { index, word in
+            PredictionResult(
+                word: word,
+                annotation: "fallback",
+                frequency: 0.5,
+                wordId: Int32(index + 1000), // Offset to distinguish from real results
+                finalScore: Float(maxCount - index), // Higher score for earlier results
+                userWord: false,
+                isEmoji: false
+            )
+        }
     }
     
     /// Set a custom prediction function

@@ -117,7 +117,7 @@ class PredictionOverlayView: NSView {
         ])
     }
     
-    func configure(with predictions: [String], showingAbove: Bool = false) {
+    func configure(with predictions: [PredictionResult], showingAbove: Bool = false) {
         guard !predictions.isEmpty else { 
             textField.stringValue = ""
             return 
@@ -127,7 +127,7 @@ class PredictionOverlayView: NSView {
         
         // Show all predictions, each on a separate line, numbered
         let candidateText = predictions.enumerated().map { index, prediction in
-            "\(index + 1). \(prediction)"
+            "\(index + 1). \(prediction.word)"
         }.joined(separator: "\n")
         
         textField.stringValue = candidateText
@@ -140,7 +140,7 @@ class PredictionOverlayView: NSView {
         }
     }
     
-    func configure(with predictions: [String]) {
+    func configure(with predictions: [PredictionResult]) {
         configure(with: predictions, showingAbove: false)
     }
 }

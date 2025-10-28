@@ -286,8 +286,8 @@ class PredictionOverlayUIView: UIView {
     private let settings = EditorSettings.shared
     private var settingsObserver: AnyCancellable?
         
-    var onTap: ((String) -> Void)?
-    private var currentPrediction: String = ""
+    var onTap: ((PredictionResult) -> Void)?
+    private var currentPrediction: PredictionResult?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -359,21 +359,23 @@ class PredictionOverlayUIView: UIView {
     
 
     @objc private func overlayTapped() {
-        onTap?(currentPrediction)
+        if let prediction = currentPrediction {
+            onTap?(prediction)
+        }
     }
     
-    func configure(with predictions: [String], showingAbove: Bool = false) {
+    func configure(with predictions: [PredictionResult], showingAbove: Bool = false) {
         guard !predictions.isEmpty else {
-            currentPrediction = ""
+            currentPrediction = nil
             label.text = ""
             return
         }
         
-        currentPrediction = predictions.first ?? ""
+        currentPrediction = predictions.first
         
         // Show all predictions, each on a separate line, numbered
         let candidateText = predictions.enumerated().map { index, prediction in
-            "\(index + 1). \(prediction)"
+            "\(index + 1). \(prediction.word)"
         }.joined(separator: "\n")
         
         label.text = candidateText

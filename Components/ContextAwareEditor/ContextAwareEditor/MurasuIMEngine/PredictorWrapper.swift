@@ -47,7 +47,7 @@ extension AnnotationDataType {
     static let transliterated = AnnotationDataType(rawValue: 2)
 }
 
-struct PredictionResult {
+public struct PredictionResult {
     let word: String
     let annotation: String
     let frequency: Double
@@ -84,6 +84,17 @@ struct PredictionResult {
         self.finalScore = cResult.final_score
         self.userWord = cResult.user_word
         self.isEmoji = cResult.is_emoji
+    }
+    
+    // Manual initializer for creating fallback predictions
+    public init(word: String, annotation: String, frequency: Double, wordId: Int32, finalScore: Float, userWord: Bool, isEmoji: Bool) {
+        self.word = word
+        self.annotation = annotation
+        self.frequency = frequency
+        self.wordId = wordId
+        self.finalScore = finalScore
+        self.userWord = userWord
+        self.isEmoji = isEmoji
     }
 }
 
