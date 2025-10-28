@@ -1,0 +1,9 @@
+framework module MurasuIMEngine {
+    header "predictor_c_api.h"
+    header "ScriptConverterStructs.h"
+    
+    link "MurasuPrediction"
+    link "c++"
+    
+    export *
+}

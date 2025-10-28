@@ -7,7 +7,21 @@ class PredictorManager {
     static let shared = PredictorManager()
     private var predictor: Predictor?
     
-    private init() { }
+    private init() { 
+        #if DEBUG
+        print("PredictorManager initializing for platform: \(platformName)")
+        #endif
+    }
+    
+    private var platformName: String {
+        #if os(macOS)
+        return "macOS"
+        #elseif os(iOS)
+        return "iOS"
+        #else
+        return "Unknown"
+        #endif
+    }
     
     func getPredictor() -> Predictor? {
         if predictor == nil {
