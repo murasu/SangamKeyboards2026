@@ -82,8 +82,6 @@ struct ContentView: View {
             .buttonStyle(.borderedProminent)
             .controlSize(.small)
             
-
-            
             editor
                 .frame(minHeight: 400)
                 .border(Color.gray.opacity(0.3), width: 1)
