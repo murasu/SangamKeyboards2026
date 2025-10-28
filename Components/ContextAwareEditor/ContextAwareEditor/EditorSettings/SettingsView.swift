@@ -47,30 +47,39 @@ struct SettingsView: View {
     #if os(macOS)
     private var macOSSettingsView: some View {
         TabView {
-            Form {
-                keyboardSection
-                textSection
+            VStack(alignment: .leading) {
+                Form {
+                    keyboardSection
+                    textSection
+                }
+                Spacer()
             }
             .tabItem {
                 Label("Editor", systemImage: "textformat")
             }
             .padding()
             
-            Form {
-                suggestionsSection
+            VStack(alignment: .leading) {
+                Form {
+                    suggestionsSection
+                }
+                Spacer()
             }
             .tabItem {
                 Label("Suggestions", systemImage: "text.bubble")
             }
             .padding()
             
-            Form {
-                Section {
-                    Button("Reset to Defaults") {
-                        settings.resetToDefaults()
+            VStack(alignment: .leading) {
+                Form {
+                    Section {
+                        Button("Reset to Defaults") {
+                            settings.resetToDefaults()
+                        }
+                        .foregroundColor(.red)
                     }
-                    .foregroundColor(.red)
                 }
+                Spacer()
             }
             .tabItem {
                 Label("Advanced", systemImage: "gearshape")
@@ -84,7 +93,7 @@ struct SettingsView: View {
     // MARK: - Common Sections
     
     private var keyboardSection: some View {
-        Section("Keyboard") {
+        Section {
             Picker("Keyboard Type", selection: $settings.keyboardType) {
                 ForEach(EditorSettings.keyboardTypes, id: \.id) { keyboardType in
                     Text(keyboardType.name)
@@ -94,11 +103,20 @@ struct SettingsView: View {
             #if os(iOS)
             .pickerStyle(.menu)
             #endif
+        } header: {
+            #if os(macOS)
+            Text("Keyboard")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+            #else
+            Text("Keyboard")
+            #endif
         }
     }
     
     private var textSection: some View {
-        Section("Text & Font") {
+        Section {
             Picker("Font Family", selection: $settings.fontFamily) {
                 ForEach(EditorSettings.availableFonts, id: \.self) { font in
                     Text(font)
@@ -121,23 +139,25 @@ struct SettingsView: View {
                     value: $settings.editorFontSize,
                     in: 12...72,
                     step: 1
-                ) {
-                    Text("Font Size")
-                } minimumValueLabel: {
-                    Text("12")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                } maximumValueLabel: {
-                    Text("72")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
+                )
+                #if os(iOS)
+                .accessibilityLabel("Font Size")
+                #endif
             }
+        } header: {
+            #if os(macOS)
+            Text("Text & Font")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+            #else
+            Text("Text & Font")
+            #endif
         }
     }
     
     private var suggestionsSection: some View {
-        Section("Suggestions & Predictions") {
+        Section {
             Toggle("Enable Suggestions", isOn: $settings.enableSuggestions)
             
             if settings.enableSuggestions {
@@ -151,59 +171,33 @@ struct SettingsView: View {
                 .pickerStyle(.segmented)
                 #endif
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("Max Predictions")
-                        Spacer()
-                        Text("\(settings.maxPredictions)")
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Slider(
-                        value: Binding(
-                            get: { Double(settings.maxPredictions) },
-                            set: { settings.maxPredictions = Int($0) }
-                        ),
-                        in: 1...10,
-                        step: 1
-                    ) {
-                        Text("Max Predictions")
-                    } minimumValueLabel: {
-                        Text("1")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    } maximumValueLabel: {
-                        Text("10")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
+                Picker("Max Suggestions", selection: $settings.maxSuggestions) {
+                    Text("3").tag(3)
+                    Text("5").tag(5)
                 }
+                #if os(iOS)
+                .pickerStyle(.segmented)
+                #endif
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("Prediction Delay")
-                        Spacer()
-                        Text("\(settings.predictionDelay, specifier: "%.1f")s")
-                            .foregroundColor(.secondary)
-                    }
-                    
-                    Slider(
-                        value: $settings.predictionDelay,
-                        in: 0.1...2.0,
-                        step: 0.1
-                    ) {
-                        Text("Prediction Delay")
-                    } minimumValueLabel: {
-                        Text("0.1s")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    } maximumValueLabel: {
-                        Text("2.0s")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
+                Toggle("Auto-Select Best Word", isOn: $settings.autoSelectBestWord)
+                
+                Toggle("Learn Typed Words", isOn: $settings.learnTypedWords)
+                
+                Toggle("Show Annotations", isOn: $settings.showAnnotations)
+                
+                Toggle("Include Emojis", isOn: $settings.includeEmojis)
+                
+                Toggle("Show Vertical Layout", isOn: $settings.showVertical)
             }
+        } header: {
+            #if os(macOS)
+            Text("Suggestions")
+                .font(.title2)
+                .fontWeight(.semibold)
+                .foregroundColor(.primary)
+            #else
+            Text("Suggestions")
+            #endif
         }
     }
 }

@@ -35,7 +35,12 @@ class EditorSettings: ObservableObject {
     @Published var enableSuggestions: Bool = true
     @Published var suggestionsFontSize: SuggestionsFontSize = .regular
     @Published var predictionDelay: Double = 0.5
-    @Published var maxPredictions: Int = 5
+    @Published var maxSuggestions: Int = 5
+    @Published var autoSelectBestWord: Bool = true
+    @Published var learnTypedWords: Bool = true
+    @Published var showAnnotations: Bool = false
+    @Published var includeEmojis: Bool = false
+    @Published var showVertical: Bool = true
     @Published var enableComposition: Bool = true
     @Published var enableSoundEffects: Bool = false
     @Published var appTheme: AppTheme = .system
@@ -89,7 +94,12 @@ class EditorSettings: ObservableObject {
         static let enableSuggestions = "enableSuggestions"
         static let suggestionsFontSize = "suggestionsFontSize"
         static let predictionDelay = "predictionDelay"
-        static let maxPredictions = "maxPredictions"
+        static let maxSuggestions = "maxSuggestions"
+        static let autoSelectBestWord = "autoSelectBestWord"
+        static let learnTypedWords = "learnTypedWords"
+        static let showAnnotations = "showAnnotations"
+        static let includeEmojis = "includeEmojis"
+        static let showVertical = "showVertical"
         static let enableComposition = "enableComposition"
         static let enableSoundEffects = "enableSoundEffects"
         static let appTheme = "appTheme"
@@ -127,7 +137,12 @@ class EditorSettings: ObservableObject {
         }
         
         predictionDelay = defaults.object(forKey: UserDefaultsKeys.predictionDelay) as? Double ?? 0.5
-        maxPredictions = defaults.object(forKey: UserDefaultsKeys.maxPredictions) as? Int ?? 5
+        maxSuggestions = defaults.object(forKey: UserDefaultsKeys.maxSuggestions) as? Int ?? 5
+        autoSelectBestWord = defaults.object(forKey: UserDefaultsKeys.autoSelectBestWord) as? Bool ?? true
+        learnTypedWords = defaults.object(forKey: UserDefaultsKeys.learnTypedWords) as? Bool ?? true
+        showAnnotations = defaults.object(forKey: UserDefaultsKeys.showAnnotations) as? Bool ?? false
+        includeEmojis = defaults.object(forKey: UserDefaultsKeys.includeEmojis) as? Bool ?? false
+        showVertical = defaults.object(forKey: UserDefaultsKeys.showVertical) as? Bool ?? true
         enableComposition = defaults.object(forKey: UserDefaultsKeys.enableComposition) as? Bool ?? true
         enableSoundEffects = defaults.object(forKey: UserDefaultsKeys.enableSoundEffects) as? Bool ?? false
         
@@ -163,7 +178,17 @@ class EditorSettings: ObservableObject {
             .store(in: &cancellables)
         $predictionDelay.sink { [weak self] _ in self?.saveSettings() }
             .store(in: &cancellables)
-        $maxPredictions.sink { [weak self] _ in self?.saveSettings() }
+        $maxSuggestions.sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+        $autoSelectBestWord.sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+        $learnTypedWords.sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+        $showAnnotations.sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+        $includeEmojis.sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
+        $showVertical.sink { [weak self] _ in self?.saveSettings() }
             .store(in: &cancellables)
         $enableComposition.sink { [weak self] _ in self?.saveSettings() }
             .store(in: &cancellables)
@@ -196,7 +221,12 @@ class EditorSettings: ObservableObject {
         defaults.set(enableSuggestions, forKey: UserDefaultsKeys.enableSuggestions)
         defaults.set(suggestionsFontSize.rawValue, forKey: UserDefaultsKeys.suggestionsFontSize)
         defaults.set(predictionDelay, forKey: UserDefaultsKeys.predictionDelay)
-        defaults.set(maxPredictions, forKey: UserDefaultsKeys.maxPredictions)
+        defaults.set(maxSuggestions, forKey: UserDefaultsKeys.maxSuggestions)
+        defaults.set(autoSelectBestWord, forKey: UserDefaultsKeys.autoSelectBestWord)
+        defaults.set(learnTypedWords, forKey: UserDefaultsKeys.learnTypedWords)
+        defaults.set(showAnnotations, forKey: UserDefaultsKeys.showAnnotations)
+        defaults.set(includeEmojis, forKey: UserDefaultsKeys.includeEmojis)
+        defaults.set(showVertical, forKey: UserDefaultsKeys.showVertical)
         defaults.set(enableComposition, forKey: UserDefaultsKeys.enableComposition)
         defaults.set(enableSoundEffects, forKey: UserDefaultsKeys.enableSoundEffects)
         defaults.set(appTheme.rawValue, forKey: UserDefaultsKeys.appTheme)
@@ -225,7 +255,12 @@ class EditorSettings: ObservableObject {
         enableSuggestions = true
         suggestionsFontSize = .regular
         predictionDelay = 0.5
-        maxPredictions = 5
+        maxSuggestions = 5
+        autoSelectBestWord = true
+        learnTypedWords = true
+        showAnnotations = false
+        includeEmojis = false
+        showVertical = true
         enableComposition = true
         enableSoundEffects = false
         appTheme = .system
