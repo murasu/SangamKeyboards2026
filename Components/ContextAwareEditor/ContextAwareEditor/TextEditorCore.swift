@@ -21,6 +21,36 @@ typealias PlatformFont = UIFont
 typealias PlatformColor = UIColor
 #endif
 
+/// N-gram selection strategy matching input method approach
+public enum NgramSelection {
+    case firstAvailable  // Try trigram → bigram → unigram
+    case withTrigrams    // Force trigram attempt
+    case withBigrams     // Force bigram attempt  
+    case unigramsOnly    // Force unigram only
+    
+    var next: NgramSelection {
+        switch self {
+        case .firstAvailable: return .withTrigrams
+        case .withTrigrams: return .withBigrams
+        case .withBigrams: return .unigramsOnly
+        case .unigramsOnly: return .firstAvailable
+        }
+    }
+}
+
+/// Word context extracted from text editor
+public struct WordContext {
+    let currentWord: String
+    let previousWord: String?
+    let earlierWord: String?
+    let lineRange: NSRange
+    
+    var hasPreviousWord: Bool { previousWord?.isEmpty == false }
+    var hasEarlierWord: Bool { earlierWord?.isEmpty == false }
+    var canUseTrigrams: Bool { hasPreviousWord && hasEarlierWord }
+    var canUseBigrams: Bool { hasPreviousWord }
+}
+
 /// Core text editor logic shared across platforms
 @MainActor
 public class TextEditorCore: ObservableObject {
@@ -35,6 +65,10 @@ public class TextEditorCore: ObservableObject {
     private var compositionRange: NSRange?
     private var compositionStartIndex: String.Index?  // Track using String.Index
     private var sangamTranslator: SangamKeyTranslator?
+    
+    // N-gram context system
+    private var cachedContext: (lineRange: NSRange, location: Int, context: WordContext)?
+    private var ngramSelection: NgramSelection = .firstAvailable
     
     // Settings reference
     private let settings = EditorSettings.shared
@@ -381,6 +415,9 @@ public class TextEditorCore: ObservableObject {
         compositionBuffer = ""
         compositionRange = nil
         
+        // Invalidate context cache since committed text changed
+        invalidateContextCache()
+        
         // Hide predictions
         hidePredictions()
         
@@ -430,8 +467,18 @@ public class TextEditorCore: ObservableObject {
     // MARK: - Candidate Generation
     
     private func generateCandidates(for text: String) {
-        // Use the prediction engine to get real predictions
-        let predictions = predictionEngine.getPrediction(forWord: text, maxCount: settings.maxSuggestions)
+        // Get word context for n-gram predictions
+        let location = compositionRange?.location ?? textStorage.length
+        let context = getWordContext(at: location)
+        
+        // Use the prediction engine with context
+        let predictions = predictionEngine.getPredictionWithContext(
+            currentWord: text,
+            previousWord: context.previousWord,
+            earlierWord: context.earlierWord,
+            ngramSelection: ngramSelection,
+            maxCount: settings.maxSuggestions
+        )
         
         if !predictions.isEmpty {
             currentPredictions = predictions
@@ -592,6 +639,136 @@ public class TextEditorCore: ObservableObject {
     
     // MARK: - Helper Methods
     
+    // MARK: - N-gram Context Extraction
+    
+    /// Get word context at a specific location, respecting line boundaries
+    private func getWordContext(at location: Int) -> WordContext {
+        // Check cache first
+        if let cached = cachedContext,
+           location >= cached.lineRange.location,
+           location <= cached.lineRange.location + cached.lineRange.length,
+           abs(location - cached.location) < 10 { // Small tolerance for cursor movement
+            return cached.context
+        }
+        
+        let text = textStorage.string
+        guard location <= text.count else {
+            return WordContext(currentWord: "", previousWord: nil, earlierWord: nil, lineRange: NSRange(location: location, length: 0))
+        }
+        
+        // Get the current line range
+        let lineRange = (text as NSString).lineRange(for: NSRange(location: location, length: 0))
+        
+        // Extract words from current line only
+        let lineText = (text as NSString).substring(with: lineRange)
+        let wordsInLine = extractWordsFromLine(lineText)
+        
+        // Find current word and context
+        let relativeLocation = location - lineRange.location
+        let context = buildWordContext(from: wordsInLine, at: relativeLocation, in: lineText, lineRange: lineRange)
+        
+        // Cache the result
+        cachedContext = (lineRange: lineRange, location: location, context: context)
+        
+        print("🔍 Context at \(location): current='\(context.currentWord)', prev='\(context.previousWord ?? "nil")', earlier='\(context.earlierWord ?? "nil")'")
+        
+        return context
+    }
+    
+    /// Extract words from a line of text, splitting by ASCII punctuation and whitespace
+    private func extractWordsFromLine(_ lineText: String) -> [String] {
+        // Create character set for word boundaries (ASCII punctuation + whitespace)
+        var boundaries = CharacterSet.punctuationCharacters
+        boundaries.formUnion(CharacterSet.whitespacesAndNewlines)
+        
+        // Split by boundaries and filter empty strings
+        return lineText.components(separatedBy: boundaries).filter { !$0.isEmpty }
+    }
+    
+    /// Build word context from extracted words and current position
+    private func buildWordContext(from words: [String], at relativeLocation: Int, in lineText: String, lineRange: NSRange) -> WordContext {
+        // Find the current word being typed at the cursor position
+        let currentWord = getCurrentWordAtPosition(relativeLocation, in: lineText)
+        
+        // Find position of current word in the words array
+        var currentWordIndex = -1
+        var searchLocation = 0
+        
+        for (index, word) in words.enumerated() {
+            let wordRange = (lineText as NSString).range(of: word, options: [], range: NSRange(location: searchLocation, length: lineText.count - searchLocation))
+            
+            if wordRange.location != NSNotFound {
+                // Check if cursor is within or just after this word
+                if relativeLocation >= wordRange.location && relativeLocation <= wordRange.location + wordRange.length {
+                    currentWordIndex = index
+                    break
+                }
+                searchLocation = wordRange.location + wordRange.length
+            }
+        }
+        
+        // If we're typing a new word (not found in existing words), it's after the last word
+        if currentWordIndex == -1 && !currentWord.isEmpty {
+            currentWordIndex = words.count
+        }
+        
+        // Extract previous and earlier words
+        let previousWord = currentWordIndex > 0 ? words[currentWordIndex - 1] : nil
+        let earlierWord = currentWordIndex > 1 ? words[currentWordIndex - 2] : nil
+        
+        return WordContext(
+            currentWord: currentWord,
+            previousWord: previousWord,
+            earlierWord: earlierWord,
+            lineRange: lineRange
+        )
+    }
+    
+    /// Get the current word being typed at a specific position within a line
+    private func getCurrentWordAtPosition(_ position: Int, in lineText: String) -> String {
+        guard position >= 0 && position <= lineText.count else { return "" }
+        
+        let nsString = lineText as NSString
+        var boundaries = CharacterSet.punctuationCharacters
+        boundaries.formUnion(CharacterSet.whitespacesAndNewlines)
+        
+        // Find the start of the current word
+        var start = position
+        while start > 0 {
+            let charIndex = start - 1
+            let char = nsString.character(at: charIndex)
+            if boundaries.contains(UnicodeScalar(char)!) {
+                break
+            }
+            start -= 1
+        }
+        
+        // Find the end of the current word
+        var end = position
+        while end < lineText.count {
+            let char = nsString.character(at: end)
+            if boundaries.contains(UnicodeScalar(char)!) {
+                break
+            }
+            end += 1
+        }
+        
+        // Extract the word
+        if start < end {
+            return nsString.substring(with: NSRange(location: start, length: end - start))
+        }
+        
+        return ""
+    }
+    
+    /// Invalidate context cache (called when composition commits)
+    private func invalidateContextCache() {
+        cachedContext = nil
+        print("🔄 Context cache invalidated")
+    }
+    
+    // MARK: - Legacy Helper Methods
+    
     private func parseSangamResult(_ result: String) -> (translatedText: String, deleteCount: Int) {
         // Parse the result format from SangamKeyTranslator
         if result.hasPrefix("\u{2421}") { // DELCODE
@@ -642,7 +819,9 @@ public class TextEditorCore: ObservableObject {
             return
         }
         
-        let currentWord = getCurrentWord(at: location)
+        // Get word context
+        let context = getWordContext(at: location)
+        let currentWord = context.currentWord
         print("🔍 Current word at location \(location): '\(currentWord)'")
         
         if currentWord.isEmpty {
@@ -651,19 +830,48 @@ public class TextEditorCore: ObservableObject {
             return
         }
         
-        // Get predictions for the current word
-        let predictions = predictionEngine.getPrediction(forWord: currentWord, maxCount: settings.maxSuggestions)
-        print("🔍 Got \(predictions.count) predictions for '\(currentWord)'")
+        // Get predictions with context
+        let predictions = predictionEngine.getPredictionWithContext(
+            currentWord: currentWord,
+            previousWord: context.previousWord,
+            earlierWord: context.earlierWord,
+            ngramSelection: ngramSelection,
+            maxCount: settings.maxSuggestions
+        )
+        print("🔍 Got \(predictions.count) predictions for '\(currentWord)' with context")
         
         if !predictions.isEmpty {
             currentPredictions = predictions
             predictionRange = getCurrentWordRange(at: location)
             showingPrediction = true
-            print("🔍 Showing predictions: \(predictions)")
+            print("🔍 Showing predictions: \(predictions.map { $0.word })")
         } else {
             print("🔍 No predictions found, hiding")
             hidePredictions()
         }
+    }
+    
+    /// Rotate n-gram selection strategy (for testing/debugging)
+    public func rotateNgramSelection() {
+        ngramSelection = ngramSelection.next
+        print("🔄 N-gram selection rotated to: \(ngramSelection)")
+        
+        // If we're currently showing predictions, refresh them with new strategy
+        if showingPrediction {
+            let location = predictionRange?.location ?? textStorage.length
+            updatePredictions(at: location)
+        }
+    }
+    
+    /// Get current n-gram selection strategy
+    public var currentNgramSelection: NgramSelection {
+        return ngramSelection
+    }
+    
+    /// Set specific n-gram selection strategy
+    public func setNgramSelection(_ selection: NgramSelection) {
+        ngramSelection = selection
+        print("🔄 N-gram selection set to: \(ngramSelection)")
     }
     
     /// Accept the current prediction
@@ -995,29 +1203,98 @@ public class PredictionEngine {
         }
     }
     
-    /// Get contextual predictions (bigram/trigram) - new method using MurasuIMEngine
-    public func getContextualPredictions(baseWord: String, secondWord: String, 
-                                       prefix: String, maxCount: Int = 3) -> [PredictionResult] {
+    /// Get predictions with n-gram context - core method matching input method approach
+    public func getPredictionWithContext(
+        currentWord: String,
+        previousWord: String?,
+        earlierWord: String?,
+        ngramSelection: NgramSelection,
+        maxCount: Int = 3
+    ) -> [PredictionResult] {
+        
         guard let predictor = predictorManager.getPredictor() else {
-            return fallbackPredictions(for: prefix, maxCount: maxCount)
+            return fallbackPredictions(for: currentWord, maxCount: maxCount)
         }
         
-        do {
-            let results = try predictor.getNgramPredictions(
-                baseWord: baseWord,
-                secondWord: secondWord,
-                prefix: prefix,
-                targetScript: .tamil,
-                annotationType: .notrequired,
-                maxResults: maxCount
-            )
+        var predictions: [PredictionResult]?
+        
+        print("🔍 GNWP Candidate selection: \(ngramSelection)")
+        
+        // Try n-gram predictions if we have previous words
+        if let lastCommitted = previousWord, !lastCommitted.isEmpty {
+            var usePrefix = currentWord
+            // Note: We don't have pulli dropping logic here since we're not in IME context
             
-            // Sort by finalScore (highest first) and return rich results
-            return results.sorted { $0.finalScore > $1.finalScore }
-        } catch {
-            print("Contextual prediction error: \(error)")
-            return fallbackPredictions(for: prefix, maxCount: maxCount)
+            // Try trigrams if we have both previous words
+            if let earlierCommitted = earlierWord, 
+               !earlierCommitted.isEmpty,
+               (ngramSelection == .firstAvailable || ngramSelection == .withTrigrams) {
+                
+                print("🔍 GNWP Getting trigrams for '\(earlierCommitted)' '\(lastCommitted)' '\(usePrefix)'")
+                
+                do {
+                    predictions = try predictor.getNgramPredictions(
+                        baseWord: earlierCommitted,
+                        secondWord: lastCommitted,
+                        prefix: usePrefix,
+                        targetScript: .tamil,
+                        annotationType: .notrequired,
+                        maxResults: maxCount
+                    ).sorted { $0.finalScore > $1.finalScore }
+                    
+                    print("🔍 GNWP    Received \(predictions?.count ?? 0) trigram predictions")
+                } catch {
+                    print("🔍 GNWP    Trigram error: \(error)")
+                }
+            }
+            
+            // Try bigrams if trigrams failed or bigram strategy requested
+            if (predictions == nil || predictions?.isEmpty == true) && 
+               (ngramSelection == .firstAvailable || ngramSelection == .withBigrams) {
+                
+                print("🔍 GNWP Getting bigrams for '\(lastCommitted)' '\(usePrefix)'")
+                
+                do {
+                    predictions = try predictor.getNgramPredictions(
+                        baseWord: lastCommitted,
+                        secondWord: "",
+                        prefix: usePrefix,
+                        targetScript: .tamil,
+                        annotationType: .notrequired,
+                        maxResults: maxCount
+                    ).sorted { $0.finalScore > $1.finalScore }
+                    
+                    print("🔍 GNWP    Received \(predictions?.count ?? 0) bigram predictions")
+                } catch {
+                    print("🔍 GNWP    Bigram error: \(error)")
+                }
+            }
         }
+        
+        // Fall back to unigrams if no n-gram results or unigrams specifically requested
+        if ((predictions == nil || predictions?.isEmpty == true) && ngramSelection == .firstAvailable) ||
+           ngramSelection == .unigramsOnly {
+            
+            print("🔍 GNWP Getting unigrams for '\(currentWord)'")
+            
+            do {
+                predictions = try predictor.getWordPredictions(
+                    prefix: currentWord,
+                    targetScript: .tamil,
+                    annotationType: .notrequired,
+                    maxResults: maxCount
+                ).sorted { $0.finalScore > $1.finalScore }
+                
+                print("🔍 GNWP    Received \(predictions?.count ?? 0) unigram predictions")
+            } catch {
+                print("🔍 GNWP    Unigram error: \(error)")
+            }
+        }
+        
+        let finalPredictions = predictions ?? []
+        print("🔍 GNWP Cumulative predictions received: \(finalPredictions.count)")
+        
+        return finalPredictions.isEmpty ? fallbackPredictions(for: currentWord, maxCount: maxCount) : finalPredictions
     }
     
     /// Fallback predictions when MurasuIMEngine is not available
