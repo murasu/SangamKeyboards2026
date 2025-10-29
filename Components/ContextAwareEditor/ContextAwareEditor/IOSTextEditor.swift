@@ -51,8 +51,27 @@ class CustomUITextView: UITextView {
     }
     
     private func updateEditorFont() {
-        font = settings.createEditorFont()
+        let newFont = settings.createEditorFont()
+        font = newFont
+        
+        // Update both UITextView's textStorage AND the editorCore's textStorage
+        let fullRange = NSRange(location: 0, length: textStorage.length)
+        if fullRange.length > 0 {
+            textStorage.addAttribute(.font, value: newFont, range: fullRange)
+        }
+        
+        // ALSO update the editorCore's textStorage so it doesn't overwrite with old font
+        if let editorCore = editorCore {
+            let coreRange = NSRange(location: 0, length: editorCore.textStorage.length)
+            if coreRange.length > 0 {
+                editorCore.textStorage.addAttribute(.font, value: newFont, range: coreRange)
+            }
+        }
     }
+    /*
+    private func updateEditorFont() {
+        font = settings.createEditorFont()
+    } */
     
     private func setupTextView() {
         // Configure text view for code editing
@@ -140,6 +159,14 @@ class CustomUITextView: UITextView {
         
         // Update content first
         attributedText = editorCore.textStorage
+        
+        // CRITICAL: After syncing from core, enforce current font settings on all text
+        let currentFont = settings.createEditorFont()
+        let fullRange = NSRange(location: 0, length: textStorage.length)
+        if fullRange.length > 0 {
+            textStorage.addAttribute(.font, value: currentFont, range: fullRange)
+            textStorage.addAttribute(.foregroundColor, value: UIColor.label, range: fullRange)
+        }
         
         // Only manage cursor position when composing
         if editorCore.isCurrentlyComposing, let compRange = editorCore.currentCompositionRange {

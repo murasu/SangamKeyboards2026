@@ -241,6 +241,8 @@ class EditorSettings: ObservableObject {
         defaults.set(hapticFeedback, forKey: UserDefaultsKeys.hapticFeedback)
         defaults.set(keyboardStyle.rawValue, forKey: UserDefaultsKeys.keyboardStyle)
         #endif
+        
+        defaults.synchronize() 
     }
     
     // MARK: - Convenience Methods
