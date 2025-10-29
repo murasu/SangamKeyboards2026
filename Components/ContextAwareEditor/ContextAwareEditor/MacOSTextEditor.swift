@@ -420,12 +420,26 @@ struct MacOSTextEditor: NSViewRepresentable {
                 maxWidth: maxCandidateWidth
             )
             
+            print("🎯 CALLER_MAC: === showPredictionOverlay called ===")
+            print("🎯 CALLER_MAC: Input to calculateCandidateWindowPosition:")
+            print("🎯 CALLER_MAC:   - editorBounds (textView.visibleRect): \(editorBounds)")
+            print("🎯 CALLER_MAC:   - compositionRect: \(compositionRect)")
+            print("🎯 CALLER_MAC:   - candidateWindowSize: \(candidateWindowSize)")
+            print("🎯 CALLER_MAC:   - textView.frame: \(textView.frame)")
+            print("🎯 CALLER_MAC:   - textView.bounds: \(textView.bounds)")
+            print("🎯 CALLER_MAC:   - textView.enclosingScrollView?.visibleRect: \(textView.enclosingScrollView?.visibleRect ?? .zero)")
+            
             // Calculate optimal position using the core's positioning logic
             let positionResult = parent.core.calculateCandidateWindowPosition(
                 editorBounds: editorBounds,
                 compositionRect: compositionRect,
                 candidateWindowSize: candidateWindowSize
             )
+            
+            print("🎯 CALLER_MAC: Result from calculateCandidateWindowPosition:")
+            print("🎯 CALLER_MAC:   - position: \(positionResult.position)")
+            print("🎯 CALLER_MAC:   - shouldShowAbove: \(positionResult.shouldShowAbove)")
+            print("🎯 CALLER_MAC: ==============================================")
             
             // Create or update prediction overlay
             if predictionOverlay == nil {

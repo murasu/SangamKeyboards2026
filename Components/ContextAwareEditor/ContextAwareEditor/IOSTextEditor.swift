@@ -11,7 +11,7 @@ import SwiftUI
 import Combine
 
 /// Custom UITextView for iOS with key interception and prediction support
-class CustomUITextView: UITextView {
+class CustomUITextView: UITextView, UITextViewDelegate {
     weak var editorCore: TextEditorCore?
     private var predictionOverlay: PredictionOverlayUIView?
     private var keyboardObserver: NSObjectProtocol?
@@ -91,6 +91,9 @@ class CustomUITextView: UITextView {
         
         // Set up keyboard observers for external keyboard support
         setupKeyboardObservers()
+        
+        // Set up scroll observers to update predictions when scrolling
+        setupScrollObservers()
     }
     
     private func setupKeyboardObservers() {
@@ -101,6 +104,12 @@ class CustomUITextView: UITextView {
         ) { [weak self] _ in
             self?.updatePredictionDisplay()
         }
+    }
+    
+    private func setupScrollObservers() {
+        // Override the scrollViewDidScroll method by setting ourselves as the delegate
+        // Note: We need to be careful not to interfere with existing delegate behavior
+        delegate = self
     }
     
     func configure(with core: TextEditorCore) {
@@ -148,24 +157,52 @@ class CustomUITextView: UITextView {
         calculateMaxCandidateWidth()
     }
     
+    /// Get the visible editor bounds that accounts for scrolling within the text view
+    private func getVisibleEditorBounds() -> CGRect {
+        // UITextView inherits from UIScrollView, so we need to calculate the visible content area
+        // The key insight: compositionRect is in text coordinates, but we need to return
+        // a rect that represents the visible viewport for positioning calculations
+        
+        // For UITextView, the visible area is always the bounds size, but positioned
+        // at the current scroll offset in the content coordinate system
+        let visibleRect = CGRect(
+            x: 0, // Always start at 0 for the viewport
+            y: 0, // Always start at 0 for the viewport  
+            width: bounds.width,
+            height: bounds.height
+        )
+        
+        return visibleRect
+    }
+    
+    /// Check if font enforcement is needed (optimization to avoid unnecessary font updates)
+    private func shouldEnforceFont() -> Bool {
+        // Only enforce font if we detect the text doesn't have the right font
+        // Check a sample of the text (first character) to see if font is correct
+        if textStorage.length > 0 {
+            let currentFont = settings.createEditorFont()
+            let actualFont = textStorage.attribute(.font, at: 0, effectiveRange: nil) as? UIFont
+            return actualFont?.pointSize != currentFont.pointSize || actualFont?.familyName != currentFont.familyName
+        }
+        return false
+    }
+    
     /// Sync the text view content from the core's text storage
     func syncFromCore() {
         guard let editorCore = editorCore else { return }
         
-        print("🔄 Syncing from core:")
-        print("  - Core text: '\(editorCore.textStorage.string)'")
-        print("  - TextView text: '\(text ?? "")'")
-        print("  - Current selection: \(selectedRange)")
-        
         // Update content first
         attributedText = editorCore.textStorage
         
-        // CRITICAL: After syncing from core, enforce current font settings on all text
-        let currentFont = settings.createEditorFont()
-        let fullRange = NSRange(location: 0, length: textStorage.length)
-        if fullRange.length > 0 {
-            textStorage.addAttribute(.font, value: currentFont, range: fullRange)
-            textStorage.addAttribute(.foregroundColor, value: UIColor.label, range: fullRange)
+        // OPTIMIZATION: Only enforce font if we detect font inconsistency
+        // This is much cheaper than always updating
+        if shouldEnforceFont() {
+            let currentFont = settings.createEditorFont()
+            let fullRange = NSRange(location: 0, length: textStorage.length)
+            if fullRange.length > 0 {
+                textStorage.addAttribute(.font, value: currentFont, range: fullRange)
+                textStorage.addAttribute(.foregroundColor, value: UIColor.label, range: fullRange)
+            }
         }
         
         // Only manage cursor position when composing
@@ -173,10 +210,6 @@ class CustomUITextView: UITextView {
             let newCursorPosition = compRange.location + compRange.length
             let newRange = NSRange(location: newCursorPosition, length: 0)
             selectedRange = newRange
-            print("  - Composing: setting cursor to end of composition at \(newCursorPosition)")
-        } else {
-            print("  - Not composing: preserving UITextView's cursor position at \(selectedRange)")
-            // Don't touch cursor position - let UITextView manage it
         }
         
         // Update prediction display
@@ -211,7 +244,6 @@ class CustomUITextView: UITextView {
     func updatePredictionDisplay() {
         guard let editorCore = editorCore else { return }
         
-        print ("updatePredictionDisplay: showingPrediction=\(editorCore.showingPrediction), currentPredictions=\(editorCore.currentPredictions)")
         if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
             showPredictionOverlay()
         } else {
@@ -223,7 +255,7 @@ class CustomUITextView: UITextView {
         guard let editorCore = editorCore else { return }
         
         // Get composition rect or fallback to cursor position
-        let compositionRect: CGRect
+        let rawCompositionRect: CGRect
         if let rect = editorCore.getCompositionRect(
                layoutManager: layoutManager,
                textContainer: textContainer,
@@ -232,12 +264,20 @@ class CustomUITextView: UITextView {
                    height: textContainerInset.top + textContainerInset.bottom
                )
            ) {
-            compositionRect = rect
+            rawCompositionRect = rect
         } else {
             // Fallback to cursor position
             let cursorRect = caretRect(for: selectedTextRange?.start ?? beginningOfDocument)
-            compositionRect = cursorRect
+            rawCompositionRect = cursorRect
         }
+        
+        // Convert composition rect to view coordinates
+        let compositionRect = CGRect(
+            x: rawCompositionRect.origin.x + textContainerInset.left,
+            y: rawCompositionRect.origin.y + textContainerInset.top,
+            width: rawCompositionRect.width,
+            height: rawCompositionRect.height
+        )
         
         // Create overlay if needed to calculate size
         if predictionOverlay == nil {
@@ -257,8 +297,8 @@ class CustomUITextView: UITextView {
             maxWidth: maxCandidateWidth
         )
         
-        // Get editor bounds (text view's bounds)
-        let editorBounds = bounds
+        // Get editor bounds - for iOS, this is simply the viewport bounds
+        let editorBounds = getVisibleEditorBounds()
         
         // Calculate optimal position using the core's positioning logic
         let positionResult = editorCore.calculateCandidateWindowPosition(
@@ -275,13 +315,6 @@ class CustomUITextView: UITextView {
             origin: positionResult.position,
             size: candidateWindowSize
         )
-        
-        // Optional: Add visual indication if showing above
-        if positionResult.shouldShowAbove {
-            print("📍 Candidate window positioned above composition (bottom overflow detected)")
-        } else {
-            print("📍 Candidate window positioned below composition")
-        }
     }
     
     private func hidePredictionOverlay() {
@@ -295,6 +328,13 @@ class CustomUITextView: UITextView {
         // Update predictions when text changes
         let location = selectedRange.location
         editorCore?.updatePredictions(at: location)
+        updatePredictionDisplay()
+    }
+    
+    // MARK: - UITextViewDelegate (Scroll Detection)
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Update prediction display when scrolling to ensure proper positioning
         updatePredictionDisplay()
     }
 }
