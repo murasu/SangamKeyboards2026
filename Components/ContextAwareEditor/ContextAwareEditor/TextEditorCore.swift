@@ -469,8 +469,11 @@ public class TextEditorCore: ObservableObject {
     
     private func generateCandidates(for text: String) {
         // Get word context for n-gram predictions
-        let location = compositionRange?.location ?? textStorage.length
+        // Get cursor location
+        let location = compositionRange?.upperBound ?? textStorage.length
         let context = getWordContext(at: location)
+        
+        print(">> text = '\(text)', cursor location = \(location)")
         
         // Use the prediction engine with context
         let predictions = predictionEngine.getPredictionWithContext(
