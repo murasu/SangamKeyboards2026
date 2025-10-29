@@ -138,6 +138,32 @@ class CustomUITextView: UITextView {
         print("  - TextView text: '\(text ?? "")'")
         print("  - Current selection: \(selectedRange)")
         
+        // Update content first
+        attributedText = editorCore.textStorage
+        
+        // Only manage cursor position when composing
+        if editorCore.isCurrentlyComposing, let compRange = editorCore.currentCompositionRange {
+            let newCursorPosition = compRange.location + compRange.length
+            let newRange = NSRange(location: newCursorPosition, length: 0)
+            selectedRange = newRange
+            print("  - Composing: setting cursor to end of composition at \(newCursorPosition)")
+        } else {
+            print("  - Not composing: preserving UITextView's cursor position at \(selectedRange)")
+            // Don't touch cursor position - let UITextView manage it
+        }
+        
+        // Update prediction display
+        updatePredictionDisplay()
+    }
+    /*
+    func syncFromCore() {
+        guard let editorCore = editorCore else { return }
+        
+        print("🔄 Syncing from core:")
+        print("  - Core text: '\(editorCore.textStorage.string)'")
+        print("  - TextView text: '\(text ?? "")'")
+        print("  - Current selection: \(selectedRange)")
+        
         // Calculate the correct cursor position based on composition state
         let newCursorPosition: Int
         if editorCore.isCurrentlyComposing, let compRange = editorCore.currentCompositionRange {
@@ -161,7 +187,7 @@ class CustomUITextView: UITextView {
         
         // Update prediction display
         updatePredictionDisplay()
-    }
+    } */
     
     // MARK: - Keyboard Input (for external keyboards)
     
@@ -430,9 +456,21 @@ struct IOSTextEditor: UIViewRepresentable {
                 return false
             }
             
+            /*
             if text == "\n" {
                 // Handle enter key - commit any composition and insert newline
                 parent.core.forceCommitComposition()
+                // Let UITextView handle the newline insertion
+                return true
+            } */
+            if text == "\n" {
+                // Handle enter key - commit any composition and insert newline
+                parent.core.forceCommitComposition()
+                
+                // IMPORTANT: Update core's textStorage with the newline immediately
+                // so it stays in sync with UITextView
+                parent.core.textStorage.insert(NSAttributedString(string: "\n"), at: range.location)
+                
                 // Let UITextView handle the newline insertion
                 return true
             }
