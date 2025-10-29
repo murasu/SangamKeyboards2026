@@ -704,7 +704,15 @@ public class TextEditorCore: ObservableObject {
         var searchLocation = 0
         
         for (index, word) in words.enumerated() {
-            let wordRange = (lineText as NSString).range(of: word, options: [], range: NSRange(location: searchLocation, length: lineText.count - searchLocation))
+            print("🔍 Debug word search:")
+            print("  - Looking for word: '\(word)'")
+            print("  - Word unicodeScalars: \(Array(word.unicodeScalars))")
+            print("  - In lineText: '\(lineText)'")
+            print("  - lineText unicodeScalars: \(Array(lineText.unicodeScalars))")
+            print("  - searchLocation: \(searchLocation)")
+            print("  - Search range: NSRange(location: \(searchLocation), length: \(lineText.count - searchLocation))")
+            
+            let wordRange = (lineText as NSString).range(of: word, options: [], range: NSRange(location: searchLocation, length: lineText.unicodeScalars.count - searchLocation))
             
             if wordRange.location != NSNotFound {
                 // Check if cursor is within or just after this word

@@ -22,7 +22,7 @@ struct ContentView: View {
             // iOS Settings Button at the top
             #if os(iOS)
             HStack {
-                Text("Tamil Input Method Editor")
+                Text("Something Awesome Lah!")
                     .font(.title2)
                     .fontWeight(.semibold)
                 
@@ -90,7 +90,7 @@ struct ContentView: View {
                 .font(.headline)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("• Type English letters to start Tamil composition")
+                Text("• Type letters to start Tamil composition")
                 Text("• Composition appears underlined in blue")
                 Text("• Press Tab to accept prediction suggestions")
                 Text("• Press Space/Return to commit current composition")
