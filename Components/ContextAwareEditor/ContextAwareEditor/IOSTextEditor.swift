@@ -10,10 +10,161 @@ import UIKit
 import SwiftUI
 import Combine
 
+/// Manages window-level overlays for candidate windows
+class WindowOverlayManager {
+    static let shared = WindowOverlayManager()
+    private init() {}
+    
+    private var currentOverlay: WindowOverlayView?
+    
+    func showOverlay(
+        predictions: [PredictionResult],
+        at windowPosition: CGPoint,
+        size: CGSize,
+        showingAbove: Bool,
+        in window: UIWindow,
+        onTap: @escaping (PredictionResult) -> Void
+    ) {
+        // Simple cleanup
+        hideOverlay()
+        
+        // Create and show overlay
+        let overlay = WindowOverlayView()
+        overlay.configure(with: predictions, showingAbove: showingAbove)
+        overlay.onTap = onTap
+        overlay.frame = CGRect(origin: windowPosition, size: size)
+        
+        window.addSubview(overlay)
+        currentOverlay = overlay
+        
+        print("SIMPLE_DEBUG: Created overlay at Y: \(windowPosition.y)")
+    }
+    
+    func hideOverlay() {
+        currentOverlay?.removeFromSuperview()
+        currentOverlay = nil
+    }
+    
+    func updateOverlayPosition(_ position: CGPoint, size: CGSize) {
+        currentOverlay?.frame = CGRect(origin: position, size: size)
+    }
+}
+
+/// Window-level overlay view for predictions
+class WindowOverlayView: UIView {
+    private let label = UILabel()
+    private let backgroundView = UIView()
+    private let settings = EditorSettings.shared
+    private var settingsObserver: AnyCancellable?
+        
+    var onTap: ((PredictionResult) -> Void)?
+    private var currentPrediction: PredictionResult?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+        setupSettingsObserver()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView()
+        setupSettingsObserver()
+    }
+    
+    deinit {
+        settingsObserver?.cancel()
+    }
+    
+    private func setupSettingsObserver() {
+        settingsObserver = settings.$suggestionsFontSize
+            .combineLatest(settings.$fontFamily)
+            .sink { [weak self] _, _ in
+                self?.updateFont()
+            }
+    }
+    
+    private func updateFont() {
+        label.font = settings.createSuggestionsFont()
+    }
+    
+    private func setupView() {
+        // Setup background
+        backgroundView.backgroundColor = UIColor.systemBackground
+        backgroundView.layer.cornerRadius = 6
+        backgroundView.layer.borderColor = UIColor.separator.cgColor
+        backgroundView.layer.borderWidth = 1
+        backgroundView.layer.shadowColor = UIColor.black.cgColor
+        backgroundView.layer.shadowOpacity = 0.2
+        backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        backgroundView.layer.shadowRadius = 8
+        
+        addSubview(backgroundView)
+        
+        // Setup label
+        updateFont() // Use settings-based font size
+        label.textColor = UIColor.label
+        label.textAlignment = .left
+        label.numberOfLines = 0 // Allow unlimited lines
+        
+        backgroundView.addSubview(label)
+        
+        // Add tap gesture
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
+        addGestureRecognizer(tapGesture)
+        isUserInteractionEnabled = true
+        
+        // Make sure overlay appears above other content
+        layer.zPosition = 1000
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // Manually layout the background and label
+        backgroundView.frame = bounds
+        label.frame = CGRect(
+            x: 8,
+            y: 4,
+            width: bounds.width - 16,
+            height: bounds.height - 8
+        )
+    }
+    
+    @objc private func overlayTapped() {
+        if let prediction = currentPrediction {
+            onTap?(prediction)
+        }
+    }
+    
+    func configure(with predictions: [PredictionResult], showingAbove: Bool = false) {
+        guard !predictions.isEmpty else {
+            currentPrediction = nil
+            label.text = ""
+            return
+        }
+        
+        currentPrediction = predictions.first
+        
+        // Show all predictions, each on a separate line, numbered
+        let candidateText = predictions.enumerated().map { index, prediction in
+            "\(index + 1). \(prediction.word)"
+        }.joined(separator: "\n")
+        
+        label.text = candidateText
+        
+        // Adjust shadow direction based on position
+        if showingAbove {
+            backgroundView.layer.shadowOffset = CGSize(width: 0, height: -2)
+        } else {
+            backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        }
+    }
+}
+
 /// Custom UITextView for iOS with key interception and prediction support
 class CustomUITextView: UITextView, UITextViewDelegate {
     weak var editorCore: TextEditorCore?
-    private var predictionOverlay: PredictionOverlayUIView?
     private var keyboardObserver: NSObjectProtocol?
     private var cachedMaxCandidateWidth: CGFloat = 0
     private var lastEditorWidth: CGFloat = 0
@@ -33,6 +184,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     }
     
     deinit {
+        // Clean up window overlay
+        WindowOverlayManager.shared.hideOverlay()
+        
         if let observer = keyboardObserver {
             NotificationCenter.default.removeObserver(observer)
         }
@@ -252,7 +406,8 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     }
     
     private func showPredictionOverlay() {
-        guard let editorCore = editorCore else { return }
+        guard let editorCore = editorCore,
+              let window = self.window else { return }
         
         // Get composition rect or fallback to cursor position
         let rawCompositionRect: CGRect
@@ -272,23 +427,16 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         }
         
         // Convert composition rect to view coordinates
-        let compositionRect = CGRect(
+        let compositionRectInTextView = CGRect(
             x: rawCompositionRect.origin.x + textContainerInset.left,
             y: rawCompositionRect.origin.y + textContainerInset.top,
             width: rawCompositionRect.width,
             height: rawCompositionRect.height
         )
         
-        // Create overlay if needed to calculate size
-        if predictionOverlay == nil {
-            predictionOverlay = PredictionOverlayUIView()
-            predictionOverlay?.onTap = { [weak self] prediction in
-                self?.editorCore?.acceptPrediction(prediction)
-                self?.syncFromCore()
-            }
-            addSubview(predictionOverlay!)
-        }
-
+        // Convert to window coordinates
+        let compositionRectInWindow = convert(compositionRectInTextView, to: window)
+        
         // Calculate candidate window size based on content (using cached width)
         let maxCandidateWidth = getMaxCandidateWidth()
         let candidateWindowSize = editorCore.calculateCandidateWindowSize(
@@ -297,29 +445,35 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             maxWidth: maxCandidateWidth
         )
         
-        // Get editor bounds - for iOS, this is simply the viewport bounds
-        let editorBounds = getVisibleEditorBounds()
+        // Get editor bounds in window coordinates for proper positioning
+        let editorBoundsInWindow = convert(bounds, to: window)
         
         // Calculate optimal position using the core's positioning logic
         let positionResult = editorCore.calculateCandidateWindowPosition(
-            editorBounds: editorBounds,
-            compositionRect: compositionRect,
+            editorBounds: editorBoundsInWindow,
+            compositionRect: compositionRectInWindow,
             candidateWindowSize: candidateWindowSize
         )
         
-        // Configure the overlay with the correct showingAbove value
-        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove)
+        // DEBUG: Let's understand the real issue
+        print("SIMPLE_DEBUG: compositionRectInWindow Y: \(compositionRectInWindow.origin.y)")
+        print("SIMPLE_DEBUG: positionResult Y: \(positionResult.position.y)")
         
-        // Apply the calculated position
-        predictionOverlay?.frame = CGRect(
-            origin: positionResult.position,
-            size: candidateWindowSize
-        )
+        // Show window-level overlay
+        WindowOverlayManager.shared.showOverlay(
+            predictions: editorCore.currentPredictions,
+            at: positionResult.position,
+            size: candidateWindowSize,
+            showingAbove: positionResult.shouldShowAbove,
+            in: window
+        ) { [weak self] prediction in
+            self?.editorCore?.acceptPrediction(prediction)
+            self?.syncFromCore()
+        }
     }
     
     private func hidePredictionOverlay() {
-        predictionOverlay?.removeFromSuperview()
-        predictionOverlay = nil
+        WindowOverlayManager.shared.hideOverlay()
     }
     
     // MARK: - Text Change Handling
@@ -336,116 +490,6 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Update prediction display when scrolling to ensure proper positioning
         updatePredictionDisplay()
-    }
-}
-
-/// Simple prediction overlay view for iOS
-class PredictionOverlayUIView: UIView {
-    private let label = UILabel()
-    private let backgroundView = UIView()
-    private let settings = EditorSettings.shared
-    private var settingsObserver: AnyCancellable?
-        
-    var onTap: ((PredictionResult) -> Void)?
-    private var currentPrediction: PredictionResult?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-        setupSettingsObserver()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupView()
-        setupSettingsObserver()
-    }
-    
-    deinit {
-        settingsObserver?.cancel()
-    }
-    
-    private func setupSettingsObserver() {
-        settingsObserver = settings.$suggestionsFontSize
-            .combineLatest(settings.$fontFamily)
-            .sink { [weak self] _, _ in
-                self?.updateFont()
-            }
-    }
-    
-    private func updateFont() {
-        label.font = settings.createSuggestionsFont()
-    }
-    
-    private func setupView() {
-        // Setup background
-        backgroundView.backgroundColor = UIColor.systemBackground
-        backgroundView.layer.cornerRadius = 6
-        backgroundView.layer.borderColor = UIColor.separator.cgColor
-        backgroundView.layer.borderWidth = 1
-        backgroundView.layer.shadowColor = UIColor.black.cgColor
-        backgroundView.layer.shadowOpacity = 0.1
-        backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        backgroundView.layer.shadowRadius = 4
-        
-        addSubview(backgroundView)
-        
-        // Setup label
-        updateFont() // Use settings-based font size
-        label.textColor = UIColor.secondaryLabel
-        label.textAlignment = .left
-        label.numberOfLines = 0 // Allow unlimited lines
-        
-        backgroundView.addSubview(label)
-        
-        // Add tap gesture
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
-        addGestureRecognizer(tapGesture)
-        isUserInteractionEnabled = true
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        // Manually layout the background and label
-        backgroundView.frame = bounds
-        label.frame = CGRect(
-            x: 8,
-            y: 4,
-            width: bounds.width - 16,
-            height: bounds.height - 8
-        )
-    }
-    
-
-    @objc private func overlayTapped() {
-        if let prediction = currentPrediction {
-            onTap?(prediction)
-        }
-    }
-    
-    func configure(with predictions: [PredictionResult], showingAbove: Bool = false) {
-        guard !predictions.isEmpty else {
-            currentPrediction = nil
-            label.text = ""
-            return
-        }
-        
-        currentPrediction = predictions.first
-        
-        // Show all predictions, each on a separate line, numbered
-        let candidateText = predictions.enumerated().map { index, prediction in
-            "\(index + 1). \(prediction.word)"
-        }.joined(separator: "\n")
-        
-        label.text = candidateText
-        
-        // Adjust shadow direction based on position
-        if showingAbove {
-            backgroundView.layer.shadowOffset = CGSize(width: 0, height: -2)
-        } else {
-            backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        }
     }
 }
 
