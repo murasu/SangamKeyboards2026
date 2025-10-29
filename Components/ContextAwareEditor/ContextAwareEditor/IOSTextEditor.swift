@@ -155,39 +155,6 @@ class CustomUITextView: UITextView {
         // Update prediction display
         updatePredictionDisplay()
     }
-    /*
-    func syncFromCore() {
-        guard let editorCore = editorCore else { return }
-        
-        print("🔄 Syncing from core:")
-        print("  - Core text: '\(editorCore.textStorage.string)'")
-        print("  - TextView text: '\(text ?? "")'")
-        print("  - Current selection: \(selectedRange)")
-        
-        // Calculate the correct cursor position based on composition state
-        let newCursorPosition: Int
-        if editorCore.isCurrentlyComposing, let compRange = editorCore.currentCompositionRange {
-            // During composition, cursor should be at the end of the composition
-            newCursorPosition = compRange.location + compRange.length
-            print("  - Composing: setting cursor to end of composition at \(newCursorPosition)")
-        } else {
-            // Not composing, cursor should be at the end of the text
-            newCursorPosition = editorCore.textStorage.length
-            print("  - Not composing: setting cursor to end of text at \(newCursorPosition)")
-        }
-        
-        // Update content
-        attributedText = editorCore.textStorage
-        
-        // Set the correct cursor position
-        let newRange = NSRange(location: newCursorPosition, length: 0)
-        selectedRange = newRange
-        
-        print("  - Updated cursor position: \(selectedRange)")
-        
-        // Update prediction display
-        updatePredictionDisplay()
-    } */
     
     // MARK: - Keyboard Input (for external keyboards)
     

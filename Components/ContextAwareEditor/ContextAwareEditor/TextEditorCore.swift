@@ -1311,7 +1311,7 @@ public class PredictionEngine {
         let finalPredictions = predictions ?? []
         print("🔍 GNWP Cumulative predictions received: \(finalPredictions.count)")
         
-        return finalPredictions.isEmpty ? fallbackPredictions(for: currentWord, maxCount: maxCount) : finalPredictions
+        return finalPredictions //finalPredictions.isEmpty ? fallbackPredictions(for: currentWord, maxCount: maxCount) : finalPredictions
     }
     
     /// Fallback predictions when MurasuIMEngine is not available
