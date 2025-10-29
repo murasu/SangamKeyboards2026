@@ -735,7 +735,7 @@ public class TextEditorCore: ObservableObject {
     
     /// Get the current word being typed at a specific position within a line
     private func getCurrentWordAtPosition(_ position: Int, in lineText: String) -> String {
-        guard position >= 0 && position <= lineText.count else { return "" }
+        guard position >= 0 && position <= lineText.unicodeScalars.count else { return "" }
         
         let nsString = lineText as NSString
         var boundaries = CharacterSet.punctuationCharacters
