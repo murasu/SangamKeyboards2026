@@ -150,6 +150,8 @@ class Predictor {
     func getWordPredictions(prefix: String, targetScript: TargetScript, annotationType: AnnotationDataType, maxResults: Int) throws -> [PredictionResult] {
         guard let handle = handle else { throw PredictorError.initializationFailed }
         
+        print("Getting word predictions for prefix: '\(prefix)', targetScript: '\(targetScript)', annotationType: '\(annotationType)', maxResuts: \(maxResults)")
+        
         var results: UnsafeMutablePointer<PredictorResult>?
         var count: size_t = 0
         
@@ -178,8 +180,10 @@ class Predictor {
         }
         
         guard let resultPtr = results else { return [] }
-        return Array(UnsafeBufferPointer(start: resultPtr, count: count))
+        let resultsArray =  Array(UnsafeBufferPointer(start: resultPtr, count: count))
             .map(PredictionResult.init)
+        print("   Results: \(resultsArray)")
+        return resultsArray
     }
     
     // Not very useful. See the C++ implementation for more info

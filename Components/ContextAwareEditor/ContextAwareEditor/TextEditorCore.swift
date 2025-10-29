@@ -237,9 +237,10 @@ public class TextEditorCore: ObservableObject {
         compositionBuffer = updatedComposition
         
         // Generate candidates for the translated text only if suggestions are enabled
-        let parsedResult = parseSangamResult(translatedResult)
+        //let parsedResult = parseSangamResult(translatedResult)
         if settings.enableSuggestions {
-            generateCandidates(for: parsedResult.translatedText)
+            //generateCandidates(for: parsedResult.translatedText)
+            generateCandidates(for: compositionBuffer)
         }
     }
     
@@ -648,12 +649,17 @@ public class TextEditorCore: ObservableObject {
            location >= cached.lineRange.location,
            location <= cached.lineRange.location + cached.lineRange.length,
            abs(location - cached.location) < 10 { // Small tolerance for cursor movement
-            return cached.context
+            // TODO: Check how to handle context
+ //           return cached.context
         }
         
         let text = textStorage.string
-        guard location <= text.count else {
+        guard location <= text.unicodeScalars.count else {
             return WordContext(currentWord: "", previousWord: nil, earlierWord: nil, lineRange: NSRange(location: location, length: 0))
+        }
+        
+        if text.count >= 5 {
+            print("Getting word context for \(text)")
         }
         
         // Get the current line range
@@ -1218,7 +1224,7 @@ public class PredictionEngine {
         
         var predictions: [PredictionResult]?
         
-        print("🔍 GNWP Candidate selection: \(ngramSelection)")
+        print("🔍 GNWP Candidate selection: \(ngramSelection) for currentWord: \(currentWord)")
         
         // Try n-gram predictions if we have previous words
         if let lastCommitted = previousWord, !lastCommitted.isEmpty {
