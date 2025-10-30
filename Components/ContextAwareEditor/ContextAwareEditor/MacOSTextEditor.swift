@@ -101,7 +101,7 @@ class PredictionOverlayView: NSView {
         textField.isEditable = false
         textField.backgroundColor = .clear
         updateFont() // Use settings-based font size
-        textField.textColor = NSColor.secondaryLabelColor
+        textField.textColor = NSColor.systemGray // secondaryLabelColor
         textField.alignment = .left
         textField.maximumNumberOfLines = 0 // Allow unlimited lines
         textField.cell?.wraps = true

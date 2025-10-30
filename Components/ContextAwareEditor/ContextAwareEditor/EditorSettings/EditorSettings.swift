@@ -44,6 +44,7 @@ class EditorSettings: ObservableObject {
     @Published var showVertical: Bool = true
     @Published var enableComposition: Bool = true
     @Published var enableSoundEffects: Bool = false
+    @Published var autoPredictNextWord: Bool = false
     @Published var appTheme: AppTheme = .system
     
     // Platform-specific settings
@@ -103,6 +104,7 @@ class EditorSettings: ObservableObject {
         static let showVertical = "showVertical"
         static let enableComposition = "enableComposition"
         static let enableSoundEffects = "enableSoundEffects"
+        static let autoPredictNextWord = "autoPredictNextWord"
         static let appTheme = "appTheme"
         
         #if os(macOS)
@@ -146,6 +148,7 @@ class EditorSettings: ObservableObject {
         showVertical = defaults.object(forKey: UserDefaultsKeys.showVertical) as? Bool ?? true
         enableComposition = defaults.object(forKey: UserDefaultsKeys.enableComposition) as? Bool ?? true
         enableSoundEffects = defaults.object(forKey: UserDefaultsKeys.enableSoundEffects) as? Bool ?? false
+        autoPredictNextWord = defaults.object(forKey: UserDefaultsKeys.autoPredictNextWord) as? Bool ?? false
         
         if let themeRaw = defaults.object(forKey: UserDefaultsKeys.appTheme) as? String {
             appTheme = AppTheme(rawValue: themeRaw) ?? .system
@@ -195,6 +198,8 @@ class EditorSettings: ObservableObject {
             .store(in: &cancellables)
         $enableSoundEffects.sink { [weak self] _ in self?.saveSettings() }
             .store(in: &cancellables)
+        $autoPredictNextWord.sink { [weak self] _ in self?.saveSettings() }
+            .store(in: &cancellables)
         $appTheme.sink { [weak self] _ in self?.saveSettings() }
             .store(in: &cancellables)
         
@@ -230,6 +235,7 @@ class EditorSettings: ObservableObject {
         defaults.set(showVertical, forKey: UserDefaultsKeys.showVertical)
         defaults.set(enableComposition, forKey: UserDefaultsKeys.enableComposition)
         defaults.set(enableSoundEffects, forKey: UserDefaultsKeys.enableSoundEffects)
+        defaults.set(autoPredictNextWord, forKey: UserDefaultsKeys.autoPredictNextWord)
         defaults.set(appTheme.rawValue, forKey: UserDefaultsKeys.appTheme)
         
         #if os(macOS)

@@ -103,7 +103,7 @@ class WindowOverlayView: UIView {
         
         // Setup label
         updateFont() // Use settings-based font size
-        label.textColor = UIColor.label
+        label.textColor = UIColor.systemGray
         label.textAlignment = .left
         label.numberOfLines = 0 // Allow unlimited lines
         
@@ -383,7 +383,7 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     
     /// Check if we should auto-predict next word after accepting a prediction
     private func shouldAutoPredictNextWord() -> Bool {
-        return UserDefaults.standard.bool(forKey: "autoPredictNextWord")
+        return settings.autoPredictNextWord
     }
     
     /// Check if onscreen keyboard is currently visible
