@@ -204,6 +204,13 @@ struct MacOSTextEditor: NSViewRepresentable {
         textView.isAutomaticSpellingCorrectionEnabled = false
         textView.isContinuousSpellCheckingEnabled = false
         textView.font = settings.createEditorFont() // Use settings-based font
+        
+        // Debug: Let's verify the font is actually set correctly
+        let currentFont = settings.createEditorFont()
+        print("📝 MAC_INIT_DEBUG: Creating text view with font \(currentFont.familyName) size \(currentFont.pointSize)")
+        print("📝 MAC_INIT_DEBUG: Settings editorFontSize: \(settings.editorFontSize)")
+        print("📝 MAC_INIT_DEBUG: Settings fontFamily: \(settings.fontFamily)")
+        print("📝 MAC_INIT_DEBUG: Text view font after setting: \(textView.font?.familyName ?? "nil") size \(textView.font?.pointSize ?? 0)")
         textView.isRichText = true
         textView.allowsUndo = true
         textView.isEditable = true
@@ -219,20 +226,18 @@ struct MacOSTextEditor: NSViewRepresentable {
             textView.string = "Working Text Editor - Now we can add features incrementally!"
         }
         
-        // CRITICAL FIX: Apply color directly to textStorage with manual dark/light mode handling
+        // CRITICAL FIX: Apply font and color directly to textStorage after setting text
         let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
+        let editorFont = settings.createEditorFont()
         
         // Manual color selection since NSColor.labelColor doesn't work in SwiftUI context
-        let textColor: NSColor
-        textColor = .labelColor
-        /*
-        if NSApp.effectiveAppearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua {
-            textColor = NSColor.white  // Dark mode - white text
-        } else {
-            textColor = NSColor.black  // Light mode - black text
-        } */
+        let textColor: NSColor = .labelColor
         
-        textView.textStorage?.addAttribute(.foregroundColor, value: textColor, range: fullRange)
+        if fullRange.length > 0 {
+            print("📝 MAC_FONT_DEBUG: Applying initial font \(editorFont.familyName) size \(editorFont.pointSize) to range \(fullRange)")
+            textView.textStorage?.addAttribute(.font, value: editorFont, range: fullRange)
+            textView.textStorage?.addAttribute(.foregroundColor, value: textColor, range: fullRange)
+        }
         
         // Fix text color visibility
         textView.textColor = textColor  // This gets ignored, but set it anyway
@@ -256,6 +261,16 @@ struct MacOSTextEditor: NSViewRepresentable {
         // Only sync if core was updated externally (not from user typing)
         if textView.string != core.textStorage.string {
             textView.string = core.textStorage.string
+            
+            // Apply font to the updated text
+            let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
+            let editorFont = settings.createEditorFont()
+            
+            if fullRange.length > 0 {
+                print("📝 MAC_FONT_DEBUG: Applying font in updateNSView - \(editorFont.familyName) size \(editorFont.pointSize)")
+                textView.textStorage?.addAttribute(.font, value: editorFont, range: fullRange)
+                textView.textStorage?.addAttribute(.foregroundColor, value: NSColor.labelColor, range: fullRange)
+            }
         }
     }
     
@@ -302,7 +317,8 @@ struct MacOSTextEditor: NSViewRepresentable {
         private func setupSettingsObserver() {
             settingsObserver = settings.$suggestionsFontSize
                 .combineLatest(settings.$fontFamily, settings.$editorFontSize)
-                .sink { [weak self] _, _, _ in
+                .sink { [weak self] _, fontFamily, fontSize in
+                    print("📝 MAC_SETTINGS_DEBUG: Font settings changed - family: \(fontFamily), size: \(fontSize)")
                     self?.refreshMaxCandidateWidth()
                     self?.updateTextViewFont()
                     // ONLY refresh display for font changes - don't regenerate candidates
@@ -312,13 +328,21 @@ struct MacOSTextEditor: NSViewRepresentable {
         
         private func updateTextViewFont() {
             guard let textView = self.textView else { return }
-            textView.font = settings.createEditorFont()
+            let editorFont = settings.createEditorFont()
+            
+            print("📝 MAC_FONT_DEBUG: updateTextViewFont called - \(editorFont.familyName) size \(editorFont.pointSize)")
+            
+            textView.font = editorFont
             
             // Update the text storage font attributes to match
             let fullRange = NSRange(location: 0, length: textView.textStorage?.length ?? 0)
             if fullRange.length > 0 {
-                textView.textStorage?.addAttribute(.font, value: settings.createEditorFont(), range: fullRange)
+                print("📝 MAC_FONT_DEBUG: Applying font to textStorage range \(fullRange)")
+                textView.textStorage?.addAttribute(.font, value: editorFont, range: fullRange)
             }
+            
+            // Force the text view to refresh
+            textView.needsDisplay = true
         }
         
         func setTextView(_ textView: NSTextView) {
@@ -564,8 +588,18 @@ struct MacOSTextEditor: NSViewRepresentable {
             if textView.string != coreText {
                 textView.string = coreText
                 
-                // Apply the attributed string to maintain formatting
-                textView.textStorage?.setAttributedString(parent.core.textStorage)
+                // Apply the attributed string to maintain formatting, but enforce font
+                let mutableAttrString = NSMutableAttributedString(attributedString: parent.core.textStorage)
+                let editorFont = settings.createEditorFont()
+                let fullRange = NSRange(location: 0, length: mutableAttrString.length)
+                
+                if fullRange.length > 0 {
+                    print("📝 MAC_FONT_DEBUG: Enforcing font in updateTextViewFromCore - \(editorFont.familyName) size \(editorFont.pointSize)")
+                    mutableAttrString.addAttribute(.font, value: editorFont, range: fullRange)
+                    mutableAttrString.addAttribute(.foregroundColor, value: NSColor.labelColor, range: fullRange)
+                }
+                
+                textView.textStorage?.setAttributedString(mutableAttrString)
             }
         }
         
