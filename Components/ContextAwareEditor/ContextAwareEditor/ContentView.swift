@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var currentText = ""
     @State private var compositionText = ""
     @State private var isComposing = false
+    @State private var editorHeight: CGFloat = 400
     
     // iOS settings presentation
     #if os(iOS)
@@ -83,8 +84,17 @@ struct ContentView: View {
             .controlSize(.small)
             
             editor
-                .frame(minHeight: 600)
+                .frame(minHeight: editorHeight)
                 .border(Color.gray.opacity(0.3), width: 1)
+                .onAppear {
+                    calculateOptimalHeight()
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    // Recalculate height when device rotates
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        calculateOptimalHeight()
+                    }
+                }
             /*
             Text("Instructions:")
                 .font(.headline)
@@ -106,6 +116,49 @@ struct ContentView: View {
             SettingsView()
         }
         #endif
+    }
+    
+    private func calculateOptimalHeight() {
+        let screenBounds = UIScreen.main.bounds
+        let screenHeight = screenBounds.height
+        let screenWidth = screenBounds.width
+        let isPhone = UIDevice.current.userInterfaceIdiom == .phone
+        let isLandscape = screenWidth > screenHeight
+        
+        let reservedHeight: CGFloat
+        let minHeight: CGFloat
+        let maxHeight: CGFloat
+        
+        if isPhone {
+            if isLandscape {
+                // iPhone Landscape: Very limited vertical space
+                reservedHeight = 180 // Compact for landscape
+                minHeight = 200
+                maxHeight = 280
+            } else {
+                // iPhone Portrait: More generous
+                reservedHeight = 250
+                minHeight = 300
+                maxHeight = 450
+            }
+        } else {
+            // iPad: Generous in both orientations
+            if isLandscape {
+                reservedHeight = 180
+                minHeight = 350
+                maxHeight = 500
+            } else {
+                reservedHeight = 200
+                minHeight = 400
+                maxHeight = 700
+            }
+        }
+        
+        let availableHeight = screenHeight - reservedHeight
+        editorHeight = max(minHeight, min(maxHeight, availableHeight))
+        
+        let orientation = isLandscape ? "Landscape" : "Portrait"
+        print("📱 Screen: \(Int(screenWidth))x\(Int(screenHeight)), Device: \(isPhone ? "iPhone" : "iPad"), Orientation: \(orientation), Editor height: \(Int(editorHeight))")
     }
 }
 
