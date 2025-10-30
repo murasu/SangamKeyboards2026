@@ -89,12 +89,14 @@ struct ContentView: View {
                 .onAppear {
                     calculateOptimalHeight()
                 }
+                #if os(iOS)
                 .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
                     // Recalculate height when device rotates
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         calculateOptimalHeight()
                     }
                 }
+                #endif
             /*
             Text("Instructions:")
                 .font(.headline)
@@ -119,6 +121,7 @@ struct ContentView: View {
     }
     
     private func calculateOptimalHeight() {
+        #if os(iOS)
         let screenBounds = UIScreen.main.bounds
         let screenHeight = screenBounds.height
         let screenWidth = screenBounds.width
@@ -159,6 +162,12 @@ struct ContentView: View {
         
         let orientation = isLandscape ? "Landscape" : "Portrait"
         print("📱 Screen: \(Int(screenWidth))x\(Int(screenHeight)), Device: \(isPhone ? "iPhone" : "iPad"), Orientation: \(orientation), Editor height: \(Int(editorHeight))")
+        
+        #else
+        // macOS: Use a generous fixed height since we have plenty of screen space
+        editorHeight = 500
+        print("💻 macOS: Using fixed editor height: \(Int(editorHeight))")
+        #endif
     }
 }
 
