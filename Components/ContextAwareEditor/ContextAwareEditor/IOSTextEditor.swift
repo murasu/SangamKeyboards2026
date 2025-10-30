@@ -381,7 +381,7 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     
     // MARK: - Composition Detection
     
-    /// Check if we should auto-predict next word after accepting a prediction
+    /// Check if we should auto-suggest next word after accepting a suggestion
     private func shouldAutoPredictNextWord() -> Bool {
         return settings.autoPredictNextWord
     }
@@ -455,11 +455,12 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             editorCore.acceptPrediction(editorCore.currentPredictions[0])
             syncFromCore()
             
-            // Check user preference for auto-predicting next word
+            // Check user preference for auto-suggesting next word
             if shouldAutoPredictNextWord() {
-                // Wait a brief moment then check for next word predictions
+                // Wait a brief moment then check for next word suggestions
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                    self?.editorCore?.updatePredictions(at: self?.selectedRange.location ?? 0)
+                    // Use debounced update for auto-suggest next word
+                    self?.editorCore?.requestDebouncedPredictionUpdate(at: self?.selectedRange.location ?? 0)
                     self?.updatePredictionDisplay()
                 }
             }

@@ -272,6 +272,7 @@ class EditorSettings: ObservableObject {
         showVertical = true
         enableComposition = true
         enableSoundEffects = false
+        autoPredictNextWord = false
         appTheme = .system
         
         #if os(macOS)

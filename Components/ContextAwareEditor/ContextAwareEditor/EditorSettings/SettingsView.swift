@@ -184,6 +184,8 @@ struct SettingsView: View {
                 
                 Toggle("Learn Typed Words", isOn: $settings.learnTypedWords)
                 
+                Toggle("Auto-suggest next word after Tab", isOn: $settings.autoPredictNextWord)
+                
                 Toggle("Show Annotations", isOn: $settings.showAnnotations)
                 
                 Toggle("Include Emojis", isOn: $settings.includeEmojis)
