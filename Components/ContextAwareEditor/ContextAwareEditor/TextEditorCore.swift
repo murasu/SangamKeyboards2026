@@ -85,9 +85,9 @@ public class TextEditorCore: ObservableObject {
         if let customFont = PlatformFont(name: fontName, size: fontSize) {
             return customFont
         } else {
-            // Fallback to system monospaced font if Tamil Sangam MN is not available
-            print("⚠️ Font '\(fontName)' not available, falling back to system monospaced font")
-            return PlatformFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
+            // Fallback to system font if Tamil Sangam MN is not available
+            print("⚠️ Font '\(fontName)' not available, falling back to system font")
+            return PlatformFont.systemFont(ofSize: fontSize)
         }
     }
     
@@ -539,7 +539,8 @@ public class TextEditorCore: ObservableObject {
     // Platform-agnostic font and text measurement helpers
     #if canImport(UIKit)
     private func fontForSize(_ size: CGFloat) -> UIFont {
-        return UIFont.monospacedSystemFont(ofSize: size, weight: .regular)
+        let fontFamily = EditorSettings.shared.fontFamily
+        return UIFont(name: fontFamily, size: size) ?? UIFont.systemFont(ofSize: size)
     }
     
     private func measureText(_ text: String, font: UIFont, maxWidth: CGFloat) -> CGSize {
@@ -552,7 +553,8 @@ public class TextEditorCore: ObservableObject {
     }
     #elseif canImport(AppKit)
     private func fontForSize(_ size: CGFloat) -> NSFont {
-        return NSFont.monospacedSystemFont(ofSize: size, weight: .regular) ?? NSFont.systemFont(ofSize: size)
+        let fontFamily = EditorSettings.shared.fontFamily
+        return NSFont(name: fontFamily, size: size) ?? NSFont.systemFont(ofSize: size)
     }
     
     private func measureText(_ text: String, font: NSFont, maxWidth: CGFloat) -> CGSize {
