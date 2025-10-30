@@ -10,10 +10,161 @@ import UIKit
 import SwiftUI
 import Combine
 
+/// Manages window-level overlays for candidate windows
+class WindowOverlayManager {
+    static let shared = WindowOverlayManager()
+    private init() {}
+    
+    private var currentOverlay: WindowOverlayView?
+    
+    func showOverlay(
+        predictions: [PredictionResult],
+        at windowPosition: CGPoint,
+        size: CGSize,
+        showingAbove: Bool,
+        in window: UIWindow,
+        onTap: @escaping (PredictionResult) -> Void
+    ) {
+        // Simple cleanup
+        hideOverlay()
+        
+        // Create and show overlay
+        let overlay = WindowOverlayView()
+        overlay.configure(with: predictions, showingAbove: showingAbove)
+        overlay.onTap = onTap
+        overlay.frame = CGRect(origin: windowPosition, size: size)
+        
+        window.addSubview(overlay)
+        currentOverlay = overlay
+        
+        print("SIMPLE_DEBUG: Created overlay at Y: \(windowPosition.y)")
+    }
+    
+    func hideOverlay() {
+        currentOverlay?.removeFromSuperview()
+        currentOverlay = nil
+    }
+    
+    func updateOverlayPosition(_ position: CGPoint, size: CGSize) {
+        currentOverlay?.frame = CGRect(origin: position, size: size)
+    }
+}
+
+/// Window-level overlay view for predictions
+class WindowOverlayView: UIView {
+    private let label = UILabel()
+    private let backgroundView = UIView()
+    private let settings = EditorSettings.shared
+    private var settingsObserver: AnyCancellable?
+        
+    var onTap: ((PredictionResult) -> Void)?
+    private var currentPrediction: PredictionResult?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+        setupSettingsObserver()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView()
+        setupSettingsObserver()
+    }
+    
+    deinit {
+        settingsObserver?.cancel()
+    }
+    
+    private func setupSettingsObserver() {
+        settingsObserver = settings.$suggestionsFontSize
+            .combineLatest(settings.$fontFamily)
+            .sink { [weak self] _, _ in
+                self?.updateFont()
+            }
+    }
+    
+    private func updateFont() {
+        label.font = settings.createSuggestionsFont()
+    }
+    
+    private func setupView() {
+        // Setup background
+        backgroundView.backgroundColor = UIColor.systemBackground
+        backgroundView.layer.cornerRadius = 6
+        backgroundView.layer.borderColor = UIColor.separator.cgColor
+        backgroundView.layer.borderWidth = 1
+        backgroundView.layer.shadowColor = UIColor.black.cgColor
+        backgroundView.layer.shadowOpacity = 0.2
+        backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        backgroundView.layer.shadowRadius = 8
+        
+        addSubview(backgroundView)
+        
+        // Setup label
+        updateFont() // Use settings-based font size
+        label.textColor = UIColor.label
+        label.textAlignment = .left
+        label.numberOfLines = 0 // Allow unlimited lines
+        
+        backgroundView.addSubview(label)
+        
+        // Add tap gesture
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
+        addGestureRecognizer(tapGesture)
+        isUserInteractionEnabled = true
+        
+        // Make sure overlay appears above other content
+        layer.zPosition = 1000
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        // Manually layout the background and label
+        backgroundView.frame = bounds
+        label.frame = CGRect(
+            x: 8,
+            y: 4,
+            width: bounds.width - 16,
+            height: bounds.height - 8
+        )
+    }
+    
+    @objc private func overlayTapped() {
+        if let prediction = currentPrediction {
+            onTap?(prediction)
+        }
+    }
+    
+    func configure(with predictions: [PredictionResult], showingAbove: Bool = false) {
+        guard !predictions.isEmpty else {
+            currentPrediction = nil
+            label.text = ""
+            return
+        }
+        
+        currentPrediction = predictions.first
+        
+        // Show all predictions, each on a separate line, numbered
+        let candidateText = predictions.enumerated().map { index, prediction in
+            "\(index + 1). \(prediction.word)"
+        }.joined(separator: "\n")
+        
+        label.text = candidateText
+        
+        // Adjust shadow direction based on position
+        if showingAbove {
+            backgroundView.layer.shadowOffset = CGSize(width: 0, height: -2)
+        } else {
+            backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        }
+    }
+}
+
 /// Custom UITextView for iOS with key interception and prediction support
 class CustomUITextView: UITextView, UITextViewDelegate {
     weak var editorCore: TextEditorCore?
-    private var predictionOverlay: PredictionOverlayUIView?
     private var keyboardObserver: NSObjectProtocol?
     private var cachedMaxCandidateWidth: CGFloat = 0
     private var lastEditorWidth: CGFloat = 0
@@ -33,6 +184,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     }
     
     deinit {
+        // Clean up window overlay
+        WindowOverlayManager.shared.hideOverlay()
+        
         if let observer = keyboardObserver {
             NotificationCenter.default.removeObserver(observer)
         }
@@ -46,7 +200,8 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             .sink { [weak self] _, _, _ in
                 self?.updateEditorFont()
                 self?.refreshMaxCandidateWidth()
-                self?.updatePredictionDisplay()
+                // ONLY refresh display for font changes - don't regenerate candidates
+                self?.refreshPredictionDisplayOnly()
             }
     }
     
@@ -102,7 +257,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.updatePredictionDisplay()
+            // Only refresh display when keyboard shows - don't regenerate candidates
+            // This is mainly for repositioning when onscreen keyboard appears/disappears
+            self?.refreshPredictionDisplayOnly()
         }
     }
     
@@ -212,8 +369,84 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             selectedRange = newRange
         }
         
-        // Update prediction display
-        updatePredictionDisplay()
+        // COMPOSITION-AWARE: Only update display if we're actively composing
+        // This prevents redundant updates when core syncs non-composition changes
+        if editorCore.isCurrentlyComposing {
+            updatePredictionDisplay()
+        } else {
+            // Hide predictions if we're not composing
+            hidePredictionOverlay()
+        }
+    }
+    
+    // Debouncing system for display updates
+    private var displayUpdateWorkItem: DispatchWorkItem?
+    
+    /// Debounced display update (50ms delay for responsive UI)
+    func debouncedDisplayUpdate() {
+        displayUpdateWorkItem?.cancel()
+        
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.updatePredictionDisplay()
+        }
+        
+        displayUpdateWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
+    }
+    
+    // MARK: - Composition Detection
+    
+    /// Check if we should auto-predict next word after accepting a prediction
+    private func shouldAutoPredictNextWord() -> Bool {
+        return UserDefaults.standard.bool(forKey: "autoPredictNextWord")
+    }
+    
+    /// Check if onscreen keyboard is currently visible
+    private func isOnscreenKeyboardVisible() -> Bool {
+        // Simple heuristic: if we're first responder but don't detect external keyboard,
+        // assume onscreen keyboard is visible
+        return isFirstResponder && !hasExternalKeyboard()
+    }
+    
+    /// Check if external (hardware) keyboard is connected
+    private func hasExternalKeyboard() -> Bool {
+        // On iOS, we can't directly detect hardware keyboards
+        // But we can use heuristics:
+        // Simple approach: assume external keyboard if text view can receive key commands
+        // This is a reasonable heuristic for our use case
+        return true // For now, assume external keyboard to enable our candidate system
+    }
+    
+    /// Check if composition state changed and candidates should be updated
+    private func shouldUpdateCandidates() -> Bool {
+        guard let editorCore = editorCore else { return false }
+        
+        let onscreenVisible = isOnscreenKeyboardVisible()
+        let composing = editorCore.isCurrentlyComposing
+        
+        // Debug logging for composition state changes
+        print("🔍 shouldUpdateCandidates: onscreen=\(onscreenVisible), composing=\(composing)")
+        
+        // Don't show candidates if onscreen keyboard is visible
+        if onscreenVisible {
+            print("🔍 Blocking candidates: onscreen keyboard visible")
+            return false
+        }
+        
+        // Only update candidates if we're actively composing
+        if !composing {
+            print("🔍 Blocking candidates: not actively composing")
+            return false
+        }
+        
+        print("🔍 ✅ Allowing candidates: external keyboard + composing")
+        return true
+    }
+    
+    /// Check if we should hide candidates (scroll, escape, etc.)
+    private func shouldHideCandidates(reason: String) -> Bool {
+        print("🔍 Checking hide candidates for reason: \(reason)")
+        return true // For now, always allow hiding
     }
     
     // MARK: - Keyboard Input (for external keyboards)
@@ -236,15 +469,42 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
             editorCore.acceptPrediction(editorCore.currentPredictions[0])
             syncFromCore()
+            
+            // Check user preference for auto-predicting next word
+            if shouldAutoPredictNextWord() {
+                // Wait a brief moment then check for next word predictions
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                    // Use debounced update for auto-predict next word
+                    self?.editorCore?.requestDebouncedPredictionUpdate(at: self?.selectedRange.location ?? 0)
+                    self?.debouncedDisplayUpdate()
+                }
+            }
         }
     }
     
     // MARK: - Prediction Display
     
+    /// Refresh prediction display without regenerating candidates (for font/layout changes)
+    func refreshPredictionDisplayOnly() {
+        guard let editorCore = editorCore else { return }
+        
+        // Only refresh display if we're currently showing predictions
+        if editorCore.showingPrediction && 
+           !editorCore.currentPredictions.isEmpty && 
+           shouldUpdateCandidates() {
+            showPredictionOverlay()
+        } else {
+            hidePredictionOverlay()
+        }
+    }
+    
     func updatePredictionDisplay() {
         guard let editorCore = editorCore else { return }
         
-        if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
+        // Only show predictions if we're actively composing and external keyboard is connected
+        if shouldUpdateCandidates() && 
+           editorCore.showingPrediction && 
+           !editorCore.currentPredictions.isEmpty {
             showPredictionOverlay()
         } else {
             hidePredictionOverlay()
@@ -252,7 +512,8 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     }
     
     private func showPredictionOverlay() {
-        guard let editorCore = editorCore else { return }
+        guard let editorCore = editorCore,
+              let window = self.window else { return }
         
         // Get composition rect or fallback to cursor position
         let rawCompositionRect: CGRect
@@ -272,23 +533,16 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         }
         
         // Convert composition rect to view coordinates
-        let compositionRect = CGRect(
+        let compositionRectInTextView = CGRect(
             x: rawCompositionRect.origin.x + textContainerInset.left,
             y: rawCompositionRect.origin.y + textContainerInset.top,
             width: rawCompositionRect.width,
             height: rawCompositionRect.height
         )
         
-        // Create overlay if needed to calculate size
-        if predictionOverlay == nil {
-            predictionOverlay = PredictionOverlayUIView()
-            predictionOverlay?.onTap = { [weak self] prediction in
-                self?.editorCore?.acceptPrediction(prediction)
-                self?.syncFromCore()
-            }
-            addSubview(predictionOverlay!)
-        }
-
+        // Convert to window coordinates
+        let compositionRectInWindow = convert(compositionRectInTextView, to: window)
+        
         // Calculate candidate window size based on content (using cached width)
         let maxCandidateWidth = getMaxCandidateWidth()
         let candidateWindowSize = editorCore.calculateCandidateWindowSize(
@@ -297,154 +551,63 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             maxWidth: maxCandidateWidth
         )
         
-        // Get editor bounds - for iOS, this is simply the viewport bounds
-        let editorBounds = getVisibleEditorBounds()
+        // Get editor bounds in window coordinates for proper positioning
+        let editorBoundsInWindow = convert(bounds, to: window)
         
         // Calculate optimal position using the core's positioning logic
         let positionResult = editorCore.calculateCandidateWindowPosition(
-            editorBounds: editorBounds,
-            compositionRect: compositionRect,
+            editorBounds: editorBoundsInWindow,
+            compositionRect: compositionRectInWindow,
             candidateWindowSize: candidateWindowSize
         )
         
-        // Configure the overlay with the correct showingAbove value
-        predictionOverlay?.configure(with: editorCore.currentPredictions, showingAbove: positionResult.shouldShowAbove)
+        // DEBUG: Let's understand the real issue
+        print("SIMPLE_DEBUG: compositionRectInWindow Y: \(compositionRectInWindow.origin.y)")
+        print("SIMPLE_DEBUG: positionResult Y: \(positionResult.position.y)")
         
-        // Apply the calculated position
-        predictionOverlay?.frame = CGRect(
-            origin: positionResult.position,
-            size: candidateWindowSize
-        )
+        // Show window-level overlay
+        WindowOverlayManager.shared.showOverlay(
+            predictions: editorCore.currentPredictions,
+            at: positionResult.position,
+            size: candidateWindowSize,
+            showingAbove: positionResult.shouldShowAbove,
+            in: window
+        ) { [weak self] prediction in
+            self?.editorCore?.acceptPrediction(prediction)
+            self?.syncFromCore()
+        }
     }
     
-    private func hidePredictionOverlay() {
-        predictionOverlay?.removeFromSuperview()
-        predictionOverlay = nil
+    func hidePredictionOverlay() {
+        WindowOverlayManager.shared.hideOverlay()
     }
     
     // MARK: - Text Change Handling
     
     func handleTextChange() {
-        // Update predictions when text changes
-        let location = selectedRange.location
-        editorCore?.updatePredictions(at: location)
-        updatePredictionDisplay()
+        guard let editorCore = editorCore else { return }
+        
+        // COMPOSITION-AWARE: Only update predictions if we're actively composing
+        // Regular text changes (paste, delete outside composition, etc.) don't need predictions
+        if editorCore.isCurrentlyComposing {
+            let location = selectedRange.location
+            // Use debounced update for text changes to avoid overwhelming the system
+            editorCore.requestDebouncedPredictionUpdate(at: location)
+            // Display update with shorter debounce for responsiveness
+            debouncedDisplayUpdate()
+        } else {
+            // If not composing, ensure predictions are hidden
+            hidePredictionOverlay()
+        }
     }
     
     // MARK: - UITextViewDelegate (Scroll Detection)
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Update prediction display when scrolling to ensure proper positioning
-        updatePredictionDisplay()
-    }
-}
-
-/// Simple prediction overlay view for iOS
-class PredictionOverlayUIView: UIView {
-    private let label = UILabel()
-    private let backgroundView = UIView()
-    private let settings = EditorSettings.shared
-    private var settingsObserver: AnyCancellable?
-        
-    var onTap: ((PredictionResult) -> Void)?
-    private var currentPrediction: PredictionResult?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-        setupSettingsObserver()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupView()
-        setupSettingsObserver()
-    }
-    
-    deinit {
-        settingsObserver?.cancel()
-    }
-    
-    private func setupSettingsObserver() {
-        settingsObserver = settings.$suggestionsFontSize
-            .combineLatest(settings.$fontFamily)
-            .sink { [weak self] _, _ in
-                self?.updateFont()
-            }
-    }
-    
-    private func updateFont() {
-        label.font = settings.createSuggestionsFont()
-    }
-    
-    private func setupView() {
-        // Setup background
-        backgroundView.backgroundColor = UIColor.systemBackground
-        backgroundView.layer.cornerRadius = 6
-        backgroundView.layer.borderColor = UIColor.separator.cgColor
-        backgroundView.layer.borderWidth = 1
-        backgroundView.layer.shadowColor = UIColor.black.cgColor
-        backgroundView.layer.shadowOpacity = 0.1
-        backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        backgroundView.layer.shadowRadius = 4
-        
-        addSubview(backgroundView)
-        
-        // Setup label
-        updateFont() // Use settings-based font size
-        label.textColor = UIColor.secondaryLabel
-        label.textAlignment = .left
-        label.numberOfLines = 0 // Allow unlimited lines
-        
-        backgroundView.addSubview(label)
-        
-        // Add tap gesture
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(overlayTapped))
-        addGestureRecognizer(tapGesture)
-        isUserInteractionEnabled = true
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        // Manually layout the background and label
-        backgroundView.frame = bounds
-        label.frame = CGRect(
-            x: 8,
-            y: 4,
-            width: bounds.width - 16,
-            height: bounds.height - 8
-        )
-    }
-    
-
-    @objc private func overlayTapped() {
-        if let prediction = currentPrediction {
-            onTap?(prediction)
-        }
-    }
-    
-    func configure(with predictions: [PredictionResult], showingAbove: Bool = false) {
-        guard !predictions.isEmpty else {
-            currentPrediction = nil
-            label.text = ""
-            return
-        }
-        
-        currentPrediction = predictions.first
-        
-        // Show all predictions, each on a separate line, numbered
-        let candidateText = predictions.enumerated().map { index, prediction in
-            "\(index + 1). \(prediction.word)"
-        }.joined(separator: "\n")
-        
-        label.text = candidateText
-        
-        // Adjust shadow direction based on position
-        if showingAbove {
-            backgroundView.layer.shadowOffset = CGSize(width: 0, height: -2)
-        } else {
-            backgroundView.layer.shadowOffset = CGSize(width: 0, height: 2)
+        // Cancel pending updates and hide candidates immediately when scrolling starts
+        editorCore?.cancelPendingUpdates()
+        if shouldHideCandidates(reason: "scroll") {
+            hidePredictionOverlay()
         }
     }
 }
@@ -484,8 +647,7 @@ struct IOSTextEditor: UIViewRepresentable {
                 parent.core.acceptPrediction(parent.core.currentPredictions[0])
                 if let customTextView = textView as? CustomUITextView {
                     customTextView.syncFromCore()
-                    
-                    customTextView.updatePredictionDisplay()
+                    // No need to call updatePredictionDisplay here - syncFromCore handles it composition-aware
                 }
                 return false
             }
@@ -559,12 +721,22 @@ struct IOSTextEditor: UIViewRepresentable {
         func textViewDidChangeSelection(_ textView: UITextView) {
             print("🎯 Selection changed to: \(textView.selectedRange)")
             
-            // Update predictions when cursor moves
-            let location = textView.selectedRange.location
-            parent.core.updatePredictions(at: location)
-            
-            if let customTextView = textView as? CustomUITextView {
-                customTextView.updatePredictionDisplay()
+            // COMPOSITION-AWARE: Only update predictions when cursor moves WITHIN composition
+            // Regular cursor movement (clicking around, arrow keys outside composition) doesn't need predictions
+            if parent.core.isCurrentlyComposing {
+                let location = textView.selectedRange.location
+                // Use immediate update for cursor movement within composition since position matters
+                parent.core.requestImmediatePredictionUpdate(at: location)
+                
+                if let customTextView = textView as? CustomUITextView {
+                    customTextView.debouncedDisplayUpdate()
+                }
+            } else {
+                // If not composing, cancel any pending updates and hide predictions
+                parent.core.cancelPendingUpdates()
+                if let customTextView = textView as? CustomUITextView {
+                    customTextView.hidePredictionOverlay()
+                }
             }
         }
         
@@ -573,6 +745,7 @@ struct IOSTextEditor: UIViewRepresentable {
             // This will be called after UITextView handles allowed changes
             
             if let customTextView = textView as? CustomUITextView {
+                // handleTextChange is now composition-aware
                 customTextView.handleTextChange()
             }
         }

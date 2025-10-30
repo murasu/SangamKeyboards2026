@@ -85,7 +85,7 @@ struct ContentView: View {
             editor
                 .frame(minHeight: 400)
                 .border(Color.gray.opacity(0.3), width: 1)
-            
+            /*
             Text("Instructions:")
                 .font(.headline)
             
@@ -98,7 +98,7 @@ struct ContentView: View {
                 Text("• Use Backspace to edit within composition")
             }
             .font(.caption)
-            .foregroundColor(.secondary)
+            .foregroundColor(.secondary) */
         }
         .padding()
         #if os(iOS)
