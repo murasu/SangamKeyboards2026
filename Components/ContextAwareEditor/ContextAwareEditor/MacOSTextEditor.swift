@@ -288,6 +288,10 @@ struct MacOSTextEditor: NSViewRepresentable {
         private let settings = EditorSettings.shared
         private var settingsObserver: AnyCancellable?
         
+        // Font matrix line drawing
+        var highlightCurrentWord: Bool = true
+        private var wordHighlightView: NSView?
+        
         // Debouncing system for display updates
         private var displayUpdateWorkItem: DispatchWorkItem?
         
@@ -300,6 +304,7 @@ struct MacOSTextEditor: NSViewRepresentable {
         deinit {
             settingsObserver?.cancel()
             displayUpdateWorkItem?.cancel()
+            wordHighlightView?.removeFromSuperview()
         }
         
         /// Debounced display update (50ms delay for responsive UI)
@@ -322,6 +327,7 @@ struct MacOSTextEditor: NSViewRepresentable {
                     self?.refreshMaxCandidateWidth()
                     self?.updateTextViewFont()
                     // ONLY refresh display for font changes - don't regenerate candidates
+                    // This will also update word highlighting
                     self?.debouncedDisplayUpdate(for: self?.textView)
                 }
         }
@@ -425,6 +431,9 @@ struct MacOSTextEditor: NSViewRepresentable {
             } else {
                 hidePredictionOverlay()
             }
+            
+            // Update word highlight when candidate window is shown/hidden
+            updateWordHighlight()
         }
         
         private func showPredictionOverlay(for textView: NSTextView) {
@@ -518,6 +527,142 @@ struct MacOSTextEditor: NSViewRepresentable {
             predictionOverlay?.removeFromSuperview()
             predictionOverlay = nil
         }
+        
+        // MARK: - Current Word Highlighting
+        
+        /// Update word highlighting when candidate window is shown
+        private func updateWordHighlight() {
+            guard highlightCurrentWord, let textView = self.textView else {
+                removeWordHighlight()
+                return
+            }
+            
+            // Get the current word being typed
+            guard let currentWordRange = getCurrentWordRange(for: textView) else {
+                removeWordHighlight()
+                return
+            }
+            
+            highlightWordAtRange(currentWordRange, in: textView)
+        }
+        
+        /// Get the range of the word currently being typed
+        private func getCurrentWordRange(for textView: NSTextView) -> NSRange? {
+            let cursorPosition = textView.selectedRange().location
+            guard cursorPosition >= 0 && cursorPosition <= textView.textStorage?.length ?? 0 else { return nil }
+            
+            // If we're composing, use the composition range
+            if parent.core.isCurrentlyComposing,
+               let compositionRange = parent.core.currentCompositionRange {
+                return compositionRange
+            }
+            
+            // Otherwise, find the word boundaries around the cursor
+            guard let textStorage = textView.textStorage else { return nil }
+            let text = textStorage.string
+            guard cursorPosition > 0 && cursorPosition <= text.count else { return nil }
+            
+            let index = text.index(text.startIndex, offsetBy: cursorPosition - 1)
+            let range = text.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines.inverted, 
+                                            options: [.backwards], range: text.startIndex..<text.index(after: index))
+            
+            if let wordStart = range?.lowerBound {
+                let remainingText = text[wordStart...]
+                let wordEndRange = remainingText.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines)
+                let wordEnd = wordEndRange?.lowerBound ?? text.endIndex
+                
+                let startOffset = text.distance(from: text.startIndex, to: wordStart)
+                let endOffset = text.distance(from: text.startIndex, to: wordEnd)
+                
+                return NSRange(location: startOffset, length: endOffset - startOffset)
+            }
+            
+            return nil
+        }
+        
+        /// Highlight the word at the specified range
+        private func highlightWordAtRange(_ range: NSRange, in textView: NSTextView) {
+            // Remove existing highlight
+            wordHighlightView?.removeFromSuperview()
+            
+            // Get the bounding rect for the word
+            guard let wordRect = getTextRect(for: range, in: textView) else { return }
+            
+            // Create highlight view
+            let highlightView = NSView(frame: wordRect)
+            highlightView.wantsLayer = true
+            highlightView.layer?.backgroundColor = NSColor.systemBlue.withAlphaComponent(0.2).cgColor
+            highlightView.layer?.cornerRadius = 4
+            highlightView.layer?.borderColor = NSColor.systemBlue.withAlphaComponent(0.5).cgColor
+            highlightView.layer?.borderWidth = 1
+            
+            // Add to text view
+            textView.addSubview(highlightView)
+            wordHighlightView = highlightView
+            
+            print("📦 macOS Word highlight - range: \(range), rect: \(wordRect)")
+        }
+        
+        /// Get the visual rect for a text range
+        private func getTextRect(for range: NSRange, in textView: NSTextView) -> CGRect? {
+            guard let layoutManager = textView.layoutManager,
+                  let textContainer = textView.textContainer,
+                  range.location >= 0 && range.location + range.length <= textView.textStorage?.length ?? 0 else { return nil }
+            
+            // Get the glyph range for the character range
+            let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+            
+            // Get the bounding rect for the glyph range
+            let boundingRect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+            
+            // Adjust for text container inset and add some padding
+            let adjustedRect = CGRect(
+                x: boundingRect.origin.x + textView.textContainerInset.width - 2,
+                y: boundingRect.origin.y + textView.textContainerInset.height - 2,
+                width: boundingRect.width + 4,
+                height: boundingRect.height + 4
+            )
+            
+            return adjustedRect
+        }
+        
+        /// Remove word highlight
+        private func removeWordHighlight() {
+            wordHighlightView?.removeFromSuperview()
+            wordHighlightView = nil
+        }
+        
+        // MARK: - Key Handling
+        
+        /// Get the rect of the line currently being edited and its baseline position
+        private func getCurrentLineRectAndBaseline(for textView: NSTextView) -> (lineRect: CGRect, baseline: CGFloat)? {
+            let cursorPosition = textView.selectedRange().location
+            guard cursorPosition >= 0 && cursorPosition <= textView.textStorage?.length ?? 0 else { return nil }
+            
+            guard let layoutManager = textView.layoutManager,
+                  let textContainer = textView.textContainer else { return nil }
+            
+            // Get the line fragment rect for the cursor position
+            let glyphIndex = layoutManager.glyphIndexForCharacter(at: cursorPosition)
+            let lineFragmentRect = layoutManager.lineFragmentRect(forGlyphAt: glyphIndex, effectiveRange: nil)
+            
+            // For macOS, the baseline is at the bottom of the line fragment rect
+            // We need to account for the text container inset to get the actual view position
+            let actualBaseline = lineFragmentRect.origin.y + lineFragmentRect.height + textView.textContainerInset.height
+            
+            // Adjust line rect for text container inset
+            let adjustedRect = CGRect(
+                x: textView.textContainerInset.width,
+                y: lineFragmentRect.origin.y + textView.textContainerInset.height,
+                width: textView.visibleRect.width - textView.textContainerInset.width * 2,
+                height: lineFragmentRect.height
+            )
+            
+            print("📏 macOS Line calculation - lineFragmentRect: \(lineFragmentRect), actualBaseline: \(actualBaseline)")
+            
+            return (adjustedRect, actualBaseline)
+        }
+        
         
         // MARK: - Key Handling
         

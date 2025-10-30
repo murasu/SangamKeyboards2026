@@ -171,6 +171,10 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     private let settings = EditorSettings.shared
     private var settingsObserver: AnyCancellable?
     
+    // Current word highlighting
+    var highlightCurrentWord: Bool = true
+    private var wordHighlightLayer: CALayer?
+    
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         setupTextView()
@@ -187,6 +191,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         // Clean up window overlay
         WindowOverlayManager.shared.hideOverlay()
         
+        // Clean up word highlight layer
+        wordHighlightLayer?.removeFromSuperlayer()
+        
         if let observer = keyboardObserver {
             NotificationCenter.default.removeObserver(observer)
         }
@@ -201,6 +208,7 @@ class CustomUITextView: UITextView, UITextViewDelegate {
                 self?.updateEditorFont()
                 self?.refreshMaxCandidateWidth()
                 // ONLY refresh display for font changes - don't regenerate candidates
+                // This will also update word highlighting
                 self?.refreshPredictionDisplayOnly()
             }
     }
@@ -481,6 +489,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         } else {
             hidePredictionOverlay()
         }
+        
+        // Update word highlight when display is refreshed
+        updateWordHighlight()
     }
     
     func updatePredictionDisplay() {
@@ -494,6 +505,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         } else {
             hidePredictionOverlay()
         }
+        
+        // Update word highlight when candidate window is shown/hidden
+        updateWordHighlight()
     }
     
     private func showPredictionOverlay() {
@@ -580,6 +594,107 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     
     func hidePredictionOverlay() {
         WindowOverlayManager.shared.hideOverlay()
+    }
+    
+    // MARK: - Current Word Highlighting
+    
+    /// Update word highlighting when candidate window is shown
+    private func updateWordHighlight() {
+        guard highlightCurrentWord else {
+            removeWordHighlight()
+            return
+        }
+        
+        // Get the current word being typed
+        guard let currentWordRange = getCurrentWordRange() else {
+            removeWordHighlight()
+            return
+        }
+        
+        highlightWordAtRange(currentWordRange)
+    }
+    
+    /// Get the range of the word currently being typed
+    private func getCurrentWordRange() -> NSRange? {
+        let cursorPosition = selectedRange.location
+        guard cursorPosition >= 0 && cursorPosition <= textStorage.length else { return nil }
+        
+        // If we're composing, use the composition range
+        if let editorCore = editorCore, editorCore.isCurrentlyComposing,
+           let compositionRange = editorCore.currentCompositionRange {
+            return compositionRange
+        }
+        
+        // Otherwise, find the word boundaries around the cursor
+        let text = textStorage.string
+        guard cursorPosition > 0 && cursorPosition <= text.count else { return nil }
+        
+        let index = text.index(text.startIndex, offsetBy: cursorPosition - 1)
+        let range = text.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines.inverted, 
+                                        options: [.backwards], range: text.startIndex..<text.index(after: index))
+        
+        if let wordStart = range?.lowerBound {
+            let remainingText = text[wordStart...]
+            let wordEndRange = remainingText.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines)
+            let wordEnd = wordEndRange?.lowerBound ?? text.endIndex
+            
+            let startOffset = text.distance(from: text.startIndex, to: wordStart)
+            let endOffset = text.distance(from: text.startIndex, to: wordEnd)
+            
+            return NSRange(location: startOffset, length: endOffset - startOffset)
+        }
+        
+        return nil
+    }
+    
+    /// Highlight the word at the specified range
+    private func highlightWordAtRange(_ range: NSRange) {
+        // Remove existing highlight
+        wordHighlightLayer?.removeFromSuperlayer()
+        
+        // Get the bounding rect for the word
+        guard let wordRect = getTextRect(for: range) else { return }
+        
+        // Create highlight layer
+        let highlightLayer = CALayer()
+        highlightLayer.frame = wordRect
+        highlightLayer.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2).cgColor
+        highlightLayer.cornerRadius = 4
+        highlightLayer.borderColor = UIColor.systemBlue.withAlphaComponent(0.5).cgColor
+        highlightLayer.borderWidth = 1
+        
+        // Add to text view
+        layer.addSublayer(highlightLayer)
+        wordHighlightLayer = highlightLayer
+        
+        print("📦 iOS Word highlight - range: \(range), rect: \(wordRect)")
+    }
+    
+    /// Get the visual rect for a text range
+    private func getTextRect(for range: NSRange) -> CGRect? {
+        guard range.location >= 0 && range.location + range.length <= textStorage.length else { return nil }
+        
+        // Get the glyph range for the character range
+        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+        
+        // Get the bounding rect for the glyph range
+        let boundingRect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+        
+        // Adjust for text container inset and add some padding
+        let adjustedRect = CGRect(
+            x: boundingRect.origin.x + textContainerInset.left - 2,
+            y: boundingRect.origin.y + textContainerInset.top - 2,
+            width: boundingRect.width + 4,
+            height: boundingRect.height + 4
+        )
+        
+        return adjustedRect
+    }
+    
+    /// Remove word highlight
+    private func removeWordHighlight() {
+        wordHighlightLayer?.removeFromSuperlayer()
+        wordHighlightLayer = nil
     }
     
     // MARK: - Text Change Handling
