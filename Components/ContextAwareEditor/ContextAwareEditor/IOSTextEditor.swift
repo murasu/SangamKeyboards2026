@@ -200,7 +200,8 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             .sink { [weak self] _, _, _ in
                 self?.updateEditorFont()
                 self?.refreshMaxCandidateWidth()
-                self?.updatePredictionDisplay()
+                // ONLY refresh display for font changes - don't regenerate candidates
+                self?.refreshPredictionDisplayOnly()
             }
     }
     
@@ -256,7 +257,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.updatePredictionDisplay()
+            // Only refresh display when keyboard shows - don't regenerate candidates
+            // This is mainly for repositioning when onscreen keyboard appears/disappears
+            self?.refreshPredictionDisplayOnly()
         }
     }
     
@@ -366,8 +369,14 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             selectedRange = newRange
         }
         
-        // Update prediction display
-        updatePredictionDisplay()
+        // COMPOSITION-AWARE: Only update display if we're actively composing
+        // This prevents redundant updates when core syncs non-composition changes
+        if editorCore.isCurrentlyComposing {
+            updatePredictionDisplay()
+        } else {
+            // Hide predictions if we're not composing
+            hidePredictionOverlay()
+        }
     }
     
     // MARK: - Composition Detection
@@ -397,13 +406,26 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     private func shouldUpdateCandidates() -> Bool {
         guard let editorCore = editorCore else { return false }
         
+        let onscreenVisible = isOnscreenKeyboardVisible()
+        let composing = editorCore.isCurrentlyComposing
+        
+        // Debug logging for composition state changes
+        print("🔍 shouldUpdateCandidates: onscreen=\(onscreenVisible), composing=\(composing)")
+        
         // Don't show candidates if onscreen keyboard is visible
-        if isOnscreenKeyboardVisible() {
+        if onscreenVisible {
+            print("🔍 Blocking candidates: onscreen keyboard visible")
             return false
         }
         
         // Only update candidates if we're actively composing
-        return editorCore.isCurrentlyComposing
+        if !composing {
+            print("🔍 Blocking candidates: not actively composing")
+            return false
+        }
+        
+        print("🔍 ✅ Allowing candidates: external keyboard + composing")
+        return true
     }
     
     /// Check if we should hide candidates (scroll, escape, etc.)
@@ -445,6 +467,20 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     }
     
     // MARK: - Prediction Display
+    
+    /// Refresh prediction display without regenerating candidates (for font/layout changes)
+    func refreshPredictionDisplayOnly() {
+        guard let editorCore = editorCore else { return }
+        
+        // Only refresh display if we're currently showing predictions
+        if editorCore.showingPrediction && 
+           !editorCore.currentPredictions.isEmpty && 
+           shouldUpdateCandidates() {
+            showPredictionOverlay()
+        } else {
+            hidePredictionOverlay()
+        }
+    }
     
     func updatePredictionDisplay() {
         guard let editorCore = editorCore else { return }
@@ -526,17 +562,25 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         }
     }
     
-    private func hidePredictionOverlay() {
+    func hidePredictionOverlay() {
         WindowOverlayManager.shared.hideOverlay()
     }
     
     // MARK: - Text Change Handling
     
     func handleTextChange() {
-        // Update predictions when text changes
-        let location = selectedRange.location
-        editorCore?.updatePredictions(at: location)
-        updatePredictionDisplay()
+        guard let editorCore = editorCore else { return }
+        
+        // COMPOSITION-AWARE: Only update predictions if we're actively composing
+        // Regular text changes (paste, delete outside composition, etc.) don't need predictions
+        if editorCore.isCurrentlyComposing {
+            let location = selectedRange.location
+            editorCore.updatePredictions(at: location)
+            updatePredictionDisplay()
+        } else {
+            // If not composing, ensure predictions are hidden
+            hidePredictionOverlay()
+        }
     }
     
     // MARK: - UITextViewDelegate (Scroll Detection)
@@ -584,8 +628,7 @@ struct IOSTextEditor: UIViewRepresentable {
                 parent.core.acceptPrediction(parent.core.currentPredictions[0])
                 if let customTextView = textView as? CustomUITextView {
                     customTextView.syncFromCore()
-                    
-                    customTextView.updatePredictionDisplay()
+                    // No need to call updatePredictionDisplay here - syncFromCore handles it composition-aware
                 }
                 return false
             }
@@ -659,12 +702,20 @@ struct IOSTextEditor: UIViewRepresentable {
         func textViewDidChangeSelection(_ textView: UITextView) {
             print("🎯 Selection changed to: \(textView.selectedRange)")
             
-            // Update predictions when cursor moves
-            let location = textView.selectedRange.location
-            parent.core.updatePredictions(at: location)
-            
-            if let customTextView = textView as? CustomUITextView {
-                customTextView.updatePredictionDisplay()
+            // COMPOSITION-AWARE: Only update predictions when cursor moves WITHIN composition
+            // Regular cursor movement (clicking around, arrow keys outside composition) doesn't need predictions
+            if parent.core.isCurrentlyComposing {
+                let location = textView.selectedRange.location
+                parent.core.updatePredictions(at: location)
+                
+                if let customTextView = textView as? CustomUITextView {
+                    customTextView.updatePredictionDisplay()
+                }
+            } else {
+                // If not composing, ensure predictions are hidden
+                if let customTextView = textView as? CustomUITextView {
+                    customTextView.hidePredictionOverlay()
+                }
             }
         }
         
@@ -673,6 +724,7 @@ struct IOSTextEditor: UIViewRepresentable {
             // This will be called after UITextView handles allowed changes
             
             if let customTextView = textView as? CustomUITextView {
+                // handleTextChange is now composition-aware
                 customTextView.handleTextChange()
             }
         }
