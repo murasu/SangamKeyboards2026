@@ -379,6 +379,21 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         }
     }
     
+    // Debouncing system for display updates
+    private var displayUpdateWorkItem: DispatchWorkItem?
+    
+    /// Debounced display update (50ms delay for responsive UI)
+    func debouncedDisplayUpdate() {
+        displayUpdateWorkItem?.cancel()
+        
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.updatePredictionDisplay()
+        }
+        
+        displayUpdateWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
+    }
+    
     // MARK: - Composition Detection
     
     /// Check if we should auto-predict next word after accepting a prediction
@@ -459,8 +474,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             if shouldAutoPredictNextWord() {
                 // Wait a brief moment then check for next word predictions
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                    self?.editorCore?.updatePredictions(at: self?.selectedRange.location ?? 0)
-                    self?.updatePredictionDisplay()
+                    // Use debounced update for auto-predict next word
+                    self?.editorCore?.requestDebouncedPredictionUpdate(at: self?.selectedRange.location ?? 0)
+                    self?.debouncedDisplayUpdate()
                 }
             }
         }
@@ -575,8 +591,10 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         // Regular text changes (paste, delete outside composition, etc.) don't need predictions
         if editorCore.isCurrentlyComposing {
             let location = selectedRange.location
-            editorCore.updatePredictions(at: location)
-            updatePredictionDisplay()
+            // Use debounced update for text changes to avoid overwhelming the system
+            editorCore.requestDebouncedPredictionUpdate(at: location)
+            // Display update with shorter debounce for responsiveness
+            debouncedDisplayUpdate()
         } else {
             // If not composing, ensure predictions are hidden
             hidePredictionOverlay()
@@ -586,7 +604,8 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     // MARK: - UITextViewDelegate (Scroll Detection)
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Hide candidates immediately when scrolling starts
+        // Cancel pending updates and hide candidates immediately when scrolling starts
+        editorCore?.cancelPendingUpdates()
         if shouldHideCandidates(reason: "scroll") {
             hidePredictionOverlay()
         }
@@ -706,13 +725,15 @@ struct IOSTextEditor: UIViewRepresentable {
             // Regular cursor movement (clicking around, arrow keys outside composition) doesn't need predictions
             if parent.core.isCurrentlyComposing {
                 let location = textView.selectedRange.location
-                parent.core.updatePredictions(at: location)
+                // Use immediate update for cursor movement within composition since position matters
+                parent.core.requestImmediatePredictionUpdate(at: location)
                 
                 if let customTextView = textView as? CustomUITextView {
-                    customTextView.updatePredictionDisplay()
+                    customTextView.debouncedDisplayUpdate()
                 }
             } else {
-                // If not composing, ensure predictions are hidden
+                // If not composing, cancel any pending updates and hide predictions
+                parent.core.cancelPendingUpdates()
                 if let customTextView = textView as? CustomUITextView {
                     customTextView.hidePredictionOverlay()
                 }

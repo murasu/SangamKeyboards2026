@@ -70,6 +70,10 @@ public class TextEditorCore: ObservableObject {
     private var cachedContext: (lineRange: NSRange, location: Int, context: WordContext)?
     private var ngramSelection: NgramSelection = .firstAvailable
     
+    // Debouncing system for prediction updates
+    private var predictionUpdateWorkItem: DispatchWorkItem?
+    private var displayUpdateWorkItem: DispatchWorkItem?
+    
     // Settings reference
     private let settings = EditorSettings.shared
     
@@ -147,6 +151,8 @@ public class TextEditorCore: ObservableObject {
         if isTranslatableKey(character, keyCode: keyCode) {
             handleTranslatableKey(character, keyCode: keyCode, isShifted: isShifted, at: range)
         } else {
+            // Cancel pending updates since we're processing a non-translatable key
+            cancelPendingUpdates()
             commitComposition()
             insertRegularText(character, at: range)
             updateCompositionDisplay(character)
@@ -405,6 +411,9 @@ public class TextEditorCore: ObservableObject {
     
     private func commitComposition() {
         guard isComposing, let range = compositionRange else { return }
+        
+        // Cancel any pending prediction updates since composition is ending
+        cancelPendingUpdates()
         
         // Remove composition styling and apply normal text attributes
         let normalAttributes = getNormalTextAttributes()
@@ -868,6 +877,47 @@ public class TextEditorCore: ObservableObject {
         }
     }
     
+    // MARK: - Debounced Prediction Updates
+    
+    /// Request a debounced prediction update (100ms delay)
+    /// This is the main entry point for prediction updates during typing
+    public func requestDebouncedPredictionUpdate(at location: Int) {
+        print("🕒 Debounced prediction update requested at location \(location)")
+        
+        // Cancel any pending prediction update
+        cancelPendingUpdates()
+        
+        // Schedule new prediction update with 100ms delay
+        let workItem = DispatchWorkItem { [weak self] in
+            print("🕒 Executing debounced prediction update at location \(location)")
+            self?.updatePredictions(at: location)
+        }
+        
+        predictionUpdateWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
+    }
+    
+    /// Request immediate prediction update (for critical actions like cursor movement within composition)
+    public func requestImmediatePredictionUpdate(at location: Int) {
+        print("⚡ Immediate prediction update requested at location \(location)")
+        
+        // Cancel pending updates to avoid conflicts
+        cancelPendingUpdates()
+        
+        // Execute immediately
+        updatePredictions(at: location)
+    }
+    
+    /// Cancel all pending debounced updates
+    /// Called on: composition end, escape/tab, scroll start, non-translatable key
+    public func cancelPendingUpdates() {
+        predictionUpdateWorkItem?.cancel()
+        displayUpdateWorkItem?.cancel()
+        predictionUpdateWorkItem = nil
+        displayUpdateWorkItem = nil
+        print("🕒 Cancelled pending prediction updates")
+    }
+    
     /// Rotate n-gram selection strategy (for testing/debugging)
     public func rotateNgramSelection() {
         ngramSelection = ngramSelection.next
@@ -919,6 +969,9 @@ public class TextEditorCore: ObservableObject {
     
     /// Hide predictions
     public func hidePredictions() {
+        // Cancel any pending updates since we're explicitly hiding predictions
+        cancelPendingUpdates()
+        
         showingPrediction = false
         currentPredictions = []
         predictionRange = nil

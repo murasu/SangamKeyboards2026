@@ -1,3 +1,6 @@
+# Keep local copies only
+Journal/
+
 # Xcode
 .DS_Store
 build/

@@ -273,6 +273,9 @@ struct MacOSTextEditor: NSViewRepresentable {
         private let settings = EditorSettings.shared
         private var settingsObserver: AnyCancellable?
         
+        // Debouncing system for display updates
+        private var displayUpdateWorkItem: DispatchWorkItem?
+        
         init(_ parent: MacOSTextEditor) {
             self.parent = parent
             super.init()
@@ -281,6 +284,19 @@ struct MacOSTextEditor: NSViewRepresentable {
         
         deinit {
             settingsObserver?.cancel()
+            displayUpdateWorkItem?.cancel()
+        }
+        
+        /// Debounced display update (50ms delay for responsive UI)
+        private func debouncedDisplayUpdate(for textView: NSTextView?) {
+            displayUpdateWorkItem?.cancel()
+            
+            let workItem = DispatchWorkItem { [weak self] in
+                self?.updatePredictionDisplay(for: textView)
+            }
+            
+            displayUpdateWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
         }
         
         private func setupSettingsObserver() {
@@ -289,7 +305,8 @@ struct MacOSTextEditor: NSViewRepresentable {
                 .sink { [weak self] _, _, _ in
                     self?.refreshMaxCandidateWidth()
                     self?.updateTextViewFont()
-                    self?.updatePredictionDisplay(for: self?.textView)
+                    // ONLY refresh display for font changes - don't regenerate candidates
+                    self?.debouncedDisplayUpdate(for: self?.textView)
                 }
         }
         
@@ -347,7 +364,7 @@ struct MacOSTextEditor: NSViewRepresentable {
             // Check if this is an external change (paste, programmatic change, etc.)
             let currentText = textView.string
             if currentText != parent.core.textStorage.string {
-                // External change detected - commit any active composition
+                // External change detected - commit any active composition and cancel pending updates
                 if parent.core.isCurrentlyComposing {
                     parent.core.forceCommitComposition()
                 }
@@ -362,11 +379,16 @@ struct MacOSTextEditor: NSViewRepresentable {
                 parent.core.onTextChange?(currentText)
             }
             
-            // Update predictions for non-composition changes
-            if !parent.core.isCurrentlyComposing {
-                parent.core.updatePredictions(at: textView.selectedRange().location)
+            // COMPOSITION-AWARE: Only update predictions if we're actively composing
+            // External changes (paste, programmatic changes, etc.) don't need predictions
+            if parent.core.isCurrentlyComposing {
+                // Use debounced update for text changes during composition
+                parent.core.requestDebouncedPredictionUpdate(at: textView.selectedRange().location)
+                debouncedDisplayUpdate(for: textView)
+            } else {
+                // If not composing, cancel any pending updates and hide predictions
+                parent.core.cancelPendingUpdates()
             }
-            updatePredictionDisplay(for: textView)
         }
 
         
@@ -482,10 +504,12 @@ struct MacOSTextEditor: NSViewRepresentable {
                 if parent.core.showingPrediction && !parent.core.currentPredictions.isEmpty {
                     parent.core.acceptPrediction(parent.core.currentPredictions[0])
                     updateTextViewFromCore(textView)
+                    // Tab acceptance should be immediate, not debounced
                     return true // Consume the event
                 }
             case 53: // Escape key - handle escape
                 parent.core.handleEscapeKey()
+                // Escape should be immediate, not debounced
                 updatePredictionDisplay(for: textView)
                 return true // Consume the event
             case 36: // Return key - commit composition and insert newline
@@ -519,7 +543,9 @@ struct MacOSTextEditor: NSViewRepresentable {
                     
                     // Update the text view
                     updateTextViewFromCore(textView)
-                    updatePredictionDisplay(for: textView)
+                    
+                    // Use debounced display update for better performance during rapid typing
+                    debouncedDisplayUpdate(for: textView)
                     
                     return true // Consume the event to prevent default handling
                 }
@@ -552,6 +578,7 @@ struct MacOSTextEditor: NSViewRepresentable {
                 
                 // Hide predictions
                 parent.core.hidePredictions()
+                // Prediction acceptance should be immediate, not debounced
                 updatePredictionDisplay(for: textView)
             }
         }
