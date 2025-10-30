@@ -83,7 +83,7 @@ struct ContentView: View {
             .controlSize(.small)
             
             editor
-                .frame(minHeight: 400)
+                .frame(minHeight: 600)
                 .border(Color.gray.opacity(0.3), width: 1)
             /*
             Text("Instructions:")
