@@ -448,8 +448,12 @@ struct MacOSTextEditor: NSViewRepresentable {
             print("🎯 CALLER_MAC:   - compositionRect: \(compositionRect)")
             print("🎯 CALLER_MAC:   - candidateWindowSize: \(candidateWindowSize)")
             print("🎯 CALLER_MAC:   - textView.frame: \(textView.frame)")
-            print("🎯 CALLER_MAC:   - textView.bounds: \(textView.bounds)")
-            print("🎯 CALLER_MAC:   - textView.enclosingScrollView?.visibleRect: \(textView.enclosingScrollView?.visibleRect ?? .zero)")
+            // DEBUG: Let's understand macOS positioning for comparison
+            print("🔍 MAC_DEBUG: =================================")
+            print("🔍 MAC_DEBUG: Text container inset: \(textView.textContainerInset)")
+            print("🔍 MAC_DEBUG: Composition rect: \(compositionRect)")
+            print("🔍 MAC_DEBUG: Editor bounds: \(editorBounds)")
+            print("🔍 MAC_DEBUG: Candidate window size: \(candidateWindowSize)")
             
             // Calculate optimal position using the core's positioning logic
             let positionResult = parent.core.calculateCandidateWindowPosition(
@@ -458,10 +462,10 @@ struct MacOSTextEditor: NSViewRepresentable {
                 candidateWindowSize: candidateWindowSize
             )
             
-            print("🎯 CALLER_MAC: Result from calculateCandidateWindowPosition:")
-            print("🎯 CALLER_MAC:   - position: \(positionResult.position)")
-            print("🎯 CALLER_MAC:   - shouldShowAbove: \(positionResult.shouldShowAbove)")
-            print("🎯 CALLER_MAC: ==============================================")
+            print("🔍 MAC_DEBUG: Final position result: \(positionResult.position)")
+            print("🔍 MAC_DEBUG: Should show above: \(positionResult.shouldShowAbove)")
+            print("🔍 MAC_DEBUG: Distance from composition bottom to candidate: \(positionResult.position.y - (compositionRect.origin.y + compositionRect.height))")
+            print("🔍 MAC_DEBUG: =================================")
             
             // Create or update prediction overlay
             if predictionOverlay == nil {

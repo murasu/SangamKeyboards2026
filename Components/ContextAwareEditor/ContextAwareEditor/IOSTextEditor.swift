@@ -191,7 +191,6 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             NotificationCenter.default.removeObserver(observer)
         }
         settingsObserver?.cancel()
-        layoutAwareUpdateWorkItem?.cancel()
     }
     
     private func setupSettingsObserver() {
@@ -373,8 +372,7 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         // COMPOSITION-AWARE: Only update display if we're actively composing
         // This prevents redundant updates when core syncs non-composition changes
         if editorCore.isCurrentlyComposing {
-            // Use layout-aware update to handle SwiftUI layout timing
-            swiftUILayoutAwareDisplayUpdate()
+            updatePredictionDisplay()
         } else {
             // Hide predictions if we're not composing
             hidePredictionOverlay()
@@ -382,26 +380,6 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     }
     
     // MARK: - Composition Detection
-    
-    // SwiftUI Layout coordination
-    private var layoutAwareUpdateWorkItem: DispatchWorkItem?
-    
-    /// SwiftUI layout-aware display update
-    /// Waits one runloop cycle for SwiftUI layout to complete before positioning
-    func swiftUILayoutAwareDisplayUpdate() {
-        layoutAwareUpdateWorkItem?.cancel()
-        
-        print("🔍 LAYOUT_DEBUG: swiftUILayoutAwareDisplayUpdate scheduled")
-        
-        let workItem = DispatchWorkItem { [weak self] in
-            print("🔍 LAYOUT_DEBUG: swiftUILayoutAwareDisplayUpdate executing after layout")
-            self?.updatePredictionDisplay()
-        }
-        
-        layoutAwareUpdateWorkItem = workItem
-        // Use asyncAfter with minimal delay to let SwiftUI complete its layout pass
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: workItem)
-    }
     
     /// Check if we should auto-predict next word after accepting a prediction
     private func shouldAutoPredictNextWord() -> Bool {
@@ -481,9 +459,8 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             if shouldAutoPredictNextWord() {
                 // Wait a brief moment then check for next word predictions
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                    // Use debounced update for auto-predict next word
-                    self?.editorCore?.requestDebouncedPredictionUpdate(at: self?.selectedRange.location ?? 0)
-                    self?.swiftUILayoutAwareDisplayUpdate()
+                    self?.editorCore?.updatePredictions(at: self?.selectedRange.location ?? 0)
+                    self?.updatePredictionDisplay()
                 }
             }
         }
@@ -508,19 +485,12 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     func updatePredictionDisplay() {
         guard let editorCore = editorCore else { return }
         
-        print("🔍 UPDATE_DEBUG: updatePredictionDisplay called")
-        print("🔍 UPDATE_DEBUG: shouldUpdateCandidates: \(shouldUpdateCandidates())")
-        print("🔍 UPDATE_DEBUG: showingPrediction: \(editorCore.showingPrediction)")
-        print("🔍 UPDATE_DEBUG: predictions count: \(editorCore.currentPredictions.count)")
-        
         // Only show predictions if we're actively composing and external keyboard is connected
         if shouldUpdateCandidates() && 
            editorCore.showingPrediction && 
            !editorCore.currentPredictions.isEmpty {
-            print("🔍 UPDATE_DEBUG: ✅ Showing prediction overlay")
             showPredictionOverlay()
         } else {
-            print("🔍 UPDATE_DEBUG: ❌ Hiding prediction overlay")
             hidePredictionOverlay()
         }
     }
@@ -528,12 +498,6 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     private func showPredictionOverlay() {
         guard let editorCore = editorCore,
               let window = self.window else { return }
-        
-        // Add comprehensive debugging for position tracking
-        print("🔍 POSITION_DEBUG: showPredictionOverlay called")
-        print("🔍 POSITION_DEBUG: UITextView bounds: \(bounds)")
-        print("🔍 POSITION_DEBUG: UITextView frame: \(frame)")
-        print("🔍 POSITION_DEBUG: selectedRange: \(selectedRange)")
         
         // Get composition rect or fallback to cursor position
         let rawCompositionRect: CGRect
@@ -546,12 +510,10 @@ class CustomUITextView: UITextView, UITextViewDelegate {
                )
            ) {
             rawCompositionRect = rect
-            print("🔍 POSITION_DEBUG: Using composition rect: \(rect)")
         } else {
             // Fallback to cursor position
             let cursorRect = caretRect(for: selectedTextRange?.start ?? beginningOfDocument)
             rawCompositionRect = cursorRect
-            print("🔍 POSITION_DEBUG: Using cursor rect fallback: \(cursorRect)")
         }
         
         // Convert composition rect to view coordinates
@@ -562,12 +524,8 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             height: rawCompositionRect.height
         )
         
-        print("🔍 POSITION_DEBUG: compositionRectInTextView: \(compositionRectInTextView)")
-        print("🔍 POSITION_DEBUG: textContainerInset: \(textContainerInset)")
-        
         // Convert to window coordinates
         let compositionRectInWindow = convert(compositionRectInTextView, to: window)
-        print("🔍 POSITION_DEBUG: compositionRectInWindow: \(compositionRectInWindow)")
         
         // Calculate candidate window size based on content (using cached width)
         let maxCandidateWidth = getMaxCandidateWidth()
@@ -579,7 +537,6 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         
         // Get editor bounds in window coordinates for proper positioning
         let editorBoundsInWindow = convert(bounds, to: window)
-        print("🔍 POSITION_DEBUG: editorBoundsInWindow: \(editorBoundsInWindow)")
         
         // Calculate optimal position using the core's positioning logic
         let positionResult = editorCore.calculateCandidateWindowPosition(
@@ -588,13 +545,29 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             candidateWindowSize: candidateWindowSize
         )
         
-        print("🔍 POSITION_DEBUG: Final candidate position: \(positionResult.position)")
-        print("🔍 POSITION_DEBUG: showingAbove: \(positionResult.shouldShowAbove)")
+        // iOS Visual Positioning Adjustment
+        // Both platforms calculate -8.0 distance, but iOS needs more aggressive positioning
+        // to achieve the same visual appearance as macOS due to coordinate system differences
+        var adjustedPosition = positionResult.position
+        
+        let iOSVisualAdjustment: CGFloat = -20.0 // More aggressive visual adjustment for iOS
+        
+        if positionResult.shouldShowAbove {
+            // When showing above, move up more to get visually closer
+            adjustedPosition.y += iOSVisualAdjustment
+        } else {
+            // When showing below, move up significantly to get closer to composition
+            adjustedPosition.y += iOSVisualAdjustment
+        }
+        
+        print("🔍 iOS_POSITIONING: Original Y: \(positionResult.position.y)")
+        print("🔍 iOS_POSITIONING: Adjusted Y: \(adjustedPosition.y)")
+        print("🔍 iOS_POSITIONING: Visual adjustment: \(iOSVisualAdjustment)")
         
         // Show window-level overlay
         WindowOverlayManager.shared.showOverlay(
             predictions: editorCore.currentPredictions,
-            at: positionResult.position,
+            at: adjustedPosition,
             size: candidateWindowSize,
             showingAbove: positionResult.shouldShowAbove,
             in: window
@@ -617,9 +590,8 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         // Regular text changes (paste, delete outside composition, etc.) don't need predictions
         if editorCore.isCurrentlyComposing {
             let location = selectedRange.location
-            editorCore.requestDebouncedPredictionUpdate(at: location)
-            // Use layout-aware display update for text changes that might trigger SwiftUI layout
-            swiftUILayoutAwareDisplayUpdate()
+            editorCore.updatePredictions(at: location)
+            updatePredictionDisplay()
         } else {
             // If not composing, ensure predictions are hidden
             hidePredictionOverlay()
@@ -629,10 +601,7 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     // MARK: - UITextViewDelegate (Scroll Detection)
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Cancel pending updates and hide candidates immediately when scrolling starts
-        editorCore?.cancelPendingUpdates()
-        layoutAwareUpdateWorkItem?.cancel()
-        
+        // Hide candidates immediately when scrolling starts
         if shouldHideCandidates(reason: "scroll") {
             hidePredictionOverlay()
         }
@@ -752,15 +721,13 @@ struct IOSTextEditor: UIViewRepresentable {
             // Regular cursor movement (clicking around, arrow keys outside composition) doesn't need predictions
             if parent.core.isCurrentlyComposing {
                 let location = textView.selectedRange.location
-                parent.core.requestImmediatePredictionUpdate(at: location)
+                parent.core.updatePredictions(at: location)
                 
                 if let customTextView = textView as? CustomUITextView {
-                    // Use layout-aware update since cursor movement might trigger SwiftUI layout changes
-                    customTextView.swiftUILayoutAwareDisplayUpdate()
+                    customTextView.updatePredictionDisplay()
                 }
             } else {
-                // If not composing, cancel any pending updates and hide predictions
-                parent.core.cancelPendingUpdates()
+                // If not composing, ensure predictions are hidden
                 if let customTextView = textView as? CustomUITextView {
                     customTextView.hidePredictionOverlay()
                 }
