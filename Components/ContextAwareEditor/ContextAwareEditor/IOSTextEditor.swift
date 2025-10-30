@@ -370,6 +370,48 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         updatePredictionDisplay()
     }
     
+    // MARK: - Composition Detection
+    
+    /// Check if we should auto-predict next word after accepting a prediction
+    private func shouldAutoPredictNextWord() -> Bool {
+        return UserDefaults.standard.bool(forKey: "autoPredictNextWord")
+    }
+    
+    /// Check if onscreen keyboard is currently visible
+    private func isOnscreenKeyboardVisible() -> Bool {
+        // Simple heuristic: if we're first responder but don't detect external keyboard,
+        // assume onscreen keyboard is visible
+        return isFirstResponder && !hasExternalKeyboard()
+    }
+    
+    /// Check if external (hardware) keyboard is connected
+    private func hasExternalKeyboard() -> Bool {
+        // On iOS, we can't directly detect hardware keyboards
+        // But we can use heuristics:
+        // Simple approach: assume external keyboard if text view can receive key commands
+        // This is a reasonable heuristic for our use case
+        return true // For now, assume external keyboard to enable our candidate system
+    }
+    
+    /// Check if composition state changed and candidates should be updated
+    private func shouldUpdateCandidates() -> Bool {
+        guard let editorCore = editorCore else { return false }
+        
+        // Don't show candidates if onscreen keyboard is visible
+        if isOnscreenKeyboardVisible() {
+            return false
+        }
+        
+        // Only update candidates if we're actively composing
+        return editorCore.isCurrentlyComposing
+    }
+    
+    /// Check if we should hide candidates (scroll, escape, etc.)
+    private func shouldHideCandidates(reason: String) -> Bool {
+        print("🔍 Checking hide candidates for reason: \(reason)")
+        return true // For now, always allow hiding
+    }
+    
     // MARK: - Keyboard Input (for external keyboards)
     
     override var keyCommands: [UIKeyCommand]? {
@@ -390,6 +432,15 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
             editorCore.acceptPrediction(editorCore.currentPredictions[0])
             syncFromCore()
+            
+            // Check user preference for auto-predicting next word
+            if shouldAutoPredictNextWord() {
+                // Wait a brief moment then check for next word predictions
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                    self?.editorCore?.updatePredictions(at: self?.selectedRange.location ?? 0)
+                    self?.updatePredictionDisplay()
+                }
+            }
         }
     }
     
@@ -398,7 +449,10 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     func updatePredictionDisplay() {
         guard let editorCore = editorCore else { return }
         
-        if editorCore.showingPrediction && !editorCore.currentPredictions.isEmpty {
+        // Only show predictions if we're actively composing and external keyboard is connected
+        if shouldUpdateCandidates() && 
+           editorCore.showingPrediction && 
+           !editorCore.currentPredictions.isEmpty {
             showPredictionOverlay()
         } else {
             hidePredictionOverlay()
@@ -488,8 +542,10 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     // MARK: - UITextViewDelegate (Scroll Detection)
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Update prediction display when scrolling to ensure proper positioning
-        updatePredictionDisplay()
+        // Hide candidates immediately when scrolling starts
+        if shouldHideCandidates(reason: "scroll") {
+            hidePredictionOverlay()
+        }
     }
 }
 
