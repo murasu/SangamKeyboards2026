@@ -171,9 +171,13 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     private let settings = EditorSettings.shared
     private var settingsObserver: AnyCancellable?
     
-    // Current word highlighting
+    // Current word highlighting with "calculate early, apply late" strategy
     var highlightCurrentWord: Bool = true
     private var wordHighlightLayer: CALayer?
+    
+    // "Calculate early, apply late" implementation
+    private var pendingHighlight: (range: NSRange, rect: CGRect, scrollOffset: CGPoint)?
+    private var highlightApplicationTimer: Timer?
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -193,6 +197,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         
         // Clean up word highlight layer
         wordHighlightLayer?.removeFromSuperlayer()
+        
+        // Clean up highlight timer
+        highlightApplicationTimer?.invalidate()
         
         if let observer = keyboardObserver {
             NotificationCenter.default.removeObserver(observer)
@@ -385,6 +392,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             // Hide predictions if we're not composing
             hidePredictionOverlay()
         }
+        
+        // Always update word highlight when syncing from core
+        updateWordHighlight()
     }
     
     // MARK: - Composition Detection
@@ -596,9 +606,9 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         WindowOverlayManager.shared.hideOverlay()
     }
     
-    // MARK: - Current Word Highlighting
+    // MARK: - Current Word Highlighting (Calculate Early, Apply Late)
     
-    /// Update word highlighting when candidate window is shown
+    /// Update word highlighting using "calculate early, apply late" strategy
     private func updateWordHighlight() {
         guard highlightCurrentWord else {
             removeWordHighlight()
@@ -611,7 +621,76 @@ class CustomUITextView: UITextView, UITextViewDelegate {
             return
         }
         
-        highlightWordAtRange(currentWordRange)
+        // CALCULATE EARLY: Get coordinates now while they're still accurate
+        calculateAndScheduleHighlight(for: currentWordRange)
+    }
+    
+    /// Calculate coordinates immediately (while accurate) and schedule delayed application
+    private func calculateAndScheduleHighlight(for range: NSRange) {
+        // Cancel any pending highlight application
+        highlightApplicationTimer?.invalidate()
+        
+        // Calculate coordinates immediately while they're still good
+        if let rect = getTextRectImmediately(for: range) {
+            // Store the highlight info with current scroll position
+            pendingHighlight = (range: range, rect: rect, scrollOffset: contentOffset)
+            
+            print("WORDHIGHLIGHT_DEBUG: Calculated early - range: \(range), rect: \(rect), scrollOffset: \(contentOffset)")
+            
+            // Schedule delayed application for accuracy
+            highlightApplicationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { [weak self] _ in
+                self?.applyPendingHighlight()
+            }
+        } else {
+            removeWordHighlight()
+        }
+    }
+    
+    /// Apply the previously calculated highlight, adjusting for any scroll changes
+    private func applyPendingHighlight() {
+        guard let pending = pendingHighlight else {
+            removeWordHighlight()
+            return
+        }
+        
+        // Calculate scroll offset delta since we calculated the coordinates
+        let scrollDelta = CGPoint(
+            x: contentOffset.x - pending.scrollOffset.x,
+            y: contentOffset.y - pending.scrollOffset.y
+        )
+        
+        // Adjust the cached rect for scroll changes
+        let adjustedRect = CGRect(
+            x: pending.rect.origin.x - scrollDelta.x,
+            y: pending.rect.origin.y - scrollDelta.y,
+            width: pending.rect.width,
+            height: pending.rect.height
+        )
+        
+        print("WORDHIGHLIGHT_DEBUG: Applying late - original: \(pending.rect), scrollDelta: \(scrollDelta), adjusted: \(adjustedRect)")
+        
+        // Apply the highlight using the adjusted coordinates
+        applyHighlightLayer(at: adjustedRect)
+    }
+    
+    /// Actually draw the highlight layer at the specified rect
+    private func applyHighlightLayer(at rect: CGRect) {
+        // Remove existing highlight
+        wordHighlightLayer?.removeFromSuperlayer()
+        
+        // Create highlight layer
+        let highlightLayer = CALayer()
+        highlightLayer.frame = rect
+        highlightLayer.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2).cgColor
+        highlightLayer.cornerRadius = 4
+        highlightLayer.borderColor = UIColor.systemBlue.withAlphaComponent(0.5).cgColor
+        highlightLayer.borderWidth = 1
+        
+        // Add to text view
+        layer.addSublayer(highlightLayer)
+        wordHighlightLayer = highlightLayer
+        
+        print("WORDHIGHLIGHT_DEBUG: Applied highlight layer at: \(rect)")
     }
     
     /// Get the range of the word currently being typed
@@ -647,60 +726,118 @@ class CustomUITextView: UITextView, UITextViewDelegate {
         return nil
     }
     
-    /// Highlight the word at the specified range
+    /// Highlight the word at the specified range (DEPRECATED - using calculate early/apply late now)
     private func highlightWordAtRange(_ range: NSRange) {
-        // Remove existing highlight
-        wordHighlightLayer?.removeFromSuperlayer()
-        
-        // Get the bounding rect for the word
-        guard let wordRect = getTextRect(for: range) else { return }
-        
-        // Create highlight layer
-        let highlightLayer = CALayer()
-        highlightLayer.frame = wordRect
-        highlightLayer.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2).cgColor
-        highlightLayer.cornerRadius = 4
-        highlightLayer.borderColor = UIColor.systemBlue.withAlphaComponent(0.5).cgColor
-        highlightLayer.borderWidth = 1
-        
-        // Add to text view
-        layer.addSublayer(highlightLayer)
-        wordHighlightLayer = highlightLayer
-        
-        print("📦 iOS Word highlight - range: \(range), rect: \(wordRect)")
+        // This method is deprecated in favor of the new "calculate early, apply late" approach
+        // Left here for reference but should not be called
+        print("WORDHIGHLIGHT_DEBUG: WARNING - deprecated highlightWordAtRange called")
     }
     
-    /// Get the visual rect for a text range
-    private func getTextRect(for range: NSRange) -> CGRect? {
+    /// Get coordinates using hybrid approach (X from UIKit, Y manual, size from UIKit)
+    private func getTextRectImmediately(for range: NSRange) -> CGRect? {
         guard range.location >= 0 && range.location + range.length <= textStorage.length else { return nil }
         
-        // Get the glyph range for the character range
-        let glyphRange = layoutManager.glyphRange(forCharacterRange: range, actualCharacterRange: nil)
+        print("WORDHIGHLIGHT_DEBUG: getTextRectImmediately - hybrid calculation:")
+        print("WORDHIGHLIGHT_DEBUG:   - range: \(range)")
+        print("WORDHIGHLIGHT_DEBUG:   - contentOffset: \(contentOffset)")
         
-        // Get the bounding rect for the glyph range
-        let boundingRect = layoutManager.boundingRect(forGlyphRange: glyphRange, in: textContainer)
+        // Get position and size from UITextInput (X and size work, Y is broken)
+        guard let startPosition = position(from: beginningOfDocument, offset: range.location),
+              let endPosition = position(from: startPosition, offset: range.length),
+              let textRange = textRange(from: startPosition, to: endPosition) else {
+            print("WORDHIGHLIGHT_DEBUG:   - ERROR: Could not create UITextRange")
+            return nil
+        }
         
-        // Adjust for text container inset and add some padding
-        let adjustedRect = CGRect(
-            x: boundingRect.origin.x + textContainerInset.left - 2,
-            y: boundingRect.origin.y + textContainerInset.top - 2,
-            width: boundingRect.width + 4,
-            height: boundingRect.height + 4
+        let uiKitRect = firstRect(for: textRange)
+        print("WORDHIGHLIGHT_DEBUG:   - UIKit rect: \(uiKitRect)")
+        
+        // Use UIKit's X and size (these work correctly)
+        let xPosition = uiKitRect.origin.x
+        let width = uiKitRect.width
+        let height = uiKitRect.height
+        
+        // Calculate Y position manually using line counting
+        let yPosition = calculateYPositionManually(for: range)
+        
+        print("WORDHIGHLIGHT_DEBUG:   - X from UIKit: \(xPosition)")
+        print("WORDHIGHLIGHT_DEBUG:   - Width from UIKit: \(width)")
+        print("WORDHIGHLIGHT_DEBUG:   - Height from UIKit: \(height)")
+        print("WORDHIGHLIGHT_DEBUG:   - Manual Y position: \(yPosition)")
+        
+        let finalRect = CGRect(
+            x: xPosition - 2,
+            y: yPosition - 2,
+            width: width + 4,
+            height: height + 4
         )
         
-        return adjustedRect
+        print("WORDHIGHLIGHT_DEBUG:   - Final rect: \(finalRect)")
+        return finalRect
+    }
+    
+    /// Calculate Y position manually by counting lines and using font metrics
+    private func calculateYPositionManually(for range: NSRange) -> CGFloat {
+        let text = textStorage.string
+        let rangeStart = range.location
+        
+        // Count newlines before the range to determine line number
+        let textBeforeRange = (text as NSString).substring(to: rangeStart)
+        let lineNumber = textBeforeRange.components(separatedBy: .newlines).count - 1
+        
+        // Get font metrics - use actual text view font
+        let font = self.font ?? UIFont.systemFont(ofSize: 17)
+        
+        // Use font.lineHeight for consistent line spacing
+        // This should match what UITextView actually uses for line spacing
+        let lineHeight = font.lineHeight
+        
+        // Calculate Y position: top inset + (line number * line height)
+        // The Y position should be where the TEXT baseline is, not the top of the line
+        let baselineOffset = font.ascender  // Distance from line top to baseline
+        let yPosition = textContainerInset.top + (CGFloat(lineNumber) * lineHeight)
+        
+        print("WORDHIGHLIGHT_DEBUG: Manual Y calculation:")
+        print("WORDHIGHLIGHT_DEBUG:   - rangeStart: \(rangeStart)")
+        print("WORDHIGHLIGHT_DEBUG:   - textBeforeRange: '\(textBeforeRange)'")
+        print("WORDHIGHLIGHT_DEBUG:   - lineNumber: \(lineNumber)")
+        print("WORDHIGHLIGHT_DEBUG:   - font: \(font)")
+        print("WORDHIGHLIGHT_DEBUG:   - lineHeight: \(lineHeight)")
+        print("WORDHIGHLIGHT_DEBUG:   - textContainerInset.top: \(textContainerInset.top)")
+        print("WORDHIGHLIGHT_DEBUG:   - baselineOffset: \(baselineOffset)")
+        print("WORDHIGHLIGHT_DEBUG:   - calculated Y: \(yPosition)")
+        
+        return yPosition
+    }
+    
+    /// Get the visual rect for a text range - DEBUG VERSION (DEPRECATED)
+    private func getTextRect(for range: NSRange) -> CGRect? {
+        // This debug method is deprecated in favor of getTextRectImmediately
+        // Left here for reference
+        print("WORDHIGHLIGHT_DEBUG: WARNING - deprecated getTextRect called, use getTextRectImmediately instead")
+        return nil
     }
     
     /// Remove word highlight
     private func removeWordHighlight() {
+        highlightApplicationTimer?.invalidate()
+        highlightApplicationTimer = nil
+        pendingHighlight = nil
         wordHighlightLayer?.removeFromSuperlayer()
         wordHighlightLayer = nil
+        print("WORDHIGHLIGHT_DEBUG: Removed word highlight")
     }
+    
+    // MARK: - Scroll Handling
     
     // MARK: - Text Change Handling
     
     func handleTextChange() {
         guard let editorCore = editorCore else { return }
+        
+        // Clear any pending highlights since text changed
+        highlightApplicationTimer?.invalidate()
+        pendingHighlight = nil
         
         // COMPOSITION-AWARE: Only update predictions if we're actively composing
         // Regular text changes (paste, delete outside composition, etc.) don't need predictions
@@ -717,9 +854,35 @@ class CustomUITextView: UITextView, UITextViewDelegate {
     // MARK: - UITextViewDelegate (Scroll Detection)
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print("WORDHIGHLIGHT_DEBUG: Scroll detected - contentOffset: \(contentOffset)")
+        
         // Hide candidates immediately when scrolling starts
         if shouldHideCandidates(reason: "scroll") {
             hidePredictionOverlay()
+        }
+        
+        // For highlighting during scroll: Immediately update highlight position
+        // This provides smooth, real-time highlighting during scroll
+        if let pending = pendingHighlight {
+            let scrollDelta = CGPoint(
+                x: contentOffset.x - pending.scrollOffset.x,
+                y: contentOffset.y - pending.scrollOffset.y
+            )
+            
+            let adjustedRect = CGRect(
+                x: pending.rect.origin.x - scrollDelta.x,
+                y: pending.rect.origin.y - scrollDelta.y,
+                width: pending.rect.width,
+                height: pending.rect.height
+            )
+            
+            print("WORDHIGHLIGHT_DEBUG: Real-time scroll adjustment:")
+            print("WORDHIGHLIGHT_DEBUG:   - scrollDelta: \(scrollDelta)")
+            print("WORDHIGHLIGHT_DEBUG:   - original rect: \(pending.rect)")
+            print("WORDHIGHLIGHT_DEBUG:   - adjusted rect: \(adjustedRect)")
+            
+            // Apply the highlight immediately with no delay
+            applyHighlightLayer(at: adjustedRect)
         }
     }
 }
